@@ -2,9 +2,9 @@
   <div class="fm-panel">
     <div class="header">
       <div class="title">{{title}}</div>
-      <div class="subTitle" v-show="subTitle">{{subTitle}}</div>
     </div>
     <div class="content">
+      <div class="subTitle" v-show="subTitle">{{subTitle}}</div>
       <slot name="content"></slot>
     </div>
   </div>
@@ -36,21 +36,23 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 169px;
-    height: 70px;
-    padding: 0px;
-    margin: 0px;
-    color: #47a2ff;
-    font-size: 20px;
+    width: 370px;
+    height: 45px;
+    padding: 0;
+    margin-left: 38px;
+    color: #FD8E2A;
+    font-size: 18px;
     font-weight: bold;
-    background: url(../assets/juxing_5.png) no-repeat;
+    background: url(../assets/tab.png) no-repeat;
+    background-size: 100% 100%;
   }
-  .fm-panel>.header>.subTitle {
+  .fm-panel>.content>.subTitle {
     display: flex;
     align-items: center;
     justify-content: center;
     color: #fff;
     font-size: 20px;
+    margin-left: -220px;
   }
   .fm-panel>.content {
     flex: 1 0 100px;

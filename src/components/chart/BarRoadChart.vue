@@ -1,6 +1,6 @@
 <template>
   <div class="chart-content">
-    <div style='display:flex;'>
+    <div style='display:flex;padding-top: 5%;'>
       <div style='flex:1;padding-left:18px;'>
         <div>道路更新累积值</div>
         <div>道路新增累积值</div>
@@ -10,7 +10,7 @@
         <div><span class='numberText'>{{roadData.cAddRoad | splitSymbol}}</span> 公里</div>
       </div>
     </div>
-    <div id='myBarRoadChart'>
+    <div id='myBarRoadChart' style="margin-left: 2px">
     </div>
   </div>
 </template>
@@ -163,5 +163,6 @@ export default {
 }
 .numberText{
   color: #FD8E20;
+  margin-left: -10px;
 }
 </style>
