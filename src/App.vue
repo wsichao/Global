@@ -90,7 +90,7 @@
       <div class="col flex-layout-v" style="width:25%;align-items: flex-end;">
         <div class="top-title right">
           <div class="text" style="padding-left: 130px;padding-bottom: 40px;">
-            <div style="margin-top: 18px;">数据来源</div>
+            <div style="margin-top: 18px;">数据出品</div>
             <div><img src="./assets/icon_1.png" alt="" style="width: 80%;margin-top: 24px;"></div>
             <div class="topRight"><img src="./assets/dianchi.png" alt="" class="img2"></div>
           </div>
