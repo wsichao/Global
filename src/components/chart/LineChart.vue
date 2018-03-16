@@ -1,6 +1,6 @@
 <template>
   <div class="chart-content">
-    <div id='myLineChart'>
+    <div id='myLineChart' style="padding-top: 8px;padding-bottom: 8px;'">
     </div>
   </div>
 </template>
@@ -37,6 +37,7 @@ export default {
           smooth: true,
           itemStyle: {
             normal: {
+              color: '#FF9933'
             }
           },
           data: [1738.82293882, 1426.64095209, 1403.30852207, 813.82310678, 1366.00084594, 1244.18313622, 1132.15832078, 1911.12552555, 1878.86507383, 593.13944326, 0, 0]
@@ -48,7 +49,7 @@ export default {
             smooth: true,
             itemStyle: {
               normal: {
-                color: '#FF9933'
+                color: '#FDE22A'
               }
             },
             data: this.chartData.lineData[0]// [120, 132, 101, 134, 90, 230, 210, 120, 132, 101, 134, 90]
@@ -60,7 +61,7 @@ export default {
             smooth: true,
             itemStyle: {
               normal: {
-                color: '#3399FF'
+                color: '#3493FF'
               }
             },
             data: this.chartData.lineData[1]// [120, 182, 191, 234, 290, 330, 310, 220, 182, 191, 234, 290]
@@ -72,7 +73,7 @@ export default {
             smooth: true,
             itemStyle: {
               normal: {
-                color: '#3333FF'
+                color: '#01B31E'
               }
             },
             data: this.chartData.lineData[2] //[120, 232, 201, 154, 190, 330, 410, 150, 232, 201, 154, 190]
@@ -81,7 +82,7 @@ export default {
         this.chart.setOption({
             backgroundColor: 'rgba(128, 128, 128, 0)',
             grid: {
-              left: 20,
+              left: 46,
               right: 20,
               top: 45,
               bottom:24

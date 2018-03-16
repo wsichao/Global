@@ -53,7 +53,7 @@ export default {
             backgroundColor: 'rgba(128, 128, 128, 0)',
             grid: {
               left: 170,
-              right: 20,
+              right: 70,
               top: 5,
               bottom: 15
             },
@@ -157,5 +157,6 @@ export default {
 #myMonthChart {
     width: 400px;
     height: 200px;
+    margin-left: 35px;
 }
 </style>

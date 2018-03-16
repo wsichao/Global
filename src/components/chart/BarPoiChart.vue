@@ -10,7 +10,7 @@
         <div><span class='numberText'>{{poiData.cAddPoi | splitSymbol}}</span> 个</div>
       </div>
     </div>
-    <div id='myBarPoiChart'>
+    <div id='myBarPoiChart' style="margin-left: 10px">
     </div>
   </div>
 </template>
@@ -165,5 +165,6 @@ export default {
 }
 .numberText{
   color: #FD8E20;
+  margin-left: -15px;
 }
 </style>

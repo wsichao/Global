@@ -2,14 +2,18 @@
   <div class="fm-stretch">
     <Global :randomData="dataSourceStatus.randomData" :poiChangedNum="dataSourceStatus.poiChangedNum" :crowdInfoSource='dataSourceStatus.crowdInfoSource' :commonInfoSource='dataSourceStatus.commonInfoSource'></Global>
     <div class="fm-stretch flex-layout float">
-      <div class="col flex-layout-v">
+
+      <div class="col flex-layout-v" style="width: 25%;">
         <div class="top-title left">
-          <div class="text">
-            数据来源
+          <div class="text" style="margin-left: -130px;margin-top: 18px;">
+            <div><img src="./assets/dianchi.png" alt="" class="img1"></div>
+            <div><img src="./assets/icon_2.png" alt="" style="width: 80%;"></div>
+            <div style="margin-top: -5px;">数据来源</div>
           </div>
         </div>
+
         <div class="flex-layout-v" style="height: 100%;">
-          <panel title="自采">
+          <panel title="自采 Own colloction">
             <div slot="content">
               <div>
                 <bar-road-chart :roadData='charData.road'></bar-road-chart>
@@ -19,13 +23,13 @@
               </div>
             </div>
           </panel>
-          <panel title="第三方数据">
-            <div slot="content">
+          <panel title="第三方数据 Third party data">
+            <div slot="content" style="margin-left: -20px">
               <line-chart :chartData='charData.thrid'></line-chart>
             </div>
           </panel>
-          <panel title="众包">
-            <div slot="content" class="flex-layout-v" style="color:#DDD;">
+          <panel title="众包 Crowdsourcing">
+            <div slot="content" class="flex-layout-v" style="color:#DDD;margin-left: 10px">
               <div class="flex-layout remark" style="align-items: flex-start;">
                 <div>用户总量</div>
                 <div>
@@ -52,39 +56,22 @@
           </div>
         </div>
       </div>
-      <div class="flex-layout-v fm-stretch" style="align-items: center;">
-        <div class="center-content">
-          <div style="margin: 0px -80px;">
+
+      <div class="flex-layout-v fm-stretch" style="align-items: center;width: 40%;">
+        <div class="center-content" style="margin-left: 2px;">
+          <div style="margin: 0px -40px;">
             <banner></banner>
           </div>
-          <div class="flex-layout summary" style="padding: 10px;">
+          <div class="flex-layout summary" style="padding: 10px 30px 10px 50px;">
             <div>
-              <div>
-                道路总里程：
-                <span class="num-text">{{title.roadLen | splitSymbol}}</span> 公里
-              </div>
-              <div>
-                今日更新：
-                <span class="num-text">{{title.perUpdateRoadLable | splitSymbol}}</span> 公里
-              </div>
-              <div>
-                今日新增：
-                <span class="num-text">{{title.perAddRoadLable | splitSymbol}}</span> 公里
-              </div>
+              <div>道路总量:<span class="num-text">{{title.roadLen | splitSymbol}}</span>公里</div>
+              <div>道路更新:<span class="num-text">{{title.perUpdateRoadLable | splitSymbol}}</span> 公里</div>
+              <div>道路新增:<span class="num-text">{{title.perAddRoadLable | splitSymbol}}</span> 公里</div>
             </div>
             <div>
-              <div>
-                POI 总量：
-                <span class="num-text" >{{title.poiNum | splitSymbol}}</span> 个
-              </div>
-              <div>
-                今日更新：
-                <span class="num-text">{{title.perUpdatePoiLable | splitSymbol}}</span> 个
-              </div>
-              <div>
-                今日新增：
-                <span class="num-text">{{title.perAddPoiLable | splitSymbol}}</span> 个
-              </div>
+              <div>POI总量:<span class="num-text" >{{title.poiNum | splitSymbol}}</span>个</div>
+              <div>POI新增:<span class="num-text">{{title.perUpdatePoiLable | splitSymbol}}</span>个</div>
+              <div>POI更新:<span class="num-text">{{title.perAddPoiLable | splitSymbol}}</span>个</div>
             </div>
           </div>
         </div>
@@ -99,57 +86,75 @@
           </div>
         </div>
       </div>
-      <div class="col flex-layout-v" style="align-items: flex-end;">
+
+      <div class="col flex-layout-v" style="width:25%;align-items: flex-end;">
         <div class="top-title right">
-          <div class="text">
-            数据出品
+          <div class="text" style="padding-left: 130px;padding-bottom: 40px;">
+            <div style="margin-top: 18px;">数据出品</div>
+            <div><img src="./assets/icon_1.png" alt="" style="width: 80%;margin-top: 24px;"></div>
+            <div class="topRight"><img src="./assets/dianchi.png" alt="" class="img2"></div>
           </div>
         </div>
-        <div class="flex-layout-v" style="height: 100%;">
-          <panel title="日出品">
+
+        <div class="flex-layout-v rightTitle" style="height: 100%;">
+          <panel title="日出品 Daily production">
             <div slot="content">
+              <div style="color: white;margin-left: 235px;margin-top: 6%;">
+                <span> 单位: </span>
+                <span> 公里 / 个 </span>
+              </div>
               <day-chart :dayProduce="charData.dayProduce"></day-chart>
             </div>
           </panel>
-          <panel title="月出品">
+          <panel title="月出品 Monthy production">
             <div slot="content">
+              <div style="color: white;margin-left: 235px;margin-top: 6%;">
+                <span> 单位: </span>
+                <span> 公里 / 个 </span>
+              </div>
               <month-chart :monthProduce="charData.monthProduce"></month-chart>
             </div>
           </panel>
-          <panel title="季出品" :sub-title="season.spVerson">
+          <panel title="季出品 Quarterly production" :sub-title="season.spVerson">
             <div slot="content" class="flex-layout-v" style="color:#DDD;">
-              <div class="flex-layout remark" style="align-items: flex-start;">
-                <div>更新道路 <span class="num-text">{{season.spUpdateRoad}}</span> 公里</div>
-                <div>新增道路 <span class="num-text">{{season.spAddRoad}}</span> 公里</div>
-              </div>
-              <div class="flex-layout remark" style="align-items: flex-start;">
-                <div>更新POI <span class="num-text">{{season.spUpdatePoi}}</span> 个</div>
-                <div>新增POI <span class="num-text">{{season.spAddPoi}}</span> 个</div>
+              <div style="margin-left: 10px;">
+                <div class="flex-layout remark" style="align-items: flex-start;">
+                  <div>更新道路<span class="num-text">{{season.spUpdateRoad}}</span> 公里</div>
+                  <div>新增道路<span class="num-text">{{season.spAddRoad}}</span> 公里</div>
+                </div>
+                <div class="flex-layout remark" style="align-items: flex-start;">
+                  <div>更新POI<span class="num-text">{{season.spUpdatePoi}}</span> 个</div>
+                  <div>新增POI<span class="num-text">{{season.spAddPoi}}</span> 个</div>
+                </div>
               </div>
             </div>
           </panel>
         </div>
         <div class="bottom-title right">
-          <div class="text">
-            Data Products
+          <div class="text" style="margin-left: 100px;">
+            Data Produced
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </template>
 
 <script>
-  import BarPoiChart from '@/components/chart/BarPoiChart'
-  import BarRoadChart from '@/components/chart/BarRoadChart'
-  import LineChart from '@/components/chart/LineChart'
-  import DayChart from '@/components/chart/DayChart'
-  import MonthChart from '@/components/chart/MonthChart'
+  import BarPoiChart from '@/components/chart/BarPoiChart';
+  import BarRoadChart from '@/components/chart/BarRoadChart';
+  import LineChart from '@/components/chart/LineChart';
+  import DayChart from '@/components/chart/DayChart';
+  import MonthChart from '@/components/chart/MonthChart';
   import Banner from '@/components/Banner';
   import Global from '@/components/Global';
-  import SplitNumber from '@/components/SplitNumber'
-  import Panel from '@/components/Panel'
+  import SplitNumber from '@/components/SplitNumber';
   import axios from 'axios';
+  import Panel from '@/components/Panel';
+
+  console.log(window.innerWidth);
+
   var TWEEN = require('@tweenjs/tween.js');
   export default {
     name: 'app',
@@ -163,7 +168,7 @@
           perAddRoadLable: 0,
           perUpdateRoadLable: 0,
           perAddPoiLable: 0,
-          perUpdatePoiLable: 0
+          perUpdatePoiLable: 0,
         },
         crowd: {},
         season: {},
@@ -173,42 +178,42 @@
             updateData: [],
             xAxis: [],
             cUpdatePoi: 0,
-            cAddPoi: 0
+            cAddPoi: 0,
           },
           road: {
             newData: [],
             updateData: [],
             xAxis: [],
             cUpdateRoad: 0,
-            cAddRoad: 0
+            cAddRoad: 0,
           },
           dayProduce: {
             barData: [],
             lineData: [],
-            yAxis: []
+            yAxis: [],
           },
           monthProduce: {
             barData: [],
             lineData: [],
-            yAxis: []
+            yAxis: [],
           },
           thrid: {
             lineData: [
               [],
               [],
-              []
+              [],
             ], //  用户轨迹点,用户问题反馈,互联网信息
-            xAxis: []
-          }
+            xAxis: [],
+          },
         },
         dataSourceStatus: {
           commonInfoSource: true,
           randomData: Math.random(),
           poiChangedNum: Math.random(),
-          crowdInfoSource: true
+          crowdInfoSource: true,
         },
         timeout: null,
-        tweenColor: ''
+        tweenColor: '',
       }
     },
     computed: {
@@ -255,8 +260,8 @@
           }
         }
         let t = new TWEEN.Tween({
-            tweeningNumber: oldValue
-          })
+          tweeningNumber: oldValue
+        })
           .easing(TWEEN.Easing.Quadratic.Out)
           .to({
             tweeningNumber: newValue
@@ -321,11 +326,11 @@
         let that = this;
         if (this.timeout) {
           clearTimeout(this.timeout);
-        }        
+        }
 
         let _refreshData = function() {
           let improve1 = that.updatePerAddRoad(times, data);
-          let improve2 = that.updatePerUpdateRoad(times, data);          
+          let improve2 = that.updatePerUpdateRoad(times, data);
           let improve3 = that.updatePerAddPoi(times, data); // poi新增每次递增值
           let improve4 = that.updatePerUpdatePoi(times, data); // poi修改每次递增值
 
@@ -386,7 +391,7 @@
       updatePerAddPoi: function(times, data) {
         let addStep = 0;
         // let step = Math.ceil(data.perAddPoi / times);
-        let step = 10 + parseInt(10 * Math.random()); 
+        let step = 10 + parseInt(10 * Math.random());
         if ((this.title.perAddPoi + step) < data.perAddPoi) {
           this.title.perAddPoi = this.title.perAddPoi + step;
           addStep = step;
@@ -399,7 +404,7 @@
       updatePerUpdatePoi: function(times, data) {
         let addStep = 0;
         // let step = Math.ceil(data.perUpdatePoi / times);
-        let step = 20 + parseInt(10 * Math.random()); 
+        let step = 20 + parseInt(10 * Math.random());
         if ((this.title.perUpdatePoi + step) < data.perUpdatePoi) {
           this.title.perUpdatePoi = this.title.perUpdatePoi + step;
           addStep = step;
@@ -559,19 +564,26 @@
     justify-content: space-between;
     align-items: flex-start;
   }
+  .rightTitle{
+    box-sizing: border-box;
+    padding-top: 25%;
+    margin-right: 10%;
+  }
   div.float {
     position: absolute;
-    top: 0px;
-    left: 0px;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     pointer-events: none;
   }
   div.flex-layout>div.col {
+    width: 100%;
     height: 100%;
   }
   div.flex-layout-v>div.row {
     width: 100%;
+    height: 100%;
   }
   div.legendContainer {
     padding: 10px;
@@ -607,6 +619,7 @@
     background-color: #9da0a4;
   }
   .num-text {
+    margin-left: 11px;
     color: #FD8E20;
   }
   .remark {
@@ -618,10 +631,13 @@
   }
   .center-content {
     width: 100%;
-    height: 250px;
-    padding: 12px 150px 0px 150px;
-    margin: 0px -150px;
-    background: url(./assets/juxing_1.png) no-repeat top/contain;
+    /*height: 250px;*/
+    padding: 70px 130px;
+    margin-top: -49px;
+    margin-left: -30px;
+    z-index: 9999;
+    background: url(./assets/middle.png) no-repeat top/contain;
+    background-size: 100% 100%;
   }
   .center-content>.summary {
     font-size: 24px;
@@ -634,14 +650,26 @@
     justify-content: center;
   }
   .top-title.left {
-    background: url(./assets/juxing_2.png) no-repeat center;
+    margin-left: -36px;
+    margin-top: -43px;
+    background: url(./assets/left_up.png) no-repeat center;
+    background-size: 100% 100%;
   }
   .top-title.right {
-    background: url(./assets/juxing_3.png) no-repeat center;
+    position: fixed;
+    top: -47px;
+    right: -36px;
+    /*margin-right: -22px;*/
+    /*margin-top: -39px;*/
+    background: url(./assets/right_up.png) no-repeat center;
+    background-size: 100% 100%;
   }
   .top-title>.text {
-    color: #47a2ff;
-    font-size: 32px;
+    width: 300px;
+    color: #fd8e2a;
+    display: flex;
+    justify-content: space-between;
+    font-size: 26px;
     font-weight: bold;
     padding-top: 46px;
   }
@@ -653,15 +681,30 @@
     justify-content: center;
   }
   .bottom-title.left {
-    background: url(./assets/juxing_4.png) no-repeat center;
+    margin-left: -40px;
+    background: url(./assets/left_down.png) no-repeat center;
+    background-size: 100% 100%;
   }
   .bottom-title.right {
-    background: url(./assets/juxing_6.png) no-repeat center;
+    background: url(./assets/right_down.png) no-repeat center;
+    background-size: 100% 100%;
   }
   .bottom-title>.text {
-    color: #47a2ff;
+    color: #FD8E20;
     font-size: 24px;
     font-weight: bold;
     padding-top: 50px;
+  }
+  .img1{
+    width: 130px;
+    margin-top: -18px;
+  }
+  .img2{
+    width: 130px;
+    margin-top: 5px;
+    -moz-transform:scaleX(-1);
+    -webkit-transform:scaleX(-1);
+    -o-transform:scaleX(-1);
+    transform:scaleX(-1);
   }
 </style>
