@@ -32,3 +32,6 @@ npm test
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
 test
+
+#备注
+    切换版本修改服务地址时，只需要修改统一的地址入口文件就可以了，地址入口文件是src/config.js

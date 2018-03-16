@@ -152,8 +152,8 @@
   import SplitNumber from '@/components/SplitNumber';
   import axios from 'axios';
   import Panel from '@/components/Panel';
+  import conf from './config';
 
-  console.log(window.innerWidth);
 
   var TWEEN = require('@tweenjs/tween.js');
   export default {
@@ -280,7 +280,8 @@
         const that = this;
         axios({
           method: 'get',
-          url: 'http://fastmap.navinfo.com/18spr/service/statics/productMonitor',
+          url: conf.serviceUrl + 'statics/productMonitor',
+          // url: 'http://fastmap.navinfo.com/18spr/service/statics/productMonitor',
           // url: 'http://fastmap.navinfo.com/service/statics/productMonitor',
         }).then(function(res) {
           if (res && res.data.errcode == 0) {
