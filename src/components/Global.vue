@@ -214,11 +214,11 @@
         fullscreenButton: false,
         sceneModePicker: false,
         selectionIndicator: false, // 禁用默认的entity选择
-        imageryProvider: new Cesium.MapboxImageryProvider({
-          mapId: 'mapbox.streets-satellite',
-          accessToken:
-                  'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NDg1bDA1cjYzM280NHJ5NzlvNDMifQ.d6e-nNyBDtmQCVwVNivz7A',
-        }),
+        // imageryProvider: new Cesium.MapboxImageryProvider({
+        //   mapId: 'mapbox.streets-satellite',
+        //   accessToken:
+        //           'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NDg1bDA1cjYzM280NHJ5NzlvNDMifQ.d6e-nNyBDtmQCVwVNivz7A',
+        // }),
         skyBox: new Cesium.SkyBox({
           sources: {
             positiveX:
