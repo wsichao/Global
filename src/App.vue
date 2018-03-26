@@ -70,8 +70,8 @@
             </div>
             <div>
               <div>POI总量:<span class="num-text" >{{title.poiNum | splitSymbol}}</span>个</div>
-              <div>POI新增:<span class="num-text">{{title.perUpdatePoiLable | splitSymbol}}</span>个</div>
-              <div>POI更新:<span class="num-text">{{title.perAddPoiLable | splitSymbol}}</span>个</div>
+              <div>POI更新:<span class="num-text">{{title.perUpdatePoiLable | splitSymbol}}</span>个</div>
+              <div>POI新增:<span class="num-text">{{title.perAddPoiLable | splitSymbol}}</span>个</div>
             </div>
           </div>
         </div>
