@@ -13,7 +13,7 @@
         </div>
 
         <div class="flex-layout-v" style="height: 100%;">
-          <panel title="自采 Own colloction">
+          <panel title="自采 Own collection">
             <div slot="content">
               <div>
                 <bar-road-chart :roadData='charData.road'></bar-road-chart>
