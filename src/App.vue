@@ -13,7 +13,7 @@
         </div>
 
         <div class="flex-layout-v" style="height: 100%;">
-          <panel title="自采 Own colloction">
+          <panel title="自采 Field collection">
             <div slot="content">
               <div>
                 <bar-road-chart :roadData='charData.road'></bar-road-chart>
@@ -97,7 +97,7 @@
         </div>
 
         <div class="flex-layout-v rightTitle" style="height: 100%;">
-          <panel title="日出品 Daily production">
+          <panel title="日出品 Daily Release">
             <div slot="content">
               <div style="color: white;margin-left: 235px;margin-top: 6%;">
                 <span> 单位: </span>
@@ -106,7 +106,7 @@
               <day-chart :dayProduce="charData.dayProduce"></day-chart>
             </div>
           </panel>
-          <panel title="月出品 Monthy production">
+          <panel title="月出品 Monthly Release">
             <div slot="content">
               <div style="color: white;margin-left: 235px;margin-top: 6%;">
                 <span> 单位: </span>
@@ -115,7 +115,7 @@
               <month-chart :monthProduce="charData.monthProduce"></month-chart>
             </div>
           </panel>
-          <panel title="季出品 Quarterly production" :sub-title="season.spVerson">
+          <panel title="季出品 Quarterly Release" :sub-title="season.spVerson">
             <div slot="content" class="flex-layout-v" style="color:#DDD;">
               <div style="margin-left: 10px;">
                 <div class="flex-layout remark" style="align-items: flex-start;">
@@ -132,7 +132,7 @@
         </div>
         <div class="bottom-title right">
           <div class="text" style="margin-left: 100px;">
-            Data Produced
+            Data Release
           </div>
         </div>
       </div>
