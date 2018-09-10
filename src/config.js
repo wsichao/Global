@@ -3,7 +3,7 @@
  */
 const conf = Object.freeze({
   // 服务接口的路径
-  serviceUrl: 'http://fastmap.navinfo.com/18sum/service/'
+  serviceUrl: 'http://fastmap.navinfo.com/datacube/service/'
 });
 
 export default conf;
