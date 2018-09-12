@@ -33,7 +33,7 @@
             max = this.dayProduce.barData[i];
           }
         }
-        max = Math.ceil(max) + 5000;
+        max = Math.ceil(max / 100) * 100;
         this.dayProduce.barData.forEach(function (item, index, arr) {
           maxArr[index] = max;
         });
