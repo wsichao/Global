@@ -34,7 +34,7 @@ export default {
           max = temp
         }
       }
-      max = Math.ceil(max) + 40;
+      max = Math.ceil(max / 100) * 100;
       this.monthProduce.barData.forEach(function (item, index, arr) {
         maxArr[index] = max;
       });

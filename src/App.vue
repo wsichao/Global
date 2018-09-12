@@ -96,7 +96,7 @@
             <div slot="content">
               <div style="color: white;margin-left: 235px;margin-top: 6%;">
                 <span> 单位: </span>
-                <span> 公里 / 个 </span>
+                <span> 公里 / 千个 </span>
               </div>
               <day-chart :dayProduce="charData.dayProduce"></day-chart>
             </div>
@@ -104,8 +104,8 @@
           <panel title="月出品 Monthly Release">
             <div slot="content">
               <div style="color: white;margin-left: 235px;margin-top: 6%;">
-                <span> 单位: </span>
-                <span> 公里 / 个 </span>
+                <span> 千单位: </span>
+                <span> 千公里 / 万个 </span>
               </div>
               <month-chart :monthProduce="charData.monthProduce"></month-chart>
             </div>
@@ -499,14 +499,30 @@ export default {
       }
     },
     recomDayProduce(data) { // 重组road数据,使之符合图表格式
+      // add by chenx on 2018-9-10 for story#6678
+      data.dpAddPoi = Math.ceil(data.dpAddPoi / 1000);
+      data.dpUpdatePoi = Math.ceil(data.dpUpdatePoi / 1000);
+      data.dpAverage.addPoi = Math.ceil(data.dpAverage.addPoi / 1000);
+      data.dpAverage.updatePoi = Math.ceil(data.dpAverage.updatePoi / 1000);
       this.charData.dayProduce.barData = [data.dpAddPoi, data.dpUpdatePoi, data.dpAddRoad, data.dpUpdateRoad];
       this.charData.dayProduce.lineData = [data.dpAverage.addPoi, data.dpAverage.updatePoi, data.dpAverage.addRoad, data.dpAverage.updateRoad];
-      this.charData.dayProduce.yAxis = [`新增POI ${data.dpAddPoi} 个`, `更新POI ${data.dpUpdatePoi} 个`, `新增道路 ${data.dpAddRoad} 公里`, `更新道路 ${data.dpUpdateRoad} 公里`];
+      this.charData.dayProduce.yAxis = [`新增POI ${data.dpAddPoi} 千个`, `更新POI ${data.dpUpdatePoi} 千个`, `新增道路 ${data.dpAddRoad} 公里`, `更新道路 ${data.dpUpdateRoad} 公里`];
     },
     recomMonthProduce(data) { // 重组road数据,使之符合图表格式
+      // add by chenx on 2018-9-10 for story#6678
+      data.mpAddPoi = Math.ceil(data.mpAddPoi / 10000);
+      data.mpUpdatePoi = Math.ceil(data.mpUpdatePoi / 10000);
+      data.mpAverage.addPoi = Math.ceil(data.mpAverage.addPoi / 10000);
+      data.mpAverage.updatePoi = Math.ceil(data.mpAverage.updatePoi / 10000);
+
+      data.mpAddRoad = Math.ceil(data.mpAddRoad / 1000);
+      data.mpUpdateRoad = Math.ceil(data.mpUpdateRoad / 1000);
+      data.mpAverage.addRoad = Math.ceil(data.mpAverage.addRoad / 1000);
+      data.mpAverage.updateRoad = Math.ceil(data.mpAverage.updateRoad / 1000);
+
       this.charData.monthProduce.barData = [data.mpAddPoi, data.mpUpdatePoi, data.mpAddRoad, data.mpUpdateRoad];
       this.charData.monthProduce.lineData = [data.mpAverage.addPoi, data.mpAverage.updatePoi, data.mpAverage.addRoad, data.mpAverage.updateRoad];
-      this.charData.monthProduce.yAxis = [`新增POI ${data.mpAddPoi} 个`, `更新POI ${data.mpUpdatePoi} 个`, `新增道路 ${data.mpAddRoad} 公里`, `更新道路 ${data.mpUpdateRoad} 公里`];
+      this.charData.monthProduce.yAxis = [`新增POI ${data.mpAddPoi} 万个`, `更新POI ${data.mpUpdatePoi} 万个`, `新增道路 ${data.mpAddRoad} 千公里`, `更新道路 ${data.mpUpdateRoad} 千公里`];
     },
     toggleDataSource(type) {
       if (type === 'common') {
