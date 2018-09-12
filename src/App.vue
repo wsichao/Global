@@ -34,17 +34,7 @@
                   <span class='num-text'>{{crowd.crowdUserNum}}</span> 个
                 </div>
               </div>
-              <div class="flex-layout remark" style='align-items: flex-start;'>
-                <div>全年累积</div>
-                <div class="remark">
-                  <div>采集道路</div>
-                  <div>采集poi</div>
-                </div>
-                <div class="remark">
-                  <div><span class='num-text'>{{crowd.crowdRoadLen}}</span> 公里</div>
-                  <div><span class='num-text'>{{crowd.crowdPoiNum}}</span> 个</div>
-                </div>
-              </div>
+              <line-chart-crowd :chartData='crowd'></line-chart-crowd>
             </div>
           </panel>
         </div>
@@ -112,14 +102,12 @@
           </panel>
           <panel title="季出品 Quarterly Release" :sub-title="season.spVerson">
             <div slot="content" class="flex-layout-v" style="color:#DDD;">
-              <div style="margin-left: 10px;">
-                <div class="flex-layout remark" style="align-items: flex-start;">
-                  <div>更新道路<span class="num-text">{{season.spUpdateRoad}}</span> 公里</div>
-                  <div>新增道路<span class="num-text">{{season.spAddRoad}}</span> 公里</div>
+              <div style="margin-left: 10px;width: 100%;">
+                <div class="inlineChart">
+                  <dashboard-chart :dashboard="season.road"></dashboard-chart>
                 </div>
-                <div class="flex-layout remark" style="align-items: flex-start;">
-                  <div>更新POI<span class="num-text">{{season.spUpdatePoi}}</span> 个</div>
-                  <div>新增POI<span class="num-text">{{season.spAddPoi}}</span> 个</div>
+                <div class="inlineChart">
+                  <dashboard-chart :dashboard="season.poi"></dashboard-chart>
                 </div>
               </div>
             </div>
@@ -138,6 +126,8 @@
 import BarPoiChart from '@/components/chart/BarPoiChart';
 import BarRoadChart from '@/components/chart/BarRoadChart';
 import LineChart from '@/components/chart/LineChart';
+import LineChartCrowd from '@/components/chart/LineChartCrowd';
+import DashboardChart from '@/components/chart/DashboardChart'
 import DayChart from '@/components/chart/DayChart';
 import MonthChart from '@/components/chart/MonthChart';
 import Banner from '@/components/Banner';
@@ -163,8 +153,13 @@ export default {
         perAddPoiLable: 0,
         perUpdatePoiLable: 0,
       },
-      crowd: {},
-      season: {},
+      crowd: {
+        lineData: []
+      },
+      season: {
+        road:{},
+        poi: {}
+      },
       charData: {
         poi: {
           newData: [],
@@ -295,16 +290,33 @@ export default {
       this.seasonData(data);
     },
     seasonData(data) {
-      this.season.spUpdateRoad = data.spUpdateRoad;
-      this.season.spAddRoad = data.spAddRoad;
-      this.season.spUpdatePoi = data.spUpdatePoi;
-      this.season.spAddPoi = data.spAddPoi;
+
+      this.season.road = {
+        cahrtId: 'roadDash',
+        titleName: '道路',
+        styleColor: '#3C8FDE',
+        dataUnit: '公里',
+        dataUpdate: data.spUpdateRoad,
+        dataAdd: data.spAddRoad
+      };
+
+      this.season.poi = {
+        cahrtId: 'poiDash',
+        titleName: 'POI',
+        styleColor: '#FD8E20',
+        dataUnit: '个',
+        dataUpdate: data.spUpdatePoi,
+        dataAdd: data.spAddPoi
+      };
       this.season.spVerson = data.spVerson;
     },
     crowdData(data) { // 众包
       this.crowd.crowdUserNum = data.crowdUserNum;
       this.crowd.crowdRoadLen = data.crowdRoadLen;
       this.crowd.crowdPoiNum = data.crowdPoiNum;
+      var lineData = [[15,20,18,12,54,12,20,22,45,32,25,33], [45,25,30,20,12,54,12,20,22,45,32,25]];
+      this.crowd.lineData = lineData;
+      this.crowd.xAxis = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
     },
     getCurrentProcess(filed, data) {
       let currentHour = new Date().getHours() - 8; // 当前小时
@@ -548,6 +560,8 @@ export default {
     BarPoiChart,
     BarRoadChart,
     LineChart,
+    LineChartCrowd,
+    DashboardChart,
     DayChart,
     MonthChart,
     Banner,
@@ -746,6 +760,11 @@ div.legendContainer div.legend span.crowdInfoNone {
   -webkit-transform: scaleX(-1);
   -o-transform: scaleX(-1);
   transform: scaleX(-1);
+}
+
+div.inlineChart{
+  display: inline-block;
+  width: 48%;
 }
 
 </style>
