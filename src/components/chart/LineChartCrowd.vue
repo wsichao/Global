@@ -86,9 +86,21 @@ export default {
             interval: 0 // 强制显示
           }
         },
-        yAxis: {
-          show: false
-        },
+        yAxis:[{
+          axisLabel : {
+            textStyle: {
+              color: '#4D4F56'
+            }
+          },
+          axisLine: {
+            lineStyle: {
+              color: '#4D4F56'
+            }
+          },
+          splitLine: {
+            show: false
+          }
+        }],
         series: seriesData
       })
       this.chart.hideLoading()

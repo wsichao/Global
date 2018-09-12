@@ -28,7 +28,7 @@
           </panel>
           <panel title="众包 Crowdsourcing">
             <div slot="content" class="flex-layout-v" style="color:#DDD;margin-left: 10px">
-              <div class="flex-layout remark" style="align-items: flex-start;">
+              <div class="flex-layout remark" style="align-items: flex-start;margin-top: 14px;">
                 <div>用户总量</div>
                 <div>
                   <span class='num-text'>{{crowd.crowdUserNum}}</span> 个
@@ -101,7 +101,7 @@
             </div>
           </panel>
           <panel title="季出品 Quarterly Release" :sub-title="season.spVerson">
-            <div slot="content" class="flex-layout-v" style="color:#DDD;">
+            <div slot="content" class="flex-layout-v" style="color:#DDD;margin-bottom: -35px;">
               <div style="margin-left: 10px;width: 100%;">
                 <div class="inlineChart">
                   <dashboard-chart :dashboard="season.road"></dashboard-chart>

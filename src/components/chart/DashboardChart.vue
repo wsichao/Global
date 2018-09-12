@@ -151,7 +151,7 @@ export default {
 
 .chart-content .chart {
   width: 200px;
-  height: 140px;
+  height: 170px;
 }
 
 .chart-content .dataDetail{
