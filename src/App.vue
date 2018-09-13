@@ -28,10 +28,10 @@
           </panel>
           <panel title="众包 Crowdsourcing">
             <div slot="content" class="flex-layout-v" style="color:#DDD;margin-left: 10px">
-              <div class="flex-layout remark" style="align-items: flex-start;margin-top: 14px;">
+              <div class="flex-layout remark" style="align-items: flex-start;margin: 14px 0 0 6px;">
                 <div>用户总量</div>
                 <div>
-                  <span class='num-text'>{{crowd.crowdUserNum}}</span> 个
+                  <span class='num-text' style="margin: 0 2px 0 7px;">{{crowd.crowdUserNum}}</span> 个
                 </div>
               </div>
               <line-chart-crowd :chartData='crowd'></line-chart-crowd>
@@ -669,7 +669,7 @@ div.legendContainer div.legend span.crowdInfoNone {
 }
 
 .remark>div:not(.remark) {
-  padding: 6px 12px;
+  padding: 6px 0;
 }
 
 .center-content {
