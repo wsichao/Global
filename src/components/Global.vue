@@ -1,5 +1,8 @@
 <template>
-  <div id="cesiumContainer"></div>
+  <div class="fm-stretch">
+    <div id="cesiumContainer" class="fm-stretch"></div>
+    <div id="myInfoBox" class="info-box"></div>
+  </div>
 </template>
 <script>
 import axios from 'axios';
@@ -20,7 +23,8 @@ export default {
     return {
       randomEntities: [],
       commonEntities: [],
-      crowdEntities: []
+      crowdEntities: [],
+      abroadEntities: []
     };
   },
   computed: {
@@ -99,10 +103,9 @@ export default {
       if (this.$props.crowdInfoSource) {
         this.loadCrowdData();
       }
-      const that = this;
       if (this.$props.commonInfoSource) {
-        setTimeout(function() {
-          that.loadCommonData();
+        setTimeout(() => {
+          this.loadCommonData();
         }, 200)
       }
     },
@@ -163,9 +166,8 @@ export default {
       }).then(function(res) {
         if (res.data.errcode === 0) {
           let tempSourceData = that.data2GeoJson(res.data.data);
-          let i, feature;
-          for (i = 0; i < tempSourceData.features.length; i++) {
-            feature = tempSourceData.features[i];
+          for (let i = 0; i < tempSourceData.features.length; i++) {
+            const feature = tempSourceData.features[i];
             that.crowdEntities.push(that.viewer.entities.add({
               position: Cesium.Cartesian3.fromDegrees(feature.geometry.coordinates[0],
                 feature.geometry.coordinates[1]),
@@ -188,9 +190,8 @@ export default {
       }).then(function(res) {
         if (res.data.errcode === 0) {
           let tempSourceData = that.data2GeoJson(res.data.data);
-          let i, feature;
-          for (i = 0; i < tempSourceData.features.length; i++) {
-            feature = tempSourceData.features[i];
+          for (let i = 0; i < tempSourceData.features.length; i++) {
+            const feature = tempSourceData.features[i];
             that.commonEntities.push(that.viewer.entities.add({
               position: Cesium.Cartesian3.fromDegrees(feature.geometry.coordinates[0],
                 feature.geometry.coordinates[1]),
@@ -201,8 +202,24 @@ export default {
             }));
           }
         }
-      }).catch(function(err) {})
+      });
     },
+    loadAbroad() {
+      this.abroadEntities.push(this.viewer.entities.add({
+        position: Cesium.Cartesian3.fromDegrees(102.36, 17.58),
+        billboard: {
+          image: './static/images/laowo.png'
+        }
+      }));
+
+      this.abroadEntities.push(this.viewer.entities.add({
+        position: Cesium.Cartesian3.fromDegrees(104.55, 11.33),
+        billboard: {
+          image: './static/images/jianpuzhai.png',
+          eyeOffset: new Cesium.Cartesian3(0, 0, -500000)
+        }
+      }));
+    }
   },
   mounted() {
     const viewer = new Cesium.Viewer('cesiumContainer', {
@@ -235,9 +252,6 @@ export default {
 
     viewer.extend(Cesium.viewerDragDropMixin);
 
-    // 禁用默认的双击一个entity后，自动缩放、定位操作
-    viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
-
     // const initialPosition = Cesium.Cartesian3.fromDegrees(115.0, 40.69114333714821,
     //   16000000);
     // viewer.scene.camera.setView({
@@ -248,8 +262,39 @@ export default {
     // 禁用默认的鼠标拖动来滚动地图
     // viewer.scene.screenSpaceCameraController.enableRotate = false;
 
+    // 禁用默认的双击一个entity后，自动缩放、定位操作
+    viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
+
+    const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+    handler.setInputAction((click) => {
+      let alertText = '';
+
+      function addToMessage(key, value) {
+        alertText += key + ': ' + value + '\n';
+      }
+
+      const pickedObject = viewer.scene.pick(click.position);
+      if (Cesium.defined(pickedObject)) {
+        addToMessage('target', pickedObject.id.id);
+        const position = viewer.camera.pickEllipsoid(click.position);
+        addToMessage('screenX', click.position.x);
+        addToMessage('screenY', click.position.y);
+        addToMessage('didHitGlobe', Cesium.defined(position));
+        const cartographicPosition = Cesium.Ellipsoid.WGS84.cartesianToCartographic(position);
+        addToMessage('longitude', Cesium.Math.toDegrees(cartographicPosition.longitude));
+        addToMessage('latitude', Cesium.Math.toDegrees(cartographicPosition.latitude));
+        const terrainSamplePositions = [cartographicPosition];
+        Cesium.sampleTerrain(viewer.terrainProvider, 9, terrainSamplePositions).then(() => {
+          addToMessage('height', terrainSamplePositions[0].height);
+        }).always(() => {
+          alert(alertText);
+        });
+      }
+    }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+
     this.viewer = viewer;
     this.reloadData();
+    this.loadAbroad();
   },
 
   beforeUpdate() {
@@ -259,16 +304,20 @@ export default {
 
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
-#cesiumContainer {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
+<style scoped>
 #cesiumContainer .cesium-viewer-bottom {
   display: none;
+}
+
+.info-box {
+  display: inline;
+  position: absolute;
+  top: 100px;
+  left: 100px;
+  height: 588px;
+  width: 486px;
+  /*background: url(../static/images/laowo_introduction.png);*/
+  background-color: #000;
 }
 
 </style>
