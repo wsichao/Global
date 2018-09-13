@@ -1,12 +1,15 @@
 <template>
   <div class="fm-stretch">
     <div id="cesiumContainer" class="fm-stretch"></div>
-    <div id="myInfoBox" class="info-box"></div>
+    <div v-if="selectedRegion">
+      <info-box type='jianpuzhai'></info-box>
+    </div>
   </div>
 </template>
 <script>
 import axios from 'axios';
 import conf from '../config';
+import InfoBox from './InfoBox';
 
 window.CESIUM_BASE_URL = './static/Cesium';
 const Cesium = require('cesium/Source/Cesium.js');
@@ -18,13 +21,17 @@ Cesium.Camera.DEFAULT_VIEW_FACTOR = 1;
 
 export default {
   name: 'global',
+  components: {
+    InfoBox
+  },
   props: ['crowdInfoSource', 'commonInfoSource', 'randomData', 'poiChangedNum'],
   data: function() {
     return {
       randomEntities: [],
       commonEntities: [],
       crowdEntities: [],
-      abroadEntities: []
+      abroadEntities: [],
+      selectedRegion: null
     };
   },
   computed: {
@@ -206,6 +213,7 @@ export default {
     },
     loadAbroad() {
       this.abroadEntities.push(this.viewer.entities.add({
+        id: 'laowo',
         position: Cesium.Cartesian3.fromDegrees(102.36, 17.58),
         billboard: {
           image: './static/images/laowo.png'
@@ -213,12 +221,24 @@ export default {
       }));
 
       this.abroadEntities.push(this.viewer.entities.add({
+        id: 'jianpuzhai',
         position: Cesium.Cartesian3.fromDegrees(104.55, 11.33),
         billboard: {
           image: './static/images/jianpuzhai.png',
           eyeOffset: new Cesium.Cartesian3(0, 0, -500000)
         }
       }));
+
+      const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+      handler.setInputAction((click) => {
+        const pickedObject = viewer.scene.pick(click.position);
+        if (Cesium.defined(pickedObject) && this.abroadEntities.includes(pickedObject)) {
+          console.log(pickedObject.id.position);
+          this.selectedRegion = pickedObject.id.id;
+        } else {
+          this.selectedRegion = null;
+        }
+      }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
     }
   },
   mounted() {
@@ -265,40 +285,9 @@ export default {
     // 禁用默认的双击一个entity后，自动缩放、定位操作
     viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
 
-    const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
-    handler.setInputAction((click) => {
-      let alertText = '';
-
-      function addToMessage(key, value) {
-        alertText += key + ': ' + value + '\n';
-      }
-
-      const pickedObject = viewer.scene.pick(click.position);
-      if (Cesium.defined(pickedObject)) {
-        addToMessage('target', pickedObject.id.id);
-        const position = viewer.camera.pickEllipsoid(click.position);
-        addToMessage('screenX', click.position.x);
-        addToMessage('screenY', click.position.y);
-        addToMessage('didHitGlobe', Cesium.defined(position));
-        const cartographicPosition = Cesium.Ellipsoid.WGS84.cartesianToCartographic(position);
-        addToMessage('longitude', Cesium.Math.toDegrees(cartographicPosition.longitude));
-        addToMessage('latitude', Cesium.Math.toDegrees(cartographicPosition.latitude));
-        const terrainSamplePositions = [cartographicPosition];
-        Cesium.sampleTerrain(viewer.terrainProvider, 9, terrainSamplePositions).then(() => {
-          addToMessage('height', terrainSamplePositions[0].height);
-        }).always(() => {
-          alert(alertText);
-        });
-      }
-    }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
-
     this.viewer = viewer;
     this.reloadData();
     this.loadAbroad();
-  },
-
-  beforeUpdate() {
-    // this.refreshDataSources();
   }
 };
 
@@ -307,17 +296,6 @@ export default {
 <style scoped>
 #cesiumContainer .cesium-viewer-bottom {
   display: none;
-}
-
-.info-box {
-  display: inline;
-  position: absolute;
-  top: 100px;
-  left: 100px;
-  height: 588px;
-  width: 486px;
-  /*background: url(../static/images/laowo_introduction.png);*/
-  background-color: #000;
 }
 
 </style>

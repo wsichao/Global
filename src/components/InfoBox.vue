@@ -1,38 +1,54 @@
 <template>
-  <div class="info-box" :style="{top: top, left: left, background-image: url(imgSrc)}">
-    <div class="text">
-      <p>{{ description }}</p>
+  <div class="info-box" :style="{top: top, left: left, 'background-image': imgSrc}">
+    <div class="content">
+      <p>开发时间：{{ desc.date }}</p>
+      <p>范围：{{ desc.scope }}</p>
+      <p>道路总里程：{{ desc.roadSum }}</p>
+      <p>POI数量：{{ desc.poiSum }}</p>
     </div>
   </div>
 </template>
 <script>
 export default {
   name: 'InfoBox',
-  props: ['position': Array, 'type': String],
-  data: function() {
-    return {
-
-    };
+  props: {
+    'type': {
+      type: String,
+      required: true
+    }
+  },
+  data() {
+    return {};
   },
   computed: {
     imgSrc() {
-      return `../static/images/${this.type}_introduction.png`
+      return `url(../static/images/${this.type}_introduction.png)`;
     },
     top() {
-      return '100px';
+      return '300px';
     },
     left() {
-      return '100px';
+      return '1000px';
+    },
+    desc() {
+      if (this.type === 'laowo') {
+        return {
+          date: '2015年',
+          scope: '全境，包括17个省、直辖市',
+          roadSum: '4.5万KM，其中高等级道路里程1.5万KM',
+          poiSum: '2.3万， 重点POI全面覆盖'
+        };
+      } else if (this.type === 'jianpuzhai') {
+        return {
+          date: '2016年',
+          scope: '全境， 包括12个重点城市及其国家主干道',
+          roadSum: '8万KM',
+          poiSum: '3万，重点POI全面覆盖'
+        };
+      }
+
+      return {};
     }
-  },
-  watch: {
-
-  },
-  methods: {
-
-  },
-  mounted() {
-
   }
 };
 
@@ -44,7 +60,11 @@ export default {
   position: absolute;
   height: 588px;
   width: 486px;
-  background: url(../static/images/laowo_introduction.png);
+}
+
+.info-box .content {
+    padding: 120px 100px;
+    color: #2fa9fc;
 }
 
 </style>
