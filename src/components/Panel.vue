@@ -58,4 +58,8 @@
     flex: 1 0 100px;
     padding-left: 20px;
   }
+
+  .subTitle{
+    margin-top: 14px;
+  }
 </style>

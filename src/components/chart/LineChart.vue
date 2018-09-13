@@ -36,6 +36,9 @@ export default {
           smooth: true,
           itemStyle: {
             normal: {
+              areaStyle: {
+                type: 'default'
+              },
               color: '#FF9933'
             }
           },
@@ -48,6 +51,9 @@ export default {
           smooth: true,
           itemStyle: {
             normal: {
+              areaStyle: {
+                type: 'default'
+              },
               color: '#FDE22A'
             }
           },
@@ -60,6 +66,9 @@ export default {
           smooth: true,
           itemStyle: {
             normal: {
+              areaStyle: {
+                type: 'default'
+              },
               color: '#3493FF'
             }
           },
@@ -72,6 +81,9 @@ export default {
           smooth: true,
           itemStyle: {
             normal: {
+              areaStyle: {
+                type: 'default'
+              },
               color: '#01B31E'
             }
           },
