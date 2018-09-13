@@ -58,7 +58,7 @@ export default {
       this.chart.setOption({
         backgroundColor: 'rgba(128, 128, 128, 0)',
         grid: {
-          left: 46,
+          left: 15,
           right: 20,
           top: 45,
           bottom: 24
@@ -66,6 +66,7 @@ export default {
         title: {},
         legend: {
           orient: 'horizontal',
+          x: 'left',
           right: 20,
           top: 0,
           itemWidth: 14,
@@ -86,10 +87,14 @@ export default {
             interval: 0 // 强制显示
           }
         },
-        yAxis:[{
+        yAxis: {
+          show: false,
+          boundaryGap: false // 坐标轴两边不留空白
+        },/* [{
+          show: false,
           axisLabel : {
             textStyle: {
-              color: '#4D4F56'
+              color: '#FFF'
             }
           },
           axisLine: {
@@ -100,7 +105,7 @@ export default {
           splitLine: {
             show: false
           }
-        }],
+        }], */
         series: seriesData
       })
       this.chart.hideLoading()
