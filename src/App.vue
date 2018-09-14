@@ -314,9 +314,17 @@ export default {
       this.crowd.crowdUserNum = data.crowdUserNum;
       this.crowd.crowdRoadLen = data.crowdRoadLen;
       this.crowd.crowdPoiNum = data.crowdPoiNum;
-      var lineData = [[15,20,18,12,54,12,20,22,45,32,25,33], [45,25,30,20,12,54,12,20,22,45,32,25]];
+
+      let months = Object.keys(data.crowdEachMonth).sort((a, b) => {return a-b});
+      let lineData = [[],[]], xAxis = [];
+      months.forEach(e => {
+        lineData[0].push(data.crowdEachMonth[Number(e)].road);
+        lineData[1].push(data.crowdEachMonth[Number(e)].poi);
+        xAxis.push(e + '月')
+      })
+
       this.crowd.lineData = lineData;
-      this.crowd.xAxis = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+      this.crowd.xAxis = xAxis;
     },
     getCurrentProcess(filed, data) {
       let currentHour = new Date().getHours() - 8; // 当前小时
