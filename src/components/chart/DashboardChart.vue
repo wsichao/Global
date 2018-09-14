@@ -35,7 +35,7 @@ export default {
       this.chart.showLoading();
 
       var addSpareData = function(data, color){
-          var spareData = (Number(data[0]) + Number(data[1]))*0.5;
+          var spareData = (Number(data[0]) + Number(data[1]))*0.35;
           console.log(spareData);
           return [{
             value: data[0], 
@@ -61,7 +61,7 @@ export default {
               }
             }
           },{
-            value: data[0],
+            value: data[1],
             name: '新增',
             itemStyle: {
               normal: {
@@ -71,7 +71,7 @@ export default {
                 labelLine : {
                   show : false
                 },
-                color: '#EDEDED'
+                color: 'rgba(237,237,237,0.5)'
               },
               emphasis: {
                 label : {
@@ -103,7 +103,7 @@ export default {
       let seriesData = [{
           name: '',
           type: 'pie',
-          startAngle: 230,
+          startAngle: 224,
           radius : ['75%', '90%'],
           smooth: true,
           tooltip: {
