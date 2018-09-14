@@ -39,7 +39,7 @@ export default {
               areaStyle: {
                 type: 'default'
               },
-              color: '#FF9933'
+              color: getLinerStyle('#DEDEDE', '#FF9933')
             }
           },
           data: [1738.82293882, 1426.64095209, 1403.30852207, 813.82310678, 1366.00084594, 1244.18313622, 1132.15832078, 1911.12552555, 1878.86507383, 593.13944326, 0, 0]
@@ -54,7 +54,7 @@ export default {
               areaStyle: {
                 type: 'default'
               },
-              color: '#FDE22A'
+              color: getLinerStyle('#DEDEDE', '#FDE22A')
             }
           },
           data: this.chartData.lineData[0] // [120, 132, 101, 134, 90, 230, 210, 120, 132, 101, 134, 90]
@@ -69,7 +69,7 @@ export default {
               areaStyle: {
                 type: 'default'
               },
-              color: '#3493FF'
+              color: getLinerStyle('#DEDEDE', '#3493FF')
             }
           },
           data: this.chartData.lineData[1] // [120, 182, 191, 234, 290, 330, 310, 220, 182, 191, 234, 290]
@@ -84,12 +84,25 @@ export default {
               areaStyle: {
                 type: 'default'
               },
-              color: '#01B31E'
+              color: getLinerStyle('#DEDEDE', '#01B31E')
             }
           },
           data: this.chartData.lineData[2] //[120, 232, 201, 154, 190, 330, 410, 150, 232, 201, 154, 190]
         }
       ]
+
+      /**
+       * 获取渐变色
+       */
+      function getLinerStyle(satrtColor, endColor){
+        return new echarts.graphic.LinearGradient(
+          0, 0, 0, 1,
+          [
+            {offset: 0.2, color: endColor},
+            {offset: 0.9, color: satrtColor}
+          ]
+        )
+      }
 
       this.chart.setOption({
         backgroundColor: 'rgba(128, 128, 128, 0)',
