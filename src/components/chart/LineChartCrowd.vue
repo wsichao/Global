@@ -27,15 +27,32 @@ export default {
         { name: `采集道路${this.chartData.crowdRoadLen}公里`, icon: 'roundRect' },
         { name: `采集poi${this.chartData.crowdPoiNum}个`, icon: 'roundRect' }
       ];
+
+      /**
+       * 获取渐变色
+       */
+      function getLinerStyle(satrtColor, endColor){
+        return new echarts.graphic.LinearGradient(
+          0, 0, 0, 1,
+          [
+            {offset: 0.2, color: endColor},
+            {offset: 0.9, color: satrtColor}
+          ]
+        )
+      }
+
       let seriesData = [{
           name: `采集道路${this.chartData.crowdRoadLen}公里`,
           type: 'line',
-          symbol: 'circle',
-          symbolSize: 6,
+          symbol: 'none',
+          // symbolSize: 6,
           smooth: true,
           itemStyle: {
             normal: {
-              color: '#FFC82C'
+              color: getLinerStyle('#d6e6e6', '#FFC82C'),
+              areaStyle: {
+                type: 'default'
+              }
             }
           },
           data: this.chartData.lineData[0]
@@ -43,12 +60,15 @@ export default {
         {
           name: `采集poi${this.chartData.crowdPoiNum}个`,
           type: 'line',
-          symbol: 'rectangle',
-          symbolSize: 6,
+          symbol: 'none',
+          // symbolSize: 6,
           smooth: true,
           itemStyle: {
             normal: {
-              color: '#C23731'
+              color: getLinerStyle('#f5b6b4', '#f00'),
+              areaStyle: {
+                type: 'default'
+              }
             }
           },
           data: this.chartData.lineData[1]
