@@ -1,8 +1,12 @@
 <template>
   <div class="fm-stretch">
     <div id="cesiumContainer" class="fm-stretch"></div>
-    <div v-if="selectedRegion">
-      <info-box type='jianpuzhai'></info-box>
+    <div class="btn-container" :style="{top: btnPosition.top, left: btnPosition.left}">
+      <img src="../../static/images/fuwei.png" @click="flyHome">
+      <img :src="abroadBtnImg" @click="showAbroad=!showAbroad">
+    </div>
+    <div v-if="selectedAbroad">
+      <info-box :anchor="center" :type="selectedAbroad.id"></info-box>
     </div>
   </div>
 </template>
@@ -15,6 +19,7 @@ window.CESIUM_BASE_URL = './static/Cesium';
 const Cesium = require('cesium/Source/Cesium.js');
 require('cesium/Source/Widgets/widgets.css');
 
+// 设置Cesium的默认显示区域，显示出中国全貌
 const extent = Cesium.Rectangle.fromDegrees(90, 20, 120, 50);
 Cesium.Camera.DEFAULT_VIEW_RECTANGLE = extent;
 Cesium.Camera.DEFAULT_VIEW_FACTOR = 1;
@@ -25,13 +30,17 @@ export default {
     InfoBox
   },
   props: ['crowdInfoSource', 'commonInfoSource', 'randomData', 'poiChangedNum'],
-  data: function() {
+  data() {
     return {
+      viewer: null,
       randomEntities: [],
       commonEntities: [],
       crowdEntities: [],
-      abroadEntities: [],
-      selectedRegion: null
+      abroadEntities: [], // 所有海外地图的Entiities
+      selectedAbroad: null, // 当前选中的海外地图的Entity
+      center: [], // 地图中心点的屏幕坐标
+      btnPosition: {}, // 控制按钮的显示位置
+      showAbroad: false // 是否显示海外地图
     };
   },
   computed: {
@@ -40,6 +49,9 @@ export default {
       Array.prototype.push.apply(arr, this.commonEntities);
       Array.prototype.push.apply(arr, this.crowdEntities);
       return arr;
+    },
+    abroadBtnImg() {
+      return this.showAbroad ? '../../static/images/abroad.png' : '../../static/images/abroad_normal.png'
     }
   },
   watch: {
@@ -75,7 +87,7 @@ export default {
       this.randomEntities = []
       while (t >= 0 && c > 0) {
         i = parseInt(t * Math.random());
-        let pointPosition = this.allEntities[i].position;
+        const pointPosition = this.allEntities[i].position;
         let count = 0;
         const entity = {
           position: pointPosition,
@@ -101,6 +113,18 @@ export default {
         this.randomEntities.push(entityAdded)
         c--;
       }
+
+      // const points = this.generateRandomPoint(10);
+      // points.forEach(it => {
+      //   this.randomEntities.push(this.viewer.entities.add(it))
+      // });
+    },
+    showAbroad(newVal) {
+      if (newVal) {
+        this.loadAbroad();
+      } else {
+        this.clearAbroad();
+      }
     }
   },
   methods: {
@@ -123,24 +147,23 @@ export default {
       const maxLon = 120;
       let points = [];
       for (let i = 0; i < num; i++) {
-        let radius = 7;
         let cnt = 0;
         const tmpEntity = {
           position: Cesium.Cartesian3.fromDegrees(minLon + (maxLon - minLon) * Math.random(), minLat + (maxLat - minLat) * Math.random()),
           point: {
             pixelSize: new Cesium.CallbackProperty(function() {
-              let r = radius;
-              if (cnt < 5) {
-                if (radius === 7) {
-                  radius = 14;
-                } else {
-                  radius = 7;
-                  cnt++;
-                }
+              // 闪烁次数
+              cnt++;
+
+              var tmp = parseInt(cnt / 2)
+              if (tmp >= 26) {
+                cnt = 0
               }
-              return r;
+              return tmp;
             }, false),
-            color: Cesium.Color.CYAN,
+            color: Cesium.Color.TRANSPARENT,
+            outlineColor: Cesium.Color.DEEPSKYBLUE,
+            outlineWidth: 2
           }
         };
         points.push(tmpEntity);
@@ -211,34 +234,71 @@ export default {
         }
       });
     },
+    flyHome() {
+      this.viewer.camera.flyHome();
+    },
     loadAbroad() {
-      this.abroadEntities.push(this.viewer.entities.add({
-        id: 'laowo',
-        position: Cesium.Cartesian3.fromDegrees(102.36, 17.58),
-        billboard: {
-          image: './static/images/laowo.png'
-        }
-      }));
+      const abroad = {
+        'laowo': [102.36, 17.58],
+        'jianpuzhai': [104.55, 11.33]
+      };
 
-      this.abroadEntities.push(this.viewer.entities.add({
-        id: 'jianpuzhai',
-        position: Cesium.Cartesian3.fromDegrees(104.55, 11.33),
-        billboard: {
-          image: './static/images/jianpuzhai.png',
-          eyeOffset: new Cesium.Cartesian3(0, 0, -500000)
-        }
-      }));
+      for (const [key, val] of Object.entries(abroad)) {
+        this.abroadEntities.push(this.viewer.entities.add({
+          id: key,
+          position: Cesium.Cartesian3.fromDegrees(val[0], val[1]),
+          billboard: {
+            image: `./static/images/abroad/${key}.png`
+          }
+        }));
+      }
 
-      const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
-      handler.setInputAction((click) => {
-        const pickedObject = viewer.scene.pick(click.position);
-        if (Cesium.defined(pickedObject) && this.abroadEntities.includes(pickedObject)) {
-          console.log(pickedObject.id.position);
-          this.selectedRegion = pickedObject.id.id;
+      let lock = false; // 地球在移动动画过程中禁止点击事件
+      this.viewer.screenSpaceEventHandler.setInputAction((click) => {
+        if (lock) {
+          return;
+        }
+
+        const scene = this.viewer.scene;
+        const camera = this.viewer.camera;
+        const canvas = this.viewer.canvas;
+        const pickedObject = scene.pick(click.position);
+        if (Cesium.defined(pickedObject) && this.abroadEntities.find(it => it.id === pickedObject.id.id)) {
+          if (this.selectedAbroad) {
+            if (pickedObject.id.id === this.selectedAbroad.id) {
+              return;
+            }
+            this.selectedAbroad.billboard.image = new Cesium.ConstantProperty(`./static/images/abroad/${this.selectedAbroad.id}.png`);
+            this.selectedAbroad = null;
+          }
+
+          lock = true;
+          const height = scene.globe.ellipsoid.cartesianToCartographic(camera.position).height;
+          this.viewer.flyTo(pickedObject.id, {
+            offset: new Cesium.HeadingPitchRange(camera.heading, camera.pitch, height)
+          }).then(() => {
+            pickedObject.id.billboard.image = new Cesium.ConstantProperty(`./static/images/abroad/${pickedObject.id.id}_active.png`);
+            this.selectedAbroad = pickedObject.id;
+            this.center = [canvas.clientWidth / 2, canvas.clientHeight / 2];
+            lock = false;
+          });
         } else {
-          this.selectedRegion = null;
+          if (this.selectedAbroad) {
+            this.selectedAbroad.billboard.image = new Cesium.ConstantProperty(`./static/images/abroad/${this.selectedAbroad.id}.png`);
+            this.selectedAbroad = null;
+          }
         }
       }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+    },
+    clearAbroad() {
+      this.abroadEntities.forEach(it => {
+        this.viewer.entities.remove(it);
+      });
+      this.abroadEntities.length = 0;
+
+      this.selectedAbroad = null;
+
+      this.viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
     }
   },
   mounted() {
@@ -272,6 +332,7 @@ export default {
 
     viewer.extend(Cesium.viewerDragDropMixin);
 
+    // 设置地球初始显示位置
     // const initialPosition = Cesium.Cartesian3.fromDegrees(115.0, 40.69114333714821,
     //   16000000);
     // viewer.scene.camera.setView({
@@ -283,11 +344,22 @@ export default {
     // viewer.scene.screenSpaceCameraController.enableRotate = false;
 
     // 禁用默认的双击一个entity后，自动缩放、定位操作
-    viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
+    viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
+    // 移动开始后清理海外地图的信息框
+    viewer.camera.moveStart.addEventListener((moveStartPosition) => {
+      if (this.selectedAbroad) {
+        this.selectedAbroad.billboard.image = new Cesium.ConstantProperty(`./static/images/abroad/${this.selectedAbroad.id}.png`);
+        this.selectedAbroad = null;
+      }
+    });
 
     this.viewer = viewer;
     this.reloadData();
-    this.loadAbroad();
+    // this.loadAbroad();
+    this.btnPosition = {
+      top: '180px',
+      left: `${this.$el.clientWidth * 0.75 - 90}px`
+    };
   }
 };
 
@@ -296,6 +368,20 @@ export default {
 <style scoped>
 #cesiumContainer .cesium-viewer-bottom {
   display: none;
+}
+
+.btn-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  justify-content: space-evenly;
+  padding: 0px 10px 0px 4px;
+  position: absolute;
+  width: 128px;
+  height: 51px;
+  background-image: url(../../static/images/button_frame.png);
+  /* 处理被右侧div压盖的问题 */
+  z-index: 999;
 }
 
 </style>

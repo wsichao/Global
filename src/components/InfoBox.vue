@@ -1,10 +1,12 @@
 <template>
   <div class="info-box" :style="{top: top, left: left, 'background-image': imgSrc}">
     <div class="content">
-      <p>开发时间：{{ desc.date }}</p>
-      <p>范围：{{ desc.scope }}</p>
-      <p>道路总里程：{{ desc.roadSum }}</p>
-      <p>POI数量：{{ desc.poiSum }}</p>
+      <div class="desc">
+        <p>开发时间：{{ desc.date }}</p>
+        <p>范围：{{ desc.scope }}</p>
+        <p>道路总里程：{{ desc.roadSum }}</p>
+        <p>POI数量：{{ desc.poiSum }}</p>
+      </div>
     </div>
   </div>
 </template>
@@ -15,6 +17,10 @@ export default {
     'type': {
       type: String,
       required: true
+    },
+    anchor: {
+      type: Array,
+      required: true
     }
   },
   data() {
@@ -22,13 +28,13 @@ export default {
   },
   computed: {
     imgSrc() {
-      return `url(../static/images/${this.type}_introduction.png)`;
+      return `url(./static/images/abroad/${this.type}_introduction.png)`;
     },
     top() {
-      return '300px';
+      return `${this.anchor[1] - 200}px`;
     },
     left() {
-      return '1000px';
+      return `${this.anchor[0]}px`;
     },
     desc() {
       if (this.type === 'laowo') {
@@ -58,13 +64,21 @@ export default {
 .info-box {
   display: inline;
   position: absolute;
-  height: 588px;
-  width: 486px;
+  height: 488px;
+  width: 386px;
+  padding: 50px;
+  pointer-events: none;
 }
 
 .info-box .content {
-    padding: 120px 100px;
-    color: #2fa9fc;
+  width: 100%;
+  height: 100%;
+  pointer-events: auto;
+}
+
+.info-box .desc {
+  padding: 60px 40px;
+  color: #2fa9fc;
 }
 
 </style>
