@@ -45,7 +45,7 @@
         </div>
       </div>
       <div class="flex-layout-v fm-stretch" style="align-items: center;width: 40%;">
-        <div class="center-content" style="margin-left: 2px;">
+        <div class="center-content">
           <div style="margin: 0px -40px;">
             <banner></banner>
           </div>
@@ -157,7 +157,7 @@ export default {
         lineData: []
       },
       season: {
-        road:{},
+        road: {},
         poi: {}
       },
       charData: {
@@ -315,8 +315,12 @@ export default {
       this.crowd.crowdRoadLen = data.crowdRoadLen;
       this.crowd.crowdPoiNum = data.crowdPoiNum;
 
-      let months = Object.keys(data.crowdEachMonth).sort((a, b) => {return a-b});
-      let lineData = [[],[]], xAxis = [];
+      let months = Object.keys(data.crowdEachMonth).sort((a, b) => { return a - b });
+      let lineData = [
+          [],
+          []
+        ],
+        xAxis = [];
       months.forEach(e => {
         lineData[0].push(data.crowdEachMonth[Number(e)].road);
         lineData[1].push(data.crowdEachMonth[Number(e)].poi);
@@ -610,8 +614,6 @@ div.float {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
   pointer-events: none;
 }
 
@@ -685,7 +687,6 @@ div.legendContainer div.legend span.crowdInfoNone {
   /*height: 250px;*/
   padding: 70px 130px;
   margin-top: -49px;
-  margin-left: -30px;
   z-index: 9999;
   background: url(./assets/middle.png) no-repeat top/contain;
   background-size: 100% 100%;
@@ -770,7 +771,7 @@ div.legendContainer div.legend span.crowdInfoNone {
   transform: scaleX(-1);
 }
 
-div.inlineChart{
+div.inlineChart {
   display: inline-block;
   width: 48%;
 }
