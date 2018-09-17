@@ -1,6 +1,6 @@
 <template>
   <div class="chart-content">
-    <div class="chart" :id="cahrtId" style="padding-top: 8px;padding-bottom: 8px;'"></div>
+    <div class="chart" :id="cahrtId"></div>
     <div class="dataDetail">
       <div><span>{{this.dashboard.titleName}}</span></div>
       <div><span>更新<span class="focusDetail">{{this.dashboard.dataUpdate}}</span>{{this.dashboard.dataUnit}}</span></div>
@@ -167,6 +167,6 @@ export default {
   font-size: 13px;
 }
 .chart-content .dataDetail div{
-  margin-top: 4px 
+  /*margin-top: 4px */
 }
 </style>
