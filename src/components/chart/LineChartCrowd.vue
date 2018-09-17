@@ -65,7 +65,7 @@ export default {
           smooth: true,
           itemStyle: {
             normal: {
-              color: getLinerStyle('#f5b6b4', '#f00'),
+              color: getLinerStyle('#d6e6e6', '#39f'),
               areaStyle: {
                 type: 'default'
               }
