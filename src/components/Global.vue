@@ -275,7 +275,8 @@ export default {
           lock = true;
           const height = scene.globe.ellipsoid.cartesianToCartographic(camera.position).height;
           this.viewer.flyTo(pickedObject.id, {
-            offset: new Cesium.HeadingPitchRange(camera.heading, camera.pitch, height)
+            offset: new Cesium.HeadingPitchRange(camera.heading, camera.pitch, height),
+            duration: 1.5
           }).then(() => {
             pickedObject.id.billboard.image = new Cesium.ConstantProperty(`./static/images/abroad/${pickedObject.id.id}_active.png`);
             this.selectedAbroad = pickedObject.id;
