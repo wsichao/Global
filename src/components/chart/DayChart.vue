@@ -114,7 +114,7 @@
               type: 'bar',
               itemStyle: {
                 normal: {
-                  color: '#FD8E20',
+                  color: '#39f',
                   barBorderRadius: [0, 5, 5, 0],
                 },
               },
@@ -163,5 +163,19 @@
     width: 400px;
     height: 200px;
     margin-left: 5px;
+  }
+  .labelSpan{
+    position: absolute;
+    display: inline;
+    right: 0px;
+    top: -6px;
+  }
+  .labelSpan span{
+    margin: 27px;
+    display: block;
+    text-align: right;
+    color: #f48b2d;
+    font-size: 13px;
+    font-weight: 600;
   }
 </style>

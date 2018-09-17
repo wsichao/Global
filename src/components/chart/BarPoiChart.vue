@@ -117,7 +117,7 @@ export default {
                stack: '总和',
                itemStyle: {
                  normal: {
-                   color: '#FD8E20',
+                   color: '#FFF',
                    barBorderRadius:[5, 5, 0, 0]
                  }
                },

@@ -108,8 +108,15 @@ export default {
                type:'bar',
                itemStyle: {
                  normal: {
-                   color: '#FD8E20',
-                   barBorderRadius:[0, 5, 5, 0]
+                   color: '#39f',
+                   barBorderRadius:[0, 5, 5, 0],
+                   label: {
+                     show: false,
+                     position: 'right',
+                     textStyle: {
+                       color: '#FD8E20'
+                     }
+                   }
                  }
                },
                data: this.monthProduce.barData // [100, 90, 80, 70]
@@ -120,7 +127,7 @@ export default {
                smooth: true,
                itemStyle: {
                  normal: {
-                   color: '#3333FF'
+                   color: '#FD8E20'
                  }
                },
                data: this.monthProduce.lineData
@@ -152,11 +159,26 @@ export default {
 .chart-content{
     color: #DDD;
     width: 400px;
+    position: relative;
     display: inline-block;
 }
 #myMonthChart {
     width: 400px;
     height: 200px;
     margin-left: 35px;
+}
+.labelSpan{
+    position: absolute;
+    display: inline;
+    right: 0px;
+    top: -6px;
+}
+.labelSpan span{
+    margin: 27px;
+    display: block;
+    text-align: right;
+    color: #f48b2d;
+    font-size: 13px;
+    font-weight: 600;
 }
 </style>
