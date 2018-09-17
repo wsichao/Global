@@ -36,7 +36,7 @@ export default {
           0, 0, 0, 1,
           [
             {offset: 0.2, color: endColor},
-            {offset: 0.9, color: satrtColor}
+            {offset: 1.0, color: satrtColor}
           ]
         )
       }
@@ -49,9 +49,10 @@ export default {
           smooth: true,
           itemStyle: {
             normal: {
-              color: getLinerStyle('#d6e6e6', '#FFC82C'),
+              color: '#FFC82C',
               areaStyle: {
-                type: 'default'
+                type: 'default',
+                color: getLinerStyle('rgba(0,0,0,0.1)', '#FFC82C')
               }
             }
           },
@@ -65,9 +66,10 @@ export default {
           smooth: true,
           itemStyle: {
             normal: {
-              color: getLinerStyle('#d6e6e6', '#39f'),
+              color: '#39f',
               areaStyle: {
-                type: 'default'
+                type: 'default',
+                color: getLinerStyle('rgba(0,0,0,0.1)', '#39f')
               }
             }
           },
