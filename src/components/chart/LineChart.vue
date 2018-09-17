@@ -111,10 +111,10 @@ export default {
       this.chart.setOption({
         backgroundColor: 'rgba(128, 128, 128, 0)',
         grid: {
-          left: 46,
-          right: 20,
-          top: 45,
-          bottom: 24
+          left: 14,
+          right: 15,
+          // top: 20,
+          bottom: 30
         },
         title: {
           // text: '累积值',
@@ -126,8 +126,7 @@ export default {
         },
         legend: {
           orient: 'horizontal',
-          right: 20,
-          top: 0,
+          x: 'left',
           itemWidth: 14,
           data: legendData,
           textStyle: { color: '#DDD' }

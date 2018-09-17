@@ -26,7 +26,6 @@
     display: flex;
     flex-flow: column nowrap;
     pointer-events: auto;
-    padding-left: 26px;
   }
   .fm-panel>.header {
     display: flex;
@@ -36,10 +35,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 370px;
+    width: 100%;
     height: 45px;
     padding: 0;
-    margin-left: 38px;
     color: #FD8E2A;
     font-size: 18px;
     font-weight: bold;
@@ -49,17 +47,11 @@
   .fm-panel>.content>.subTitle {
     display: flex;
     align-items: center;
-    justify-content: center;
     color: #fff;
     font-size: 20px;
-    margin-left: -220px;
+    padding: 10px 6px;
   }
   .fm-panel>.content {
     flex: 1 0 100px;
-    padding-left: 20px;
-  }
-
-  .subTitle{
-    margin-top: 14px;
   }
 </style>

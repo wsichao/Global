@@ -2,7 +2,7 @@
   <div class="fm-stretch">
     <Global :randomData="dataSourceStatus.randomData" :poiChangedNum="dataSourceStatus.poiChangedNum" :crowdInfoSource='dataSourceStatus.crowdInfoSource' :commonInfoSource='dataSourceStatus.commonInfoSource'></Global>
     <div class="fm-stretch flex-layout float">
-      <div class="col flex-layout-v" style="width: 25%;">
+      <div class="col flex-layout-v" style="width: 25%;align-items: flex-start;">
         <div class="top-title left">
           <div class="text" style="margin-left: -130px;margin-top: 18px;">
             <div><img src="./assets/dianchi.png" alt="" class="img1"></div>
@@ -10,7 +10,7 @@
             <div style="margin-top: -5px;">数据来源</div>
           </div>
         </div>
-        <div class="flex-layout-v" style="height: 100%;">
+        <div class="flex-layout-v" style="height: 100%;padding-left: 40px;">
           <panel title="自采 Field collection">
             <div slot="content">
               <div>
@@ -22,13 +22,13 @@
             </div>
           </panel>
           <panel title="第三方数据 Third party data">
-            <div slot="content" style="margin-left: -20px">
+            <div slot="content">
               <line-chart :chartData='charData.thrid'></line-chart>
             </div>
           </panel>
-          <panel title="众包 Crowdsourcing">
-            <div slot="content" class="flex-layout-v" style="color:#DDD;margin-left: 10px">
-              <div class="flex-layout remark" style="align-items: flex-start;margin: 14px 0 0 6px;">
+          <panel title="众包 Crowdsourcing" style="margin-bottom: -30px;">
+            <div slot="content" class="flex-layout-v" style="align-items: flex-start;">
+              <div class="flex-layout remark" style="align-items: flex-start;padding: 10px 6px;">
                 <div>用户总量</div>
                 <div>
                   <span class='num-text' style="margin: 0 2px 0 7px;">{{crowd.crowdUserNum}}</span> 个
@@ -44,21 +44,23 @@
           </div>
         </div>
       </div>
-      <div class="flex-layout-v fm-stretch" style="align-items: center;width: 40%;">
+      <div class="flex-layout-v fm-stretch" style="width: 40%;align-items: center;">
         <div class="center-content">
-          <div style="margin: 0px -40px;">
-            <banner></banner>
-          </div>
-          <div class="flex-layout summary" style="padding: 10px 30px 10px 50px;">
-            <div>
-              <div>道路总量:<span class="num-text">{{title.roadLen | splitSymbol}}</span>公里</div>
-              <div>道路更新:<span class="num-text">{{title.perUpdateRoadLable | splitSymbol}}</span> 公里</div>
-              <div>道路新增:<span class="num-text">{{title.perAddRoadLable | splitSymbol}}</span> 公里</div>
+          <div style="padding: 70px 130px;">
+            <div style="margin: 0px -40px;">
+              <banner></banner>
             </div>
-            <div>
-              <div>POI总量:<span class="num-text">{{title.poiNum | splitSymbol}}</span>个</div>
-              <div>POI更新:<span class="num-text">{{title.perUpdatePoiLable | splitSymbol}}</span>个</div>
-              <div>POI新增:<span class="num-text">{{title.perAddPoiLable | splitSymbol}}</span>个</div>
+            <div class="flex-layout summary">
+              <div>
+                <div>道路总量:<span class="num-text">{{title.roadLen | splitSymbol}}</span>公里</div>
+                <div>道路更新:<span class="num-text">{{title.perUpdateRoadLable | splitSymbol}}</span> 公里</div>
+                <div>道路新增:<span class="num-text">{{title.perAddRoadLable | splitSymbol}}</span> 公里</div>
+              </div>
+              <div>
+                <div>POI总量:<span class="num-text">{{title.poiNum | splitSymbol}}</span>个</div>
+                <div>POI更新:<span class="num-text">{{title.perUpdatePoiLable | splitSymbol}}</span>个</div>
+                <div>POI新增:<span class="num-text">{{title.perAddPoiLable | splitSymbol}}</span>个</div>
+              </div>
             </div>
           </div>
         </div>
@@ -73,7 +75,7 @@
           </div>
         </div>
       </div>
-      <div class="col flex-layout-v" style="width:25%;align-items: flex-end;">
+      <div class="col flex-layout-v" style="width:25%;align-items: flex-end">
         <div class="top-title right">
           <div class="text" style="padding-left: 130px;padding-bottom: 40px;">
             <div style="margin-top: 18px;">数据出品</div>
@@ -81,7 +83,7 @@
             <div class="topRight"><img src="./assets/dianchi.png" alt="" class="img2"></div>
           </div>
         </div>
-        <div class="flex-layout-v rightTitle" style="height: 100%;">
+        <div class="flex-layout-v" style="height: 100%;padding-right: 40px;">
           <panel title="日出品 Daily Release">
             <div slot="content">
               <div style="color: white;margin-left: 235px;margin-top: 6%;">
@@ -100,16 +102,10 @@
               <month-chart :monthProduce="charData.monthProduce"></month-chart>
             </div>
           </panel>
-          <panel title="季出品 Quarterly Release" :sub-title="season.spVerson">
-            <div slot="content" class="flex-layout-v" style="color:#DDD;margin-bottom: -35px;">
-              <div style="margin-left: 10px;width: 100%;">
-                <div class="inlineChart">
-                  <dashboard-chart :dashboard="season.road"></dashboard-chart>
-                </div>
-                <div class="inlineChart">
-                  <dashboard-chart :dashboard="season.poi"></dashboard-chart>
-                </div>
-              </div>
+          <panel title="季出品 Quarterly Release" :sub-title="season.spVerson" style="margin-bottom: -40px;">
+            <div slot="content" class="flex-layout">
+              <dashboard-chart :dashboard="season.road"></dashboard-chart>
+              <dashboard-chart :dashboard="season.poi"></dashboard-chart>
             </div>
           </panel>
         </div>
@@ -603,13 +599,7 @@ div.flex-layout-v {
   display: flex;
   flex-flow: column nowrap;
   justify-content: space-between;
-  align-items: flex-start;
-}
-
-.rightTitle {
-  box-sizing: border-box;
-  padding-top: 25%;
-  margin-right: 10%;
+  align-items: center;
 }
 
 div.float {
@@ -685,40 +675,37 @@ div.legendContainer div.legend span.crowdInfoNone {
 }
 
 .center-content {
-  width: 100%;
-  /*height: 250px;*/
-  padding: 70px 130px;
-  margin-top: -49px;
+  width: 1013px;
+  height: 313px;
+  margin-top: -48px;
   z-index: 9999;
   background: url(./assets/middle.png) no-repeat top/contain;
   background-size: 100% 100%;
 }
 
-.center-content>.summary {
+.center-content .summary {
   font-size: 24px;
   color: #fff;
+  padding: 10px 30px 10px 50px;
 }
 
 .top-title {
   flex: 0 0 153px;
-  width: 547px;
+  width: 578px;
   display: flex;
   justify-content: center;
 }
 
 .top-title.left {
-  margin-left: -36px;
+  margin-left: -38px;
   margin-top: -43px;
   background: url(./assets/left_up.png) no-repeat center;
   background-size: 100% 100%;
 }
 
 .top-title.right {
-  position: fixed;
-  top: -47px;
-  right: -36px;
-  /*margin-right: -22px;*/
-  /*margin-top: -39px;*/
+  margin-right: -38px;
+  margin-top: -43px;
   background: url(./assets/right_up.png) no-repeat center;
   background-size: 100% 100%;
 }
@@ -735,7 +722,7 @@ div.legendContainer div.legend span.crowdInfoNone {
 
 .bottom-title {
   flex: 0 0 83px;
-  width: 620px;
+  width: 624px;
   color: #47a2ff;
   display: flex;
   justify-content: center;

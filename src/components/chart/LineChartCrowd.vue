@@ -1,6 +1,6 @@
 <template>
   <div class="chart-content">
-    <div id='crowdChart' style="padding-top: 8px;padding-bottom: 8px;'">
+    <div id="crowdChart">
     </div>
   </div>
 </template>
@@ -25,7 +25,7 @@ export default {
       this.chart.showLoading()
       let legendData = [
         { name: `采集道路${this.chartData.crowdRoadLen}公里`, icon: 'roundRect' },
-        { name: `采集poi${this.chartData.crowdPoiNum}个`, icon: 'roundRect' }
+        { name: `采集POI${this.chartData.crowdPoiNum}个`, icon: 'roundRect' }
       ];
 
       /**
@@ -59,7 +59,7 @@ export default {
           data: this.chartData.lineData[0]
         },
         {
-          name: `采集poi${this.chartData.crowdPoiNum}个`,
+          name: `采集POI${this.chartData.crowdPoiNum}个`,
           type: 'line',
           symbol: 'none',
           // symbolSize: 6,
@@ -81,16 +81,14 @@ export default {
         backgroundColor: 'rgba(128, 128, 128, 0)',
         grid: {
           left: 15,
-          right: 20,
-          top: 45,
-          bottom: 24
+          right: 15,
+          // top: 20,
+          bottom: 30
         },
         title: {},
         legend: {
           orient: 'horizontal',
           x: 'left',
-          right: 20,
-          top: 0,
           itemWidth: 14,
           data: legendData,
           textStyle: { color: '#DDD' }
