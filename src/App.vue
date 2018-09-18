@@ -29,10 +29,10 @@
           <panel title="众包 Crowdsourcing" style="margin-bottom: -30px;">
             <div slot="content" class="flex-layout-v" style="align-items: flex-start;">
               <div class="flex-layout remark" style="align-items: flex-start;padding: 10px 6px;">
-                <div>用户总量</div>
+                <!-- <div>用户总量</div>
                 <div>
                   <span class='num-text' style="margin: 0 2px 0 7px;">{{crowd.crowdUserNum}}</span> 个
-                </div>
+                </div> -->
               </div>
               <line-chart-crowd :chartData='crowd'></line-chart-crowd>
             </div>
@@ -86,19 +86,19 @@
         <div class="flex-layout-v" style="height: 100%;padding-right: 40px;">
           <panel title="日出品 Daily Release">
             <div slot="content">
-              <div style="color: white;margin-left: 235px;margin-top: 6%;">
+              <!-- <div style="color: white;margin-left: 235px;margin-top: 6%;">
                 <span> 单位: </span>
                 <span> 公里 / 千个 </span>
-              </div>
+              </div> -->
               <day-chart :dayProduce="charData.dayProduce"></day-chart>
             </div>
           </panel>
           <panel title="月出品 Monthly Release">
             <div slot="content">
-              <div style="color: white;margin-left: 235px;margin-top: 6%;">
+              <!-- <div style="color: white;margin-left: 235px;margin-top: 6%;">
                 <span> 单位: </span>
                 <span> 公里 / 个 </span>
-              </div>
+              </div> -->
               <month-chart :monthProduce="charData.monthProduce"></month-chart>
             </div>
           </panel>
@@ -645,7 +645,7 @@ div.legendContainer div.legend span {
 }
 
 div.legendContainer div.legend span.commonInfo {
-  background-color: #CC3333;
+  background-color: #33c3ff;
 }
 
 div.legendContainer div.legend span.commonInfoNone {
@@ -653,7 +653,7 @@ div.legendContainer div.legend span.commonInfoNone {
 }
 
 div.legendContainer div.legend span.crowdInfo {
-  background-color: #FFCC00;
+  background-color: #fd8e2a;
 }
 
 div.legendContainer div.legend span.crowdInfoNone {
