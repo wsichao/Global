@@ -203,7 +203,7 @@ export default {
                 feature.geometry.coordinates[1]),
               point: {
                 pixelSize: 4,
-                color: Cesium.Color.fromCssColorString('#FFCC00')
+                color: Cesium.Color.fromCssColorString('#fd8e20')
               }
             }));
           }
@@ -227,7 +227,7 @@ export default {
                 feature.geometry.coordinates[1]),
               point: {
                 pixelSize: 4,
-                color: Cesium.Color.fromCssColorString('#CC3333')
+                color: Cesium.Color.fromCssColorString('#33c3ff')
               }
             }));
           }
