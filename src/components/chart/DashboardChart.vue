@@ -36,7 +36,6 @@ export default {
 
       var addSpareData = function(data, color){
           var spareData = (Number(data[0]) + Number(data[1]))*0.35;
-          console.log(spareData);
           return [{
             value: data[0], 
             name: '更新',
