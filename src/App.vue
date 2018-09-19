@@ -3,11 +3,11 @@
     <Global :randomData="dataSourceStatus.randomData" :poiChangedNum="dataSourceStatus.poiChangedNum" :crowdInfoSource='dataSourceStatus.crowdInfoSource' :commonInfoSource='dataSourceStatus.commonInfoSource'></Global>
     <div class="fm-stretch flex-layout float">
       <div class="col flex-layout-v" style="width: 25%;align-items: flex-start;">
+
         <div class="top-title left">
-          <div class="text" style="margin-left: -130px;margin-top: 18px;">
-            <div><img src="./assets/dianchi.png" alt="" class="img1"></div>
-            <div><img src="./assets/icon_2.png" alt="" style="width: 80%;"></div>
-            <div style="margin-top: -5px;">数据来源</div>
+          <div class="text" >
+            <img src="./assets/icon_2.png">
+            <div style="padding:0 10px">数据来源</div>
           </div>
         </div>
         <div class="flex-layout-v" style="height: 100%;padding-left: 40px;">
@@ -29,10 +29,6 @@
           <panel title="众包 Crowdsourcing" style="margin-bottom: -30px;">
             <div slot="content" class="flex-layout-v" style="align-items: flex-start;">
               <div class="flex-layout remark" style="align-items: flex-start;padding: 10px 6px;">
-                <!-- <div>用户总量</div>
-                <div>
-                  <span class='num-text' style="margin: 0 2px 0 7px;">{{crowd.crowdUserNum}}</span> 个
-                </div> -->
               </div>
               <line-chart-crowd :chartData='crowd'></line-chart-crowd>
             </div>
@@ -47,7 +43,7 @@
       <div class="flex-layout-v fm-stretch" style="width: 40%;align-items: center;">
         <div class="center-content">
           <div style="padding: 70px 130px;">
-            <div style="margin: 0px -40px;">
+            <div style="margin: 0px 0px;">
               <banner></banner>
             </div>
             <div class="flex-layout summary">
@@ -76,29 +72,20 @@
         </div>
       </div>
       <div class="col flex-layout-v" style="width:25%;align-items: flex-end">
-        <div class="top-title right">
-          <div class="text" style="padding-left: 130px;padding-bottom: 40px;">
-            <div style="margin-top: 18px;">数据出品</div>
-            <div><img src="./assets/icon_1.png" alt="" style="width: 80%;margin-top: 24px;"></div>
-            <div class="topRight"><img src="./assets/dianchi.png" alt="" class="img2"></div>
+        <div class="top-title right" style="padding-top: 0%;align-items: flex-start;">
+          <div class="text">
+            <div style="padding:0 10px">数据出品</div>
+            <img src="./assets/icon_1.png">
           </div>
         </div>
         <div class="flex-layout-v" style="height: 100%;padding-right: 40px;">
           <panel title="日出品 Daily Release">
             <div slot="content">
-              <!-- <div style="color: white;margin-left: 235px;margin-top: 6%;">
-                <span> 单位: </span>
-                <span> 公里 / 千个 </span>
-              </div> -->
               <day-chart :dayProduce="charData.dayProduce"></day-chart>
             </div>
           </panel>
           <panel title="月出品 Monthly Release">
             <div slot="content">
-              <!-- <div style="color: white;margin-left: 235px;margin-top: 6%;">
-                <span> 单位: </span>
-                <span> 公里 / 个 </span>
-              </div> -->
               <month-chart :monthProduce="charData.monthProduce"></month-chart>
             </div>
           </panel>
@@ -110,7 +97,7 @@
           </panel>
         </div>
         <div class="bottom-title right">
-          <div class="text" style="margin-left: 100px;">
+          <div class="text" style="padding-left:100px" >
             Data Release
           </div>
         </div>
@@ -694,30 +681,43 @@ div.legendContainer div.legend span.crowdInfoNone {
   width: 578px;
   display: flex;
   justify-content: center;
+  flex-wrap: nowrap;
+  
 }
 
 .top-title.left {
-  margin-left: -38px;
-  margin-top: -43px;
+  /* margin-left: -38px;
+  margin-top: -43px; */
   background: url(./assets/left_up.png) no-repeat center;
-  background-size: 100% 100%;
+  
+  background-position:-25px 0px;
 }
 
 .top-title.right {
-  margin-right: -38px;
-  margin-top: -43px;
+  /* margin-right: -38px;
+  margin-top: -43px; */
   background: url(./assets/right_up.png) no-repeat center;
-  background-size: 100% 100%;
+
+  background-position:45px 0px;
 }
 
 .top-title>.text {
-  width: 300px;
+  width: 250px;
+  height: 70px;
   color: #fd8e2a;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
   font-size: 26px;
   font-weight: bold;
-  padding-top: 46px;
+}
+
+.top-title.left>.text {
+  padding-left: 70px;
+}
+
+.top-title.right>.text {
+  padding-right: 70px;
 }
 
 .bottom-title {
@@ -731,12 +731,12 @@ div.legendContainer div.legend span.crowdInfoNone {
 .bottom-title.left {
   margin-left: -40px;
   background: url(./assets/left_down.png) no-repeat center;
-  background-size: 100% 100%;
+  background-position:-5px -10px;
 }
 
 .bottom-title.right {
   background: url(./assets/right_down.png) no-repeat center;
-  background-size: 100% 100%;
+  background-position:5px -10px;
 }
 
 .bottom-title>.text {
@@ -746,19 +746,22 @@ div.legendContainer div.legend span.crowdInfoNone {
   padding-top: 50px;
 }
 
-.img1 {
+/*.img1 {
   width: 130px;
-  margin-top: -18px;
-}
+  display: flex;
+  align-items:flex-start;
+  /* padding-left: -30px; 
+}*/
 
-.img2 {
+/* .img2 {
   width: 130px;
-  margin-top: 5px;
+  display: flex;
+  align-items:flex-start;
   -moz-transform: scaleX(-1);
   -webkit-transform: scaleX(-1);
   -o-transform: scaleX(-1);
   transform: scaleX(-1);
-}
+} */
 
 div.inlineChart {
   display: inline-block;
