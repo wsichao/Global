@@ -664,7 +664,7 @@ div.legendContainer div.legend span.crowdInfoNone {
 
 .top-title {
   flex: 0 0 122px;
-  width: 558px;
+  width: 533px;
   display: flex;
   justify-content: center;
   flex-wrap: nowrap;
@@ -672,12 +672,10 @@ div.legendContainer div.legend span.crowdInfoNone {
 
 .top-title.left {
   background: url(./assets/left_up.png) no-repeat center;
-  background-position: -25px 0px;
 }
 
 .top-title.right {
   background: url(./assets/right_up.png) no-repeat center;
-  background-position: 25px 0px;
 }
 
 .top-title>.text {
@@ -708,13 +706,11 @@ div.legendContainer div.legend span.crowdInfoNone {
 
 .bottom-title.left {
   background: url(./assets/left_down.png) no-repeat center;
-  background-position: -40px;
 }
 
 .bottom-title.right {
   justify-content: flex-end;
   background: url(./assets/right_down.png) no-repeat center;
-  background-position: 0px;
 }
 
 .bottom-title>.text {
