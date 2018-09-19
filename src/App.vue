@@ -727,4 +727,9 @@ div.inlineChart {
   width: 48%;
 }
 
+/*覆盖cesium的默认样式，不显示下方工具条*/
+.cesium-viewer-bottom {
+  display: none;
+}
+
 </style>
