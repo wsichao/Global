@@ -1,6 +1,6 @@
 <template>
   <div class="chart-content">
-    <div id="crowdChart">
+    <div id="crowdChart" style="padding: 8px 0px;"> 
     </div>
   </div>
 </template>

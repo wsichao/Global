@@ -3,9 +3,8 @@
     <Global :randomData="dataSourceStatus.randomData" :poiChangedNum="dataSourceStatus.poiChangedNum" :crowdInfoSource='dataSourceStatus.crowdInfoSource' :commonInfoSource='dataSourceStatus.commonInfoSource'></Global>
     <div class="fm-stretch flex-layout float">
       <div class="col flex-layout-v" style="width: 25%;align-items: flex-start;">
-
         <div class="top-title left">
-          <div class="text" >
+          <div class="text">
             <img src="./assets/icon_2.png">
             <div style="padding:0 10px">数据来源</div>
           </div>
@@ -26,10 +25,8 @@
               <line-chart :chartData='charData.thrid'></line-chart>
             </div>
           </panel>
-          <panel title="众包 Crowdsourcing" style="margin-bottom: -30px;">
-            <div slot="content" class="flex-layout-v" style="align-items: flex-start;">
-              <div class="flex-layout remark" style="align-items: flex-start;padding: 10px 6px;">
-              </div>
+          <panel title="众包 Crowdsourcing">
+            <div slot="content">
               <line-chart-crowd :chartData='crowd'></line-chart-crowd>
             </div>
           </panel>
@@ -42,8 +39,8 @@
       </div>
       <div class="flex-layout-v fm-stretch" style="width: 40%;align-items: center;">
         <div class="center-content">
-          <div style="padding: 70px 130px;">
-            <div style="margin: 0px 0px;">
+          <div style="padding: 20px 130px;">
+            <div>
               <banner></banner>
             </div>
             <div class="flex-layout summary">
@@ -89,7 +86,7 @@
               <month-chart :monthProduce="charData.monthProduce"></month-chart>
             </div>
           </panel>
-          <panel title="季出品 Quarterly Release" :sub-title="season.spVerson" style="margin-bottom: -40px;">
+          <panel title="季出品 Quarterly Release" :sub-title="season.spVerson">
             <div slot="content" class="flex-layout">
               <dashboard-chart :dashboard="season.road"></dashboard-chart>
               <dashboard-chart :dashboard="season.poi"></dashboard-chart>
@@ -97,7 +94,7 @@
           </panel>
         </div>
         <div class="bottom-title right">
-          <div class="text" style="padding-left:100px" >
+          <div class="text">
             Data Release
           </div>
         </div>
@@ -652,22 +649,11 @@ div.legendContainer div.legend span.crowdInfoNone {
   color: #FD8E20;
 }
 
-.remark {
-  font-size: 16px;
-  color: #DDD;
-}
-
-.remark>div:not(.remark) {
-  padding: 6px 0;
-}
-
 .center-content {
   width: 1013px;
-  height: 313px;
-  margin-top: -48px;
+  height: 264px;
   z-index: 9999;
   background: url(./assets/middle.png) no-repeat top/contain;
-  background-size: 100% 100%;
 }
 
 .center-content .summary {
@@ -677,24 +663,21 @@ div.legendContainer div.legend span.crowdInfoNone {
 }
 
 .top-title {
-  flex: 0 0 153px;
-  width: 578px;
+  flex: 0 0 122px;
+  width: 558px;
   display: flex;
   justify-content: center;
   flex-wrap: nowrap;
-  
 }
 
 .top-title.left {
   background: url(./assets/left_up.png) no-repeat center;
-  
-  background-position:-25px 0px;
+  background-position: -25px 0px;
 }
 
 .top-title.right {
   background: url(./assets/right_up.png) no-repeat center;
-
-  background-position:45px 0px;
+  background-position: 25px 0px;
 }
 
 .top-title>.text {
@@ -717,29 +700,30 @@ div.legendContainer div.legend span.crowdInfoNone {
 }
 
 .bottom-title {
-  flex: 0 0 83px;
+  flex: 0 0 92px;
   width: 624px;
-  color: #47a2ff;
   display: flex;
-  justify-content: center;
+  align-items: flex-end;
 }
 
 .bottom-title.left {
-  margin-left: -40px;
   background: url(./assets/left_down.png) no-repeat center;
-  background-position:-5px -10px;
+  background-position: -40px;
 }
 
 .bottom-title.right {
+  justify-content: flex-end;
   background: url(./assets/right_down.png) no-repeat center;
-  background-position:5px -10px;
+  background-position: 0px;
 }
 
 .bottom-title>.text {
   color: #FD8E20;
   font-size: 24px;
   font-weight: bold;
-  padding-top: 50px;
+  line-height: 46px;
+  width: 566px;
+  text-align: center;
 }
 
 div.inlineChart {

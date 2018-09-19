@@ -1,6 +1,6 @@
 <template>
   <div class="chart-content">
-    <div id='myLineChart' style="padding-top: 8px;padding-bottom: 8px;'">
+    <div id="myLineChart" style="padding: 8px 0px;">
     </div>
   </div>
 </template>
