@@ -686,16 +686,12 @@ div.legendContainer div.legend span.crowdInfoNone {
 }
 
 .top-title.left {
-  /* margin-left: -38px;
-  margin-top: -43px; */
   background: url(./assets/left_up.png) no-repeat center;
   
   background-position:-25px 0px;
 }
 
 .top-title.right {
-  /* margin-right: -38px;
-  margin-top: -43px; */
   background: url(./assets/right_up.png) no-repeat center;
 
   background-position:45px 0px;
@@ -745,23 +741,6 @@ div.legendContainer div.legend span.crowdInfoNone {
   font-weight: bold;
   padding-top: 50px;
 }
-
-/*.img1 {
-  width: 130px;
-  display: flex;
-  align-items:flex-start;
-  /* padding-left: -30px; 
-}*/
-
-/* .img2 {
-  width: 130px;
-  display: flex;
-  align-items:flex-start;
-  -moz-transform: scaleX(-1);
-  -webkit-transform: scaleX(-1);
-  -o-transform: scaleX(-1);
-  transform: scaleX(-1);
-} */
 
 div.inlineChart {
   display: inline-block;
