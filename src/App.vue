@@ -259,6 +259,11 @@ export default {
       }).catch(function(err) {})
     },
     recomData(data) { // 格式化接口数据
+      data.perAddPoi = 12616;
+      data.perUpdatePoi = 35418;
+      data.perAddRoad = 1432;
+      data.perUpdateRoad = 6345;
+
       this.initOriginData(data);
       this.titleData(data);
       this.recomPoi(data)
@@ -319,7 +324,7 @@ export default {
       return step;
     },
     titleData(data) {
-      let perAddRoad = data.perAddRoad;
+      let perAddRoad = data.perAddRoad ;
       let times = 60 * 15 * 2; // 总共更新的次数 （一分钟刷新一次，24小时刷新60*24次，可以根据具体效果设置时长）
       let intervalTimes = 1000 * 30;
       let that = this;
@@ -725,6 +730,11 @@ div.legendContainer div.legend span.crowdInfoNone {
 div.inlineChart {
   display: inline-block;
   width: 48%;
+}
+
+/*覆盖cesium的默认样式，不显示下方工具条*/
+.cesium-viewer-bottom {
+  display: none;
 }
 
 </style>
