@@ -60,16 +60,16 @@
         <div class="legendContainer">
           <div class="legend">
             <div @click="mapData.showCommon=!mapData.showCommon">
-              <span :style="{background-color: commonBgColor}"></span> 自采分布
+              <span :style="{'background-color': mapData.showCommon ? '#33c3ff' : '#9da0a4'}"></span> 自采分布
             </div>
             <div @click="mapData.showCrowd=!mapData.showCrowd">
-              <span :style="{background-color: crowdBgColor}"></span> 众包分布
+              <span :style="{'background-color': mapData.showCrowd ? '#fd8e2a' : '#9da0a4'}"></span> 众包分布
             </div>
             <div @click="mapData.showBase=!mapData.showBase">
-              <span :style="{background-color: baseBgColor}"></span> 外业基地
+              <span :style="{'background-color': mapData.showBase ? '#0b8415' : '#9da0a4'}"></span> 外业基地
             </div>
             <div @click="mapData.showAbroad=!mapData.showAbroad">
-              <span :style="{background-color: abroadBgColor}"></span> 海外地图
+              <span :style="{'background-color': mapData.showAbroad ? '#e10c13' : '#9da0a4'}"></span> 海外地图
             </div>
           </div>
         </div>
@@ -192,18 +192,6 @@ export default {
     };
   },
   computed: {
-    commonBgColor() {
-      return this.mapData.showCommon ? '#33c3ff' : '#9da0a4';
-    },
-    crowdBgColor() {
-      return this.mapData.showCrowd ? '#fd8e2a' : '#9da0a4';
-    },
-    baseBgColor() {
-      return this.mapData.showBase ? '#33c3ff' : '#9da0a4';
-    },
-    abroadBgColor() {
-      return this.mapData.showAbroad ? '#fd8e2a' : '#9da0a4';
-    }
   },
   filters: {
     splitSymbol(value) { // 将数字三位隔开
@@ -643,22 +631,7 @@ div.legendContainer div.legend span {
   width: 16px;
   height: 16px;
   vertical-align: bottom;
-}
-
-div.legendContainer div.legend span.commonInfo {
-  background-color: #33c3ff;
-}
-
-div.legendContainer div.legend span.commonInfoNone {
-  background-color: #9da0a4;
-}
-
-div.legendContainer div.legend span.crowdInfo {
-  background-color: #fd8e2a;
-}
-
-div.legendContainer div.legend span.crowdInfoNone {
-  background-color: #9da0a4;
+  border-radius: 5px;
 }
 
 .num-text {

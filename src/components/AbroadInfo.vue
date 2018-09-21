@@ -1,12 +1,13 @@
 <template>
   <div class="info-box" :style="{top: top, left: left}">
-    <div class="content">
-      <div class="desc">
-        <p>开发时间：{{ info.summary.devDate }}</p>
-        <p>范围：{{ info.summary.scope }}</p>
-        <p>道路总里程：{{ info.summary.roadSum }}</p>
-        <p>POI数量：{{ info.summary.poiSum }}</p>
-      </div>
+    <div class="desc">
+      <p>开发时间：{{ info.summary.devDate }}</p>
+      <p>范围：{{ info.summary.scope }}</p>
+      <p>道路总里程：{{ info.summary.roadSum }}</p>
+      <p>POI数量：{{ info.summary.poiSum }}</p>
+    </div>
+    <div class="img">
+      <img :src="imgSrc">
     </div>
   </div>
 </template>
@@ -25,13 +26,13 @@ export default {
   },
   computed: {
     imgSrc() {
-      return `./static/images/abroad/${this.info.id}_introduction.png`;
+      return `./static/images/abroad/map_${this.info.id}.png`;
     },
     top() {
       return `${this.anchor[1] - 200}px`;
     },
     left() {
-      return `${this.anchor[0]}px`;
+      return `${this.anchor[0] + 40}px`;
     }
   },
   mounted() {
@@ -43,24 +44,33 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .info-box {
-  display: inline;
+  display: flex;
+  flex-flow: column nowrap;
   position: absolute;
-  height: 488px;
-  width: 386px;
-  padding: 50px;
-  pointer-events: none;
+  height: 424px;
+  width: 392px;
+  padding-top: 40px;
+  padding-bottom: 30px;
   background-image: url(../../static/images/abroad/frame.png);
+  box-shadow: 0 0 50px -5px #2fa9fc;
 }
 
-.info-box .content {
-  width: 100%;
-  height: 100%;
-  pointer-events: auto;
-}
-
-.info-box .desc {
-  padding: 60px 40px;
+.info-box > .desc {
+  padding: 30px 60px 10px 60px;
   color: #2fa9fc;
+}
+
+.info-box > .img {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}
+
+.img > img {
+  max-width: 100%;
+  max-height: 100%;
 }
 
 </style>
