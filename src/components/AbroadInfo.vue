@@ -1,11 +1,11 @@
 <template>
-  <div class="info-box" :style="{top: top, left: left, 'background-image': imgSrc}">
+  <div class="info-box" :style="{top: top, left: left}">
     <div class="content">
       <div class="desc">
-        <p>开发时间：{{ data.summary.devDate }}</p>
-        <p>范围：{{ data.summary.scope }}</p>
-        <p>道路总里程：{{ data.summary.roadSum }}</p>
-        <p>POI数量：{{ data.summary.poiSum }}</p>
+        <p>开发时间：{{ info.summary.devDate }}</p>
+        <p>范围：{{ info.summary.scope }}</p>
+        <p>道路总里程：{{ info.summary.roadSum }}</p>
+        <p>POI数量：{{ info.summary.poiSum }}</p>
       </div>
     </div>
   </div>
@@ -14,7 +14,7 @@
 export default {
   name: 'AbroadInfo',
   props: {
-    data: {
+    info: {
       type: Object,
       required: true
     },
@@ -23,12 +23,9 @@ export default {
       required: true
     }
   },
-  data() {
-    return {};
-  },
   computed: {
     imgSrc() {
-      return `url(./static/images/abroad/${this.data.id}_introduction.png)`;
+      return `./static/images/abroad/${this.info.id}_introduction.png`;
     },
     top() {
       return `${this.anchor[1] - 200}px`;
@@ -36,6 +33,9 @@ export default {
     left() {
       return `${this.anchor[0]}px`;
     }
+  },
+  mounted() {
+    console.log(this.info);
   }
 };
 
@@ -49,6 +49,7 @@ export default {
   width: 386px;
   padding: 50px;
   pointer-events: none;
+  background-image: url(../../static/images/abroad/frame.png);
 }
 
 .info-box .content {

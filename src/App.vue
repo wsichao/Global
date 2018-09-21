@@ -60,16 +60,16 @@
         <div class="legendContainer">
           <div class="legend">
             <div @click="mapData.showCommon=!mapData.showCommon">
-              <span :class="test1"></span> 自采分布
+              <span :style="{background-color: commonBgColor}"></span> 自采分布
             </div>
             <div @click="mapData.showCrowd=!mapData.showCrowd">
-              <span :class="test2"></span> 众包分布
+              <span :style="{background-color: crowdBgColor}"></span> 众包分布
             </div>
             <div @click="mapData.showBase=!mapData.showBase">
-              <span :class="test2"></span> 外业基地
+              <span :style="{background-color: baseBgColor}"></span> 外业基地
             </div>
             <div @click="mapData.showAbroad=!mapData.showAbroad">
-              <span :class="test2"></span> 海外地图
+              <span :style="{background-color: abroadBgColor}"></span> 海外地图
             </div>
           </div>
         </div>
@@ -185,18 +185,24 @@ export default {
         showCrowd: true,
         showBase: true,
         showAbroad: false,
-        randomPoiChangedNum: 5 + (parseInt(20 * Math.random()))       
+        randomPoiChangedNum: 5 + (parseInt(20 * Math.random()))
       },
       timeout: null,
       tweenColor: ''
     };
   },
   computed: {
-    test1() {
-      return this.mapData.showCommon ? 'commonInfo' : 'commonInfoNone';
+    commonBgColor() {
+      return this.mapData.showCommon ? '#33c3ff' : '#9da0a4';
     },
-    test2() {
-      return this.mapData.showCrowd ? 'crowdInfo' : 'crowdInfoNone';
+    crowdBgColor() {
+      return this.mapData.showCrowd ? '#fd8e2a' : '#9da0a4';
+    },
+    baseBgColor() {
+      return this.mapData.showBase ? '#33c3ff' : '#9da0a4';
+    },
+    abroadBgColor() {
+      return this.mapData.showAbroad ? '#fd8e2a' : '#9da0a4';
     }
   },
   filters: {
@@ -738,7 +744,9 @@ div.inlineChart {
   width: 48%;
 }
 
+
 /*覆盖cesium的默认样式，不显示下方工具条*/
+
 .cesium-viewer-bottom {
   display: none;
 }

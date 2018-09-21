@@ -5,8 +5,8 @@
       <img src="../../static/images/fuwei.png" @click="flyHome">
       <img :src="abroadBtnImg">
     </div>
-    <div v-if="selectedAbroad">
-      <abroad-info :anchor="center" :data="selectedAbroad"></abroad-info>
+    <div v-if="selectedAbroadEntity">
+      <abroad-info :anchor="center" :info="selectedAbroad"></abroad-info>
     </div>
   </div>
 </template>
@@ -38,7 +38,8 @@ export default {
       crowdEntities: [],
       baseEntities: [],
       abroadEntities: [], // 所有海外地图的Entiities
-      selectedAbroad: null, // 当前选中的海外地图的Entity
+      abroadList: [],
+      selectedAbroadEntity: null, // 当前选中的海外地图的Entity
       center: [], // 地图中心点的屏幕坐标
       btnPosition: {} // 控制按钮的显示位置
     };
@@ -52,6 +53,9 @@ export default {
     },
     abroadBtnImg() {
       return this.showAbroad ? '../../static/images/abroad.png' : '../../static/images/abroad_normal.png'
+    },
+    selectedAbroad() {
+      return this.abroadList.find(it => it.id === this.selectedAbroadEntity.id);
     }
   },
   watch: {
@@ -121,7 +125,8 @@ export default {
       } else {
         this.clearSpecEntities(this.abroadEntities);
 
-        this.selectedAbroad = null;
+        this.abroadList.length = 0;
+        this.selectedAbroadEntity = null;
         this.viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
       }
     }
@@ -195,7 +200,6 @@ export default {
       axios({
         method: 'get',
         url: conf.serviceUrl + 'statics/crowdInfo'
-        // url: 'http://fastmap.navinfo.com/service/statics/crowdInfo',
       }).then(function(res) {
         if (res.data.errcode === 0) {
           let tempSourceData = that.data2GeoJson(res.data.data);
@@ -218,7 +222,6 @@ export default {
       axios({
         method: 'get',
         url: conf.serviceUrl + 'statics/commonInfo',
-        // url: 'http://fastmap.navinfo.com/service/statics/commonInfo',
         dataType: 'json'
       }).then(function(res) {
         if (res.data.errcode === 0) {
@@ -244,7 +247,6 @@ export default {
       axios({
         method: 'get',
         url: 'http://localhost:8082/static/waiyejidi.json',
-        // url: 'http://fastmap.navinfo.com/service/statics/commonInfo',
         dataType: 'json'
       }).then(res => {
         if (res.data) {
@@ -255,21 +257,17 @@ export default {
                 item.lonlat[1]),
               billboard: {
                 image: new Cesium.CallbackProperty(function() {
-                  // 闪烁次数
-                  count++
-
-                  var tmp = parseInt(count / 2)
-                  if (tmp >= 34) {
-                    count = 0
-                  }
-                  var image = `./static/billboard/${tmp}.png`
-                  return image
+                  return `./static/images/base_type_${item.type}.png`
                 }, true)
               }
             }));
           });
         }
       });
+    },
+    clearSelectedAbroadEntity() {
+      this.selectedAbroadEntity.billboard.image = new Cesium.ConstantProperty(`./static/images/abroad/${this.selectedAbroadEntity.id}.png`);
+      this.selectedAbroadEntity = null;
     },
     bindAbroadEvent() {
       let lock = false; // 地球在移动动画过程中禁止点击事件
@@ -284,12 +282,11 @@ export default {
         const pickedObject = scene.pick(click.position);
         if (Cesium.defined(pickedObject) && this.abroadEntities.find(it => it.id === pickedObject.id.id)) {
           const pickedEntity = pickedObject.id;
-          if (this.selectedAbroad) {
-            if (pickedEntity.id === this.selectedAbroad.id) {
+          if (this.selectedAbroadEntity) {
+            if (pickedEntity.id === this.selectedAbroadEntity.id) {
               return;
             }
-            this.selectedAbroad.billboard.image = new Cesium.ConstantProperty(`./static/images/abroad/${this.selectedAbroad.id}.png`);
-            this.selectedAbroad = null;
+            this.clearSelectedAbroadEntity();
           }
 
           lock = true;
@@ -299,14 +296,13 @@ export default {
             duration: 1.5
           }).then(() => {
             pickedEntity.billboard.image = new Cesium.ConstantProperty(`./static/images/abroad/${pickedEntity.id}_active.png`);
-            this.selectedAbroad = pickedEntity;
+            this.selectedAbroadEntity = pickedEntity;
             this.center = [canvas.clientWidth / 2, canvas.clientHeight / 2];
             lock = false;
           });
         } else {
-          if (this.selectedAbroad) {
-            this.selectedAbroad.billboard.image = new Cesium.ConstantProperty(`./static/images/abroad/${this.selectedAbroad.id}.png`);
-            this.selectedAbroad = null;
+          if (this.selectedAbroadEntity) {
+            this.clearSelectedAbroadEntity();
           }
         }
       }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
@@ -315,11 +311,11 @@ export default {
       axios({
         method: 'get',
         url: 'http://localhost:8082/static/haiwai.json',
-        // url: 'http://fastmap.navinfo.com/service/statics/commonInfo',
         dataType: 'json'
       }).then(res => {
         if (res.data) {
-          res.data.forEach(item => {
+          this.abroadList = res.data;
+          this.abroadList.forEach(item => {
             this.abroadEntities.push(this.viewer.entities.add({
               id: item.id,
               position: Cesium.Cartesian3.fromDegrees(item.lonlat[0],
@@ -385,19 +381,17 @@ export default {
 
     // 禁用默认的双击一个entity后，自动缩放、定位操作
     viewer.screenSpaceEventHandler.setInputAction(() => {
-      viewer.camera.flyHome();
+      viewer.camera.flyHome(1.5);
     }, Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
     // 移动开始后清理海外地图的信息框
     viewer.camera.moveStart.addEventListener((moveStartPosition) => {
-      if (this.selectedAbroad) {
-        this.selectedAbroad.billboard.image = new Cesium.ConstantProperty(`./static/images/abroad/${this.selectedAbroad.id}.png`);
-        this.selectedAbroad = null;
+      if (this.selectedAbroadEntity) {
+        this.clearSelectedAbroadEntity();
       }
     });
 
     this.viewer = viewer;
     this.reloadData();
-    // this.loadAbroad();
     this.btnPosition = {
       top: '180px',
       left: `${this.$el.clientWidth * 0.75 - 90}px`
