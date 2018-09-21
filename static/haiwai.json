@@ -1,4 +1,27 @@
    [
+        
+        {
+        "id":"jianpuzhai",
+        "name":"柬埔寨",
+        "geometry":[104.55,11.33],
+        "samery":{
+                "devDate":"2016年",
+                "scope":"全境， 包括12个重点城市及其国家主干道",
+                "roadSum":"8万公里",
+                "poiSum":"3万，重点POI全面覆盖"
+                }
+        },
+        {
+        "id":"laowo",
+        "name":"老挝",
+        "geometry":[102.36,17.58],
+        "samery":{
+                "devDate":"2015年",
+                "scope":"全境，包括17个省、直辖市",
+                "roadSum":"4.5万公里，其中高等级道路里程1.5万公里",
+                "poiSum":"2.3万， 重点POI全面覆盖"
+                }
+        },
         {
         "id":"miandian",
         "name":"缅甸",
