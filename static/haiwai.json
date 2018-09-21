@@ -36,7 +36,7 @@
         {
         "id":"yuenan",
         "name":"越南",
-        "geometry":[21.01,105.53],
+        "geometry":[105.53,21.01],
         "samery":{
                 "devDate":"2018年",
                 "scope":"全境",
