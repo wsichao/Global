@@ -3,17 +3,17 @@
     <div id="cesiumContainer" class="fm-stretch"></div>
     <div class="btn-container" :style="{top: btnPosition.top, left: btnPosition.left}">
       <img src="../../static/images/fuwei.png" @click="flyHome">
-      <img :src="abroadBtnImg" @click="showAbroad=!showAbroad">
+      <img :src="abroadBtnImg">
     </div>
     <div v-if="selectedAbroad">
-      <info-box :anchor="center" :type="selectedAbroad.id"></info-box>
+      <abroad-info :anchor="center" :data="selectedAbroad"></abroad-info>
     </div>
   </div>
 </template>
 <script>
 import axios from 'axios';
 import conf from '../config';
-import InfoBox from './InfoBox';
+import AbroadInfo from './AbroadInfo';
 
 window.CESIUM_BASE_URL = './static/Cesium';
 const Cesium = require('cesium/Source/Cesium.js');
@@ -27,9 +27,9 @@ Cesium.Camera.DEFAULT_VIEW_FACTOR = 1;
 export default {
   name: 'global',
   components: {
-    InfoBox
+    AbroadInfo
   },
-  props: ['crowdInfoSource', 'commonInfoSource', 'randomData', 'poiChangedNum'],
+  props: ['showCrowd', 'showCommon', 'showBase', 'showAbroad', 'poiChangedNum'],
   data() {
     return {
       viewer: null,
@@ -39,8 +39,7 @@ export default {
       abroadEntities: [], // 所有海外地图的Entiities
       selectedAbroad: null, // 当前选中的海外地图的Entity
       center: [], // 地图中心点的屏幕坐标
-      btnPosition: {}, // 控制按钮的显示位置
-      showAbroad: false // 是否显示海外地图
+      btnPosition: {} // 控制按钮的显示位置
     };
   },
   computed: {
@@ -55,8 +54,8 @@ export default {
     }
   },
   watch: {
-    crowdInfoSource: function() {
-      if (this.$props.crowdInfoSource) {
+    showCrowd: function(newVal) {
+      if (newVal) {
         this.loadCrowdData();
       } else {
         for (let i = 0; i < this.crowdEntities.length; i++) {
@@ -65,8 +64,8 @@ export default {
         this.crowdEntities.length = 0;
       }
     },
-    commonInfoSource: function() {
-      if (this.$props.commonInfoSource) {
+    showCommon: function(newVal) {
+      if (newVal) {
         this.loadCommonData();
       } else {
         for (let i = 0; i < this.commonEntities.length; i++) {
@@ -75,18 +74,16 @@ export default {
         this.commonEntities.length = 0;
       }
     },
-    randomData: function() {
-      let c = this.$props.poiChangedNum;
-      let i;
-      let t = this.allEntities.length - 1;
-
+    poiChangedNum: function(newVal) {
       for (let m = 0; m < this.randomEntities.length; m++) {
         this.viewer.entities.remove(this.randomEntities[m]);
       }
 
+      let c = newVal;
+      const t = this.allEntities.length - 1;
       this.randomEntities = []
       while (t >= 0 && c > 0) {
-        i = parseInt(t * Math.random());
+        const i = parseInt(t * Math.random());
         const pointPosition = this.allEntities[i].position;
         let count = 0;
         const entity = {
@@ -119,6 +116,13 @@ export default {
       //   this.randomEntities.push(this.viewer.entities.add(it))
       // });
     },
+    showBase(newVal) {
+      if (newVal) {
+        this.loadBase();
+      } else {
+        this.clearBase();
+      }
+    },
     showAbroad(newVal) {
       if (newVal) {
         this.loadAbroad();
@@ -131,10 +135,10 @@ export default {
     reloadData() {
       this.viewer.entities.removeAll();
       this.allEntities.length = 0;
-      if (this.$props.crowdInfoSource) {
+      if (this.$props.showCrowd) {
         this.loadCrowdData();
       }
-      if (this.$props.commonInfoSource) {
+      if (this.$props.showCommon) {
         setTimeout(() => {
           this.loadCommonData();
         }, 200)
@@ -236,6 +240,33 @@ export default {
     },
     flyHome() {
       this.viewer.camera.flyHome();
+    },
+    loadBase() {
+      const that = this;
+      axios({
+        method: 'get',
+        url: conf.serviceUrl + 'statics/commonInfo',
+        // url: 'http://fastmap.navinfo.com/service/statics/commonInfo',
+        dataType: 'json'
+      }).then(function(res) {
+        if (res.data.errcode === 0) {
+          let tempSourceData = that.data2GeoJson(res.data.data);
+          for (let i = 0; i < tempSourceData.features.length; i++) {
+            const feature = tempSourceData.features[i];
+            that.commonEntities.push(that.viewer.entities.add({
+              position: Cesium.Cartesian3.fromDegrees(feature.geometry.coordinates[0],
+                feature.geometry.coordinates[1]),
+              point: {
+                pixelSize: 4,
+                color: Cesium.Color.fromCssColorString('#33c3ff')
+              }
+            }));
+          }
+        }
+      });
+    },
+    clearBase() {
+
     },
     loadAbroad() {
       const abroad = {
@@ -345,7 +376,9 @@ export default {
     // viewer.scene.screenSpaceCameraController.enableRotate = false;
 
     // 禁用默认的双击一个entity后，自动缩放、定位操作
-    viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
+    viewer.screenSpaceEventHandler.setInputAction(() => {
+      viewer.camera.flyHome();
+    }, Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
     // 移动开始后清理海外地图的信息框
     viewer.camera.moveStart.addEventListener((moveStartPosition) => {
       if (this.selectedAbroad) {
@@ -383,6 +416,7 @@ export default {
   background-image: url(../../static/images/button_frame.png);
   /* 处理被右侧div压盖的问题 */
   z-index: 999;
+  display: none;
 }
 
 </style>

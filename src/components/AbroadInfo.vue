@@ -12,10 +12,10 @@
 </template>
 <script>
 export default {
-  name: 'InfoBox',
+  name: 'AbroadInfo',
   props: {
-    'type': {
-      type: String,
+    data: {
+      type: Object,
       required: true
     },
     anchor: {
@@ -28,7 +28,7 @@ export default {
   },
   computed: {
     imgSrc() {
-      return `url(./static/images/abroad/${this.type}_introduction.png)`;
+      return `url(./static/images/abroad/${this.data.id}_introduction.png)`;
     },
     top() {
       return `${this.anchor[1] - 200}px`;
