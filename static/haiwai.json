@@ -1,35 +1,31 @@
-   [
-        {
-        "id":"miandian",
-        "name":"缅甸",
-        "geometry":[96.6,19.45],
-        "samery":{
-                "devDate":"2018年",
-                "scope":"全境",
-                "roadSum":"约18.6万公里",
-                "poiSum":"规划重点POI全面覆盖"
-                }
-        },
-        {
-        "id":"yuenan",
-        "name":"越南",
-        "geometry":[21.01,105.53],
-        "samery":{
-                "devDate":"2018年",
-                "scope":"全境",
-                "roadSum":"约16万公里",
-                "poiSum":"规划重点POI全面覆盖"
-            }
-        },
-        {
-        "id":"taiwan",
-        "name":"台湾",
-        "geometry":[121.50,25.03],
-        "samery":{
-                "devDate":"2018年",
-                "scope":"全境",
-                "roadSum":"约13万公里",
-                "poiSum":"规划重点POI全面覆盖"
-                }
-        }
-    ]
+[{
+    "id": "miandian",
+    "name": "缅甸",
+    "geometry": [96.6, 19.45],
+    "summary": {
+        "devDate": "2018年",
+        "scope": "全境",
+        "roadSum": "约18.6万公里",
+        "poiSum": "规划重点POI全面覆盖"
+    }
+}, {
+    "id": "yuenan",
+    "name": "越南",
+    "geometry": [21.01, 105.53],
+    "summary": {
+        "devDate": "2018年",
+        "scope": "全境",
+        "roadSum": "约16万公里",
+        "poiSum": "规划重点POI全面覆盖"
+    }
+}, {
+    "id": "taiwan",
+    "name": "台湾",
+    "geometry": [121.50, 25.03],
+    "summary": {
+        "devDate": "2018年",
+        "scope": "全境",
+        "roadSum": "约13万公里",
+        "poiSum": "规划重点POI全面覆盖"
+    }
+}]

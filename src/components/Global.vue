@@ -36,6 +36,7 @@ export default {
       randomEntities: [],
       commonEntities: [],
       crowdEntities: [],
+      baseEntities: [],
       abroadEntities: [], // 所有海外地图的Entiities
       selectedAbroad: null, // 当前选中的海外地图的Entity
       center: [], // 地图中心点的屏幕坐标
@@ -58,30 +59,21 @@ export default {
       if (newVal) {
         this.loadCrowdData();
       } else {
-        for (let i = 0; i < this.crowdEntities.length; i++) {
-          this.viewer.entities.remove(this.crowdEntities[i]);
-        }
-        this.crowdEntities.length = 0;
+        this.clearSpecEntities(this.crowdEntities);
       }
     },
     showCommon: function(newVal) {
       if (newVal) {
         this.loadCommonData();
       } else {
-        for (let i = 0; i < this.commonEntities.length; i++) {
-          this.viewer.entities.remove(this.commonEntities[i]);
-        }
-        this.commonEntities.length = 0;
+        this.clearSpecEntities(this.commonEntities);
       }
     },
     poiChangedNum: function(newVal) {
-      for (let m = 0; m < this.randomEntities.length; m++) {
-        this.viewer.entities.remove(this.randomEntities[m]);
-      }
+      this.clearSpecEntities(this.randomEntities);
 
       let c = newVal;
       const t = this.allEntities.length - 1;
-      this.randomEntities = []
       while (t >= 0 && c > 0) {
         const i = parseInt(t * Math.random());
         const pointPosition = this.allEntities[i].position;
@@ -120,14 +112,17 @@ export default {
       if (newVal) {
         this.loadBase();
       } else {
-        this.clearBase();
+        this.clearSpecEntities(this.baseEntities);
       }
     },
     showAbroad(newVal) {
       if (newVal) {
         this.loadAbroad();
       } else {
-        this.clearAbroad();
+        this.clearSpecEntities(this.abroadEntities);
+
+        this.selectedAbroad = null;
+        this.viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
       }
     }
   },
@@ -135,13 +130,17 @@ export default {
     reloadData() {
       this.viewer.entities.removeAll();
       this.allEntities.length = 0;
-      if (this.$props.showCrowd) {
+      if (this.showCrowd) {
         this.loadCrowdData();
       }
-      if (this.$props.showCommon) {
-        setTimeout(() => {
-          this.loadCommonData();
-        }, 200)
+      if (this.showCommon) {
+        this.loadCommonData();
+      }
+      if (this.showBase) {
+        this.loadBase();
+      }
+      if (this.showAbroad) {
+        this.loadAbroad();
       }
     },
     generateRandomPoint(num) {
@@ -242,51 +241,37 @@ export default {
       this.viewer.camera.flyHome();
     },
     loadBase() {
-      const that = this;
       axios({
         method: 'get',
-        url: conf.serviceUrl + 'statics/commonInfo',
+        url: 'http://localhost:8082/static/waiyejidi.json',
         // url: 'http://fastmap.navinfo.com/service/statics/commonInfo',
         dataType: 'json'
-      }).then(function(res) {
-        if (res.data.errcode === 0) {
-          let tempSourceData = that.data2GeoJson(res.data.data);
-          for (let i = 0; i < tempSourceData.features.length; i++) {
-            const feature = tempSourceData.features[i];
-            that.commonEntities.push(that.viewer.entities.add({
-              position: Cesium.Cartesian3.fromDegrees(feature.geometry.coordinates[0],
-                feature.geometry.coordinates[1]),
-              point: {
-                pixelSize: 4,
-                color: Cesium.Color.fromCssColorString('#33c3ff')
+      }).then(res => {
+        if (res.data) {
+          res.data.forEach(item => {
+            this.baseEntities.push(this.viewer.entities.add({
+              id: item.id,
+              position: Cesium.Cartesian3.fromDegrees(item.lonlat[0],
+                item.lonlat[1]),
+              billboard: {
+                image: new Cesium.CallbackProperty(function() {
+                  // 闪烁次数
+                  count++
+
+                  var tmp = parseInt(count / 2)
+                  if (tmp >= 34) {
+                    count = 0
+                  }
+                  var image = `./static/billboard/${tmp}.png`
+                  return image
+                }, true)
               }
             }));
-          }
+          });
         }
       });
     },
-    clearBase() {
-
-    },
-    loadAbroad() {
-      const abroad = {
-        'laowo': [102.36, 17.58],
-        'jianpuzhai': [104.55, 11.33],
-        'miandian': [96.6,19.45],
-        'yuenan': [21.01,105.53],
-        'taiwan': [121.50,25.03]
-      };
-
-      for (const [key, val] of Object.entries(abroad)) {
-        this.abroadEntities.push(this.viewer.entities.add({
-          id: key,
-          position: Cesium.Cartesian3.fromDegrees(val[0], val[1], val[2]),
-          billboard: {
-            image: `./static/images/abroad/${key}.png`
-          }
-        }));
-      }
-
+    bindAbroadEvent() {
       let lock = false; // 地球在移动动画过程中禁止点击事件
       this.viewer.screenSpaceEventHandler.setInputAction((click) => {
         if (lock) {
@@ -298,8 +283,9 @@ export default {
         const canvas = this.viewer.canvas;
         const pickedObject = scene.pick(click.position);
         if (Cesium.defined(pickedObject) && this.abroadEntities.find(it => it.id === pickedObject.id.id)) {
+          const pickedEntity = pickedObject.id;
           if (this.selectedAbroad) {
-            if (pickedObject.id.id === this.selectedAbroad.id) {
+            if (pickedEntity.id === this.selectedAbroad.id) {
               return;
             }
             this.selectedAbroad.billboard.image = new Cesium.ConstantProperty(`./static/images/abroad/${this.selectedAbroad.id}.png`);
@@ -308,12 +294,12 @@ export default {
 
           lock = true;
           const height = scene.globe.ellipsoid.cartesianToCartographic(camera.position).height;
-          this.viewer.flyTo(pickedObject.id, {
+          this.viewer.flyTo(pickedEntity, {
             offset: new Cesium.HeadingPitchRange(camera.heading, camera.pitch, height),
             duration: 1.5
           }).then(() => {
-            pickedObject.id.billboard.image = new Cesium.ConstantProperty(`./static/images/abroad/${pickedObject.id.id}_active.png`);
-            this.selectedAbroad = pickedObject.id;
+            pickedEntity.billboard.image = new Cesium.ConstantProperty(`./static/images/abroad/${pickedEntity.id}_active.png`);
+            this.selectedAbroad = pickedEntity;
             this.center = [canvas.clientWidth / 2, canvas.clientHeight / 2];
             lock = false;
           });
@@ -325,15 +311,34 @@ export default {
         }
       }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
     },
-    clearAbroad() {
-      this.abroadEntities.forEach(it => {
+    loadAbroad() {
+      axios({
+        method: 'get',
+        url: 'http://localhost:8082/static/haiwai.json',
+        // url: 'http://fastmap.navinfo.com/service/statics/commonInfo',
+        dataType: 'json'
+      }).then(res => {
+        if (res.data) {
+          res.data.forEach(item => {
+            this.abroadEntities.push(this.viewer.entities.add({
+              id: item.id,
+              position: Cesium.Cartesian3.fromDegrees(item.lonlat[0],
+                item.lonlat[1]),
+              billboard: {
+                image: `./static/images/abroad/${item.id}.png`
+              }
+            }));
+          });
+
+          this.bindAbroadEvent();
+        }
+      });
+    },
+    clearSpecEntities(entitiesArray) {
+      entitiesArray.forEach(it => {
         this.viewer.entities.remove(it);
       });
-      this.abroadEntities.length = 0;
-
-      this.selectedAbroad = null;
-
-      this.viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
+      entitiesArray.length = 0;
     }
   },
   mounted() {
