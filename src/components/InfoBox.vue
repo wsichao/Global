@@ -52,6 +52,30 @@ export default {
           poiSum: '3万，重点POI全面覆盖'
         };
       }
+      else if (this.type === 'miandian') {
+        return {
+          date: '2018年',
+          scope: '全境',
+          roadSum: '18.6万KM',
+          poiSum: '规划重点POI全面覆盖'
+        };
+      }
+      else if (this.type === 'yuenan') {
+        return {
+          date: '2018年',
+          scope: '全境',
+          roadSum: '16万KM',
+          poiSum: '规划重点POI全面覆盖'
+        };
+      }
+      else if (this.type === 'taiwan') {
+        return {
+          date: '2018年',
+          scope: '全境',
+          roadSum: '13万KM',
+          poiSum: '规划重点POI全面覆盖'
+        };
+      }
 
       return {};
     }
