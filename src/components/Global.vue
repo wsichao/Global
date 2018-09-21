@@ -271,13 +271,16 @@ export default {
     loadAbroad() {
       const abroad = {
         'laowo': [102.36, 17.58],
-        'jianpuzhai': [104.55, 11.33]
+        'jianpuzhai': [104.55, 11.33],
+        'miandian': [96.6,19.45],
+        'yuenan': [21.01,105.53],
+        'taiwan': [121.50,25.03]
       };
 
       for (const [key, val] of Object.entries(abroad)) {
         this.abroadEntities.push(this.viewer.entities.add({
           id: key,
-          position: Cesium.Cartesian3.fromDegrees(val[0], val[1]),
+          position: Cesium.Cartesian3.fromDegrees(val[0], val[1], val[2]),
           billboard: {
             image: `./static/images/abroad/${key}.png`
           }
