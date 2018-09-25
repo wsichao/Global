@@ -246,7 +246,7 @@ export default {
     loadBase() {
       axios({
         method: 'get',
-        url: 'http://localhost:8082/static/waiyejidi.json',
+        url: './static/waiyejidi.json',
         dataType: 'json'
       }).then(res => {
         if (res.data) {
@@ -310,7 +310,7 @@ export default {
     loadAbroad() {
       axios({
         method: 'get',
-        url: 'http://localhost:8082/static/haiwai.json',
+        url: './static/haiwai.json',
         dataType: 'json'
       }).then(res => {
         if (res.data) {
