@@ -3,8 +3,8 @@
         {
         "id":"jianpuzhai",
         "name":"柬埔寨",
-        "geometry":[104.55,11.33],
-        "samery":{
+        "lonlat":[104.55,11.33],
+        "summary":{
                 "devDate":"2016年",
                 "scope":"全境， 包括12个重点城市及其国家主干道",
                 "roadSum":"8万公里",
@@ -14,8 +14,8 @@
         {
         "id":"laowo",
         "name":"老挝",
-        "geometry":[102.36,17.58],
-        "samery":{
+        "lonlat":[102.36,17.58],
+        "summary":{
                 "devDate":"2015年",
                 "scope":"全境，包括17个省、直辖市",
                 "roadSum":"4.5万公里，其中高等级道路里程1.5万公里",
@@ -25,8 +25,8 @@
         {
         "id":"miandian",
         "name":"缅甸",
-        "geometry":[96.6,19.45],
-        "samery":{
+        "lonlat":[96.6,19.45],
+        "summary":{
                 "devDate":"2018年",
                 "scope":"全境",
                 "roadSum":"约18.6万公里",
@@ -36,8 +36,8 @@
         {
         "id":"yuenan",
         "name":"越南",
-        "geometry":[105.53,21.01],
-        "samery":{
+        "lonlat":[105.53,21.01],
+        "summary":{
                 "devDate":"2018年",
                 "scope":"全境",
                 "roadSum":"约16万公里",
@@ -47,8 +47,8 @@
         {
         "id":"taiwan",
         "name":"台湾",
-        "geometry":[121.50,25.03],
-        "samery":{
+        "lonlat":[121.50,25.03],
+        "summary":{
                 "devDate":"2018年",
                 "scope":"全境",
                 "roadSum":"约13万公里",

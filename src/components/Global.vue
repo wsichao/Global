@@ -3,17 +3,17 @@
     <div id="cesiumContainer" class="fm-stretch"></div>
     <div class="btn-container" :style="{top: btnPosition.top, left: btnPosition.left}">
       <img src="../../static/images/fuwei.png" @click="flyHome">
-      <img :src="abroadBtnImg" @click="showAbroad=!showAbroad">
+      <img :src="abroadBtnImg">
     </div>
-    <div v-if="selectedAbroad">
-      <info-box :anchor="center" :type="selectedAbroad.id"></info-box>
+    <div v-if="selectedAbroadEntity">
+      <abroad-info :anchor="center" :info="selectedAbroad"></abroad-info>
     </div>
   </div>
 </template>
 <script>
 import axios from 'axios';
 import conf from '../config';
-import InfoBox from './InfoBox';
+import AbroadInfo from './AbroadInfo';
 
 window.CESIUM_BASE_URL = './static/Cesium';
 const Cesium = require('cesium/Source/Cesium.js');
@@ -27,20 +27,21 @@ Cesium.Camera.DEFAULT_VIEW_FACTOR = 1;
 export default {
   name: 'global',
   components: {
-    InfoBox
+    AbroadInfo
   },
-  props: ['crowdInfoSource', 'commonInfoSource', 'randomData', 'poiChangedNum'],
+  props: ['showCrowd', 'showCommon', 'showBase', 'showAbroad', 'poiChangedNum'],
   data() {
     return {
       viewer: null,
       randomEntities: [],
       commonEntities: [],
       crowdEntities: [],
+      baseEntities: [],
       abroadEntities: [], // 所有海外地图的Entiities
-      selectedAbroad: null, // 当前选中的海外地图的Entity
+      abroadList: [],
+      selectedAbroadEntity: null, // 当前选中的海外地图的Entity
       center: [], // 地图中心点的屏幕坐标
-      btnPosition: {}, // 控制按钮的显示位置
-      showAbroad: false // 是否显示海外地图
+      btnPosition: {} // 控制按钮的显示位置
     };
   },
   computed: {
@@ -52,41 +53,33 @@ export default {
     },
     abroadBtnImg() {
       return this.showAbroad ? '../../static/images/abroad.png' : '../../static/images/abroad_normal.png'
+    },
+    selectedAbroad() {
+      return this.abroadList.find(it => it.id === this.selectedAbroadEntity.id);
     }
   },
   watch: {
-    crowdInfoSource: function() {
-      if (this.$props.crowdInfoSource) {
+    showCrowd: function(newVal) {
+      if (newVal) {
         this.loadCrowdData();
       } else {
-        for (let i = 0; i < this.crowdEntities.length; i++) {
-          this.viewer.entities.remove(this.crowdEntities[i]);
-        }
-        this.crowdEntities.length = 0;
+        this.clearSpecEntities(this.crowdEntities);
       }
     },
-    commonInfoSource: function() {
-      if (this.$props.commonInfoSource) {
+    showCommon: function(newVal) {
+      if (newVal) {
         this.loadCommonData();
       } else {
-        for (let i = 0; i < this.commonEntities.length; i++) {
-          this.viewer.entities.remove(this.commonEntities[i]);
-        }
-        this.commonEntities.length = 0;
+        this.clearSpecEntities(this.commonEntities);
       }
     },
-    randomData: function() {
-      let c = this.$props.poiChangedNum;
-      let i;
-      let t = this.allEntities.length - 1;
+    poiChangedNum: function(newVal) {
+      this.clearSpecEntities(this.randomEntities);
 
-      for (let m = 0; m < this.randomEntities.length; m++) {
-        this.viewer.entities.remove(this.randomEntities[m]);
-      }
-
-      this.randomEntities = []
+      let c = newVal;
+      const t = this.allEntities.length - 1;
       while (t >= 0 && c > 0) {
-        i = parseInt(t * Math.random());
+        const i = parseInt(t * Math.random());
         const pointPosition = this.allEntities[i].position;
         let count = 0;
         const entity = {
@@ -119,11 +112,22 @@ export default {
       //   this.randomEntities.push(this.viewer.entities.add(it))
       // });
     },
+    showBase(newVal) {
+      if (newVal) {
+        this.loadBase();
+      } else {
+        this.clearSpecEntities(this.baseEntities);
+      }
+    },
     showAbroad(newVal) {
       if (newVal) {
         this.loadAbroad();
       } else {
-        this.clearAbroad();
+        this.clearSpecEntities(this.abroadEntities);
+
+        this.abroadList.length = 0;
+        this.selectedAbroadEntity = null;
+        this.viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
       }
     }
   },
@@ -131,13 +135,17 @@ export default {
     reloadData() {
       this.viewer.entities.removeAll();
       this.allEntities.length = 0;
-      if (this.$props.crowdInfoSource) {
+      if (this.showCrowd) {
         this.loadCrowdData();
       }
-      if (this.$props.commonInfoSource) {
-        setTimeout(() => {
-          this.loadCommonData();
-        }, 200)
+      if (this.showCommon) {
+        this.loadCommonData();
+      }
+      if (this.showBase) {
+        this.loadBase();
+      }
+      if (this.showAbroad) {
+        this.loadAbroad();
       }
     },
     generateRandomPoint(num) {
@@ -192,7 +200,6 @@ export default {
       axios({
         method: 'get',
         url: conf.serviceUrl + 'statics/crowdInfo'
-        // url: 'http://fastmap.navinfo.com/service/statics/crowdInfo',
       }).then(function(res) {
         if (res.data.errcode === 0) {
           let tempSourceData = that.data2GeoJson(res.data.data);
@@ -215,7 +222,6 @@ export default {
       axios({
         method: 'get',
         url: conf.serviceUrl + 'statics/commonInfo',
-        // url: 'http://fastmap.navinfo.com/service/statics/commonInfo',
         dataType: 'json'
       }).then(function(res) {
         if (res.data.errcode === 0) {
@@ -237,25 +243,33 @@ export default {
     flyHome() {
       this.viewer.camera.flyHome();
     },
-    loadAbroad() {
-      const abroad = {
-        'laowo': [102.36, 17.58],
-        'jianpuzhai': [104.55, 11.33],
-        'miandian': [96.6,19.45],
-        'yuenan': [105.53,21.01],//[108.01,16.41],
-        'taiwan': [121.50,25.03]
-      };
-
-      for (const [key, val] of Object.entries(abroad)) {
-        this.abroadEntities.push(this.viewer.entities.add({
-          id: key,
-          position: Cesium.Cartesian3.fromDegrees(val[0], val[1], val[2], val[3], val[4]),
-          billboard: {
-            image: `./static/images/abroad/${key}.png`
-          }
-        }));
-      }
-
+    loadBase() {
+      axios({
+        method: 'get',
+        url: 'http://localhost:8082/static/waiyejidi.json',
+        dataType: 'json'
+      }).then(res => {
+        if (res.data) {
+          res.data.forEach(item => {
+            this.baseEntities.push(this.viewer.entities.add({
+              id: item.id,
+              position: Cesium.Cartesian3.fromDegrees(item.lonlat[0],
+                item.lonlat[1]),
+              billboard: {
+                image: new Cesium.CallbackProperty(function() {
+                  return `./static/images/base_type_${item.type}.png`
+                }, true)
+              }
+            }));
+          });
+        }
+      });
+    },
+    clearSelectedAbroadEntity() {
+      this.selectedAbroadEntity.billboard.image = new Cesium.ConstantProperty(`./static/images/abroad/${this.selectedAbroadEntity.id}.png`);
+      this.selectedAbroadEntity = null;
+    },
+    bindAbroadEvent() {
       let lock = false; // 地球在移动动画过程中禁止点击事件
       this.viewer.screenSpaceEventHandler.setInputAction((click) => {
         if (lock) {
@@ -267,42 +281,60 @@ export default {
         const canvas = this.viewer.canvas;
         const pickedObject = scene.pick(click.position);
         if (Cesium.defined(pickedObject) && this.abroadEntities.find(it => it.id === pickedObject.id.id)) {
-          if (this.selectedAbroad) {
-            if (pickedObject.id.id === this.selectedAbroad.id) {
+          const pickedEntity = pickedObject.id;
+          if (this.selectedAbroadEntity) {
+            if (pickedEntity.id === this.selectedAbroadEntity.id) {
               return;
             }
-            this.selectedAbroad.billboard.image = new Cesium.ConstantProperty(`./static/images/abroad/${this.selectedAbroad.id}.png`);
-            this.selectedAbroad = null;
+            this.clearSelectedAbroadEntity();
           }
 
           lock = true;
           const height = scene.globe.ellipsoid.cartesianToCartographic(camera.position).height;
-          this.viewer.flyTo(pickedObject.id, {
+          this.viewer.flyTo(pickedEntity, {
             offset: new Cesium.HeadingPitchRange(camera.heading, camera.pitch, height),
             duration: 1.5
           }).then(() => {
-            pickedObject.id.billboard.image = new Cesium.ConstantProperty(`./static/images/abroad/${pickedObject.id.id}_active.png`);
-            this.selectedAbroad = pickedObject.id;
+            pickedEntity.billboard.image = new Cesium.ConstantProperty(`./static/images/abroad/${pickedEntity.id}_active.png`);
+            this.selectedAbroadEntity = pickedEntity;
             this.center = [canvas.clientWidth / 2, canvas.clientHeight / 2];
             lock = false;
           });
         } else {
-          if (this.selectedAbroad) {
-            this.selectedAbroad.billboard.image = new Cesium.ConstantProperty(`./static/images/abroad/${this.selectedAbroad.id}.png`);
-            this.selectedAbroad = null;
+          if (this.selectedAbroadEntity) {
+            this.clearSelectedAbroadEntity();
           }
         }
       }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
     },
-    clearAbroad() {
-      this.abroadEntities.forEach(it => {
+    loadAbroad() {
+      axios({
+        method: 'get',
+        url: 'http://localhost:8082/static/haiwai.json',
+        dataType: 'json'
+      }).then(res => {
+        if (res.data) {
+          this.abroadList = res.data;
+          this.abroadList.forEach(item => {
+            this.abroadEntities.push(this.viewer.entities.add({
+              id: item.id,
+              position: Cesium.Cartesian3.fromDegrees(item.lonlat[0],
+                item.lonlat[1]),
+              billboard: {
+                image: `./static/images/abroad/${item.id}.png`
+              }
+            }));
+          });
+
+          this.bindAbroadEvent();
+        }
+      });
+    },
+    clearSpecEntities(entitiesArray) {
+      entitiesArray.forEach(it => {
         this.viewer.entities.remove(it);
       });
-      this.abroadEntities.length = 0;
-
-      this.selectedAbroad = null;
-
-      this.viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
+      entitiesArray.length = 0;
     }
   },
   mounted() {
@@ -348,18 +380,18 @@ export default {
     // viewer.scene.screenSpaceCameraController.enableRotate = false;
 
     // 禁用默认的双击一个entity后，自动缩放、定位操作
-    viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
+    viewer.screenSpaceEventHandler.setInputAction(() => {
+      viewer.camera.flyHome(1.5);
+    }, Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
     // 移动开始后清理海外地图的信息框
     viewer.camera.moveStart.addEventListener((moveStartPosition) => {
-      if (this.selectedAbroad) {
-        this.selectedAbroad.billboard.image = new Cesium.ConstantProperty(`./static/images/abroad/map_${this.selectedAbroad.id}.png`);
-        this.selectedAbroad = null;
+      if (this.selectedAbroadEntity) {
+        this.clearSelectedAbroadEntity();
       }
     });
 
     this.viewer = viewer;
     this.reloadData();
-    // this.loadAbroad();
     this.btnPosition = {
       top: '180px',
       left: `${this.$el.clientWidth * 0.75 - 90}px`
@@ -386,6 +418,7 @@ export default {
   background-image: url(../../static/images/button_frame.png);
   /* 处理被右侧div压盖的问题 */
   z-index: 999;
+  display: none;
 }
 
 </style>

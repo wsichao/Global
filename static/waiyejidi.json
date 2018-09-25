@@ -1,212 +1,176 @@
-[
-    {
-    "id":"haerbin",
-    "name":"哈尔滨",
-    "geometry":[126.36,45.44],
-    "type":"3"
-    },
-    {
-    "id":"changchun",
-    "name":"长春",
-    "geometry":[125.19,43.54],
-    "type":"3"
-    },
-    {
-    "id":"shenyang",
-    "name":"沈阳",
-    "geometry":[123.25,41.48],
-    "type":"2"
-    },
-    {
-    "id":"dalian",
-    "name":"大连",
-    "geometry":[121.36,38.55],
-    "type":"3"
-    },
-    {
-    "id":"huhehaote",
-    "name":"呼和浩特",
-    "geometry":[111.41,40.48],
-    "type":"3"
-    },
-    {
-    "id":"tianjin",
-    "name":"天津",
-    "geometry":[117.12,39.02],
-    "type":"3"
-    },
-    {
-    "id":"beijing",
-    "name":"北京",
-    "geometry":[116.24,39.55],
-    "type":"1"
-    },
-    {
-    "id":"shijiazhuang",
-    "name":"石家庄",
-    "geometry":[114.30,38.02],
-    "type":"3"
-    },
-    {
-    "id":"taiyuan",
-    "name":"太原",
-    "geometry":[112.33,37.54],
-    "type":"3"
-    },
-    {
-    "id":"jinan",
-    "name":"济南",
-    "geometry":[117.00,36.40],
-    "type":"3"
-    },
-    {
-    "id":"qingdao",
-    "name":"青岛",
-    "geometry":[120.18,36.03],
-    "type":"3"
-    },
-    {
-    "id":"zhengzhou",
-    "name":"郑州",
-    "geometry":[113.40,34.46],
-    "type":"3"
-    },
-    {
-    "id":"xian",
-    "name":"西安",
-    "geometry":[108.57,34.17],
-    "type":"2"
-    },
-    {
-    "id":"lanzhou",
-    "name":"兰州",
-    "geometry":[103.51,36.04],
-    "type":"3"
-    },
-    {
-    "id":"chengdu",
-    "name":"成都",
-    "geometry":[104.04,30.40],
-    "type":"3"
-    },
-    {
-    "id":"chongqing",
-    "name":"重庆",
-    "geometry":[106.33,29.35],
-    "type":"3"
-    },
-    {
-    "id":"guiyang",
-    "name":"贵阳",
-    "geometry":[106.42,26.35],
-    "type":"3"
-    },
-    {
-    "id":"kunming",
-    "name":"昆明",
-    "geometry":[102.42,25.04],
-    "type":"3"
-    },
-    {
-    "id":"hefei",
-    "name":"合肥",
-    "geometry":[117.17,31.52],
-    "type":"3"
-    },
-    {
-    "id":"shanghai",
-    "name":"上海",
-    "geometry":[121.29,31.14],
-    "type":"2"
-    },
-    {
-    "id":"nanjing",
-    "name":"南京",
-    "geometry":[118.46,32.03],
-    "type":"3"
-    },
-    {
-    "id":"suzhou",
-    "name":"苏州",
-    "geometry":[120.37,31.19],
-    "type":"3"
-    },
-    {
-    "id":"hangzhou",
-    "name":"杭州",
-    "geometry":[120.10,30.16],
-    "type":"3"
-    },
-    {
-    "id":"ningbo",
-    "name":"宁波",
-    "geometry":[121.33,29.52],
-    "type":"3"
-    },
-    {
-    "id":"wuhan",
-    "name":"武汉",
-    "geometry":[114.17,30.35],
-    "type":"2"
-    },
-    {
-    "id":"changsha",
-    "name":"长沙",
-    "geometry":[112.59,28.12],
-    "type":"3"
-    },
-    {
-    "id":"nanchang",
-    "name":"南昌",
-    "geometry":[115.55,28.40],
-    "type":"3"
-    },
-    {
-    "id":"fuzhou",
-    "name":"福州",
-    "geometry":[119.18,26.05],
-    "type":"3"
-    },
-    {
-    "id":"xiamen",
-    "name":"厦门",
-    "geometry":[118.07,24.43],
-    "type":"3"
-    },
-    {
-    "id":"guangzhou",
-    "name":"广州",
-    "geometry":[113.14,23.08],
-    "type":"3"
-    },
-    {
-    "id":"shenzhen",
-    "name":"深圳",
-    "geometry":[114.05,22.53],
-    "type":"3"
-    },
-    {
-    "id":"xianggang",
-    "name":"香港",
-    "geometry":[115.12,21.23],
-    "type":"3"
-    },
-    {
-    "id":"nanning",
-    "name":"南宁",
-    "geometry":[108.19,22.48],
-    "type":"3"
-    },
-    {
-    "id":"haikou",
-    "name":"海口",
-    "geometry":[110.20,20.02],
-    "type":"3"
-    },
-    {
-    "id":"wulumuq",
-    "name":"乌鲁木齐",
-    "geometry":[87.36,43.45],
-    "type":"3"
-    }
-]
+[{
+    "id": "haerbin",
+    "name": "哈尔滨",
+    "lonlat": [126.36, 45.44],
+    "type": "3"
+}, {
+    "id": "changchun",
+    "name": "长春",
+    "lonlat": [125.19, 43.54],
+    "type": "3"
+}, {
+    "id": "shenyang",
+    "name": "沈阳",
+    "lonlat": [123.25, 41.48],
+    "type": "2"
+}, {
+    "id": "dalian",
+    "name": "大连",
+    "lonlat": [121.36, 38.55],
+    "type": "3"
+}, {
+    "id": "huhehaote",
+    "name": "呼和浩特",
+    "lonlat": [111.41, 40.48],
+    "type": "3"
+}, {
+    "id": "tianjin",
+    "name": "天津",
+    "lonlat": [117.12, 39.02],
+    "type": "3"
+}, {
+    "id": "beijing",
+    "name": "北京",
+    "lonlat": [116.24, 39.55],
+    "type": "1"
+}, {
+    "id": "shijiazhuang",
+    "name": "石家庄",
+    "lonlat": [114.30, 38.02],
+    "type": "3"
+}, {
+    "id": "taiyuan",
+    "name": "太原",
+    "lonlat": [112.33, 37.54],
+    "type": "3"
+}, {
+    "id": "jinan",
+    "name": "济南",
+    "lonlat": [117.00, 36.40],
+    "type": "3"
+}, {
+    "id": "qingdao",
+    "name": "青岛",
+    "lonlat": [120.18, 36.03],
+    "type": "3"
+}, {
+    "id": "zhengzhou",
+    "name": "郑州",
+    "lonlat": [113.40, 34.46],
+    "type": "3"
+}, {
+    "id": "xian",
+    "name": "西安",
+    "lonlat": [108.57, 34.17],
+    "type": "2"
+}, {
+    "id": "lanzhou",
+    "name": "兰州",
+    "lonlat": [103.51, 36.04],
+    "type": "3"
+}, {
+    "id": "chengdu",
+    "name": "成都",
+    "lonlat": [104.04, 30.40],
+    "type": "3"
+}, {
+    "id": "chongqing",
+    "name": "重庆",
+    "lonlat": [106.33, 29.35],
+    "type": "3"
+}, {
+    "id": "guiyang",
+    "name": "贵阳",
+    "lonlat": [106.42, 26.35],
+    "type": "3"
+}, {
+    "id": "kunming",
+    "name": "昆明",
+    "lonlat": [102.42, 25.04],
+    "type": "3"
+}, {
+    "id": "hefei",
+    "name": "合肥",
+    "lonlat": [117.17, 31.52],
+    "type": "3"
+}, {
+    "id": "shanghai",
+    "name": "上海",
+    "lonlat": [121.29, 31.14],
+    "type": "2"
+}, {
+    "id": "nanjing",
+    "name": "南京",
+    "lonlat": [118.46, 32.03],
+    "type": "3"
+}, {
+    "id": "suzhou",
+    "name": "苏州",
+    "lonlat": [120.37, 31.19],
+    "type": "3"
+}, {
+    "id": "hangzhou",
+    "name": "杭州",
+    "lonlat": [120.10, 30.16],
+    "type": "3"
+}, {
+    "id": "ningbo",
+    "name": "宁波",
+    "lonlat": [121.33, 29.52],
+    "type": "3"
+}, {
+    "id": "wuhan",
+    "name": "武汉",
+    "lonlat": [114.17, 30.35],
+    "type": "2"
+}, {
+    "id": "changsha",
+    "name": "长沙",
+    "lonlat": [112.59, 28.12],
+    "type": "3"
+}, {
+    "id": "nanchang",
+    "name": "南昌",
+    "lonlat": [115.55, 28.40],
+    "type": "3"
+}, {
+    "id": "fuzhou",
+    "name": "福州",
+    "lonlat": [119.18, 26.05],
+    "type": "3"
+}, {
+    "id": "xiamen",
+    "name": "厦门",
+    "lonlat": [118.07, 24.43],
+    "type": "3"
+}, {
+    "id": "guangzhou",
+    "name": "广州",
+    "lonlat": [113.14, 23.08],
+    "type": "3"
+}, {
+    "id": "shenzhen",
+    "name": "深圳",
+    "lonlat": [114.05, 22.53],
+    "type": "3"
+}, {
+    "id": "xianggang",
+    "name": "香港",
+    "lonlat": [115.12, 21.23],
+    "type": "3"
+}, {
+    "id": "nanning",
+    "name": "南宁",
+    "lonlat": [108.19, 22.48],
+    "type": "3"
+}, {
+    "id": "haikou",
+    "name": "海口",
+    "lonlat": [110.20, 20.02],
+    "type": "3"
+}, {
+    "id": "wulumuq",
+    "name": "乌鲁木齐",
+    "lonlat": [87.36, 43.45],
+    "type": "3"
+}]

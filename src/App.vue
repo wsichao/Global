@@ -1,6 +1,6 @@
 <template>
   <div class="fm-stretch">
-    <Global :randomData="dataSourceStatus.randomData" :poiChangedNum="dataSourceStatus.poiChangedNum" :crowdInfoSource='dataSourceStatus.crowdInfoSource' :commonInfoSource='dataSourceStatus.commonInfoSource'></Global>
+    <Global :poi-changed-num="mapData.randomPoiChangedNum" :show-crowd="mapData.showCrowd" :show-common="mapData.showCommon" :show-base="mapData.showBase" :show-abroad="mapData.showAbroad"></Global>
     <div class="fm-stretch flex-layout float">
       <div class="col flex-layout-v" style="width: 25%;align-items: flex-start;">
         <div class="top-title left">
@@ -59,11 +59,17 @@
         </div>
         <div class="legendContainer">
           <div class="legend">
-            <div v-on:click="toggleDataSource('common')">
-              <span :class="test1"></span> 自采分布
+            <div @click="mapData.showCommon=!mapData.showCommon">
+              <span :style="{'background-color': mapData.showCommon ? '#fd8e2a' : '#9da0a4'}"></span> 自采分布
             </div>
-            <div v-on:click="toggleDataSource('crowd')">
-              <span :class="test2"></span> 众包分布
+            <div @click="mapData.showCrowd=!mapData.showCrowd">
+              <span :style="{'background-color': mapData.showCrowd ? '#33c3ff' : '#9da0a4'}"></span> 众包分布
+            </div>
+            <div @click="mapData.showBase=!mapData.showBase">
+              <span :style="{'background-color': mapData.showBase ? '#0b8415' : '#9da0a4'}"></span> 外业基地
+            </div>
+            <div @click="mapData.showAbroad=!mapData.showAbroad">
+              <span :style="{'background-color': mapData.showAbroad ? '#e10c13' : '#9da0a4'}"></span> 海外地图
             </div>
           </div>
         </div>
@@ -107,7 +113,7 @@ import BarPoiChart from '@/components/chart/BarPoiChart';
 import BarRoadChart from '@/components/chart/BarRoadChart';
 import LineChart from '@/components/chart/LineChart';
 import LineChartCrowd from '@/components/chart/LineChartCrowd';
-import DashboardChart from '@/components/chart/DashboardChart'
+import DashboardChart from '@/components/chart/DashboardChart';
 import DayChart from '@/components/chart/DayChart';
 import MonthChart from '@/components/chart/MonthChart';
 import Banner from '@/components/Banner';
@@ -131,7 +137,7 @@ export default {
         perAddRoadLable: 0,
         perUpdateRoadLable: 0,
         perAddPoiLable: 0,
-        perUpdatePoiLable: 0,
+        perUpdatePoiLable: 0
       },
       crowd: {
         lineData: []
@@ -146,51 +152,46 @@ export default {
           updateData: [],
           xAxis: [],
           cUpdatePoi: 0,
-          cAddPoi: 0,
+          cAddPoi: 0
         },
         road: {
           newData: [],
           updateData: [],
           xAxis: [],
           cUpdateRoad: 0,
-          cAddRoad: 0,
+          cAddRoad: 0
         },
         dayProduce: {
           barData: [],
           lineData: [],
-          yAxis: [],
+          yAxis: []
         },
         monthProduce: {
           barData: [],
           lineData: [],
-          yAxis: [],
+          yAxis: []
         },
         thrid: {
           lineData: [
             [],
             [],
-            [],
+            []
           ], //  用户轨迹点,用户问题反馈,互联网信息
-          xAxis: [],
-        },
+          xAxis: []
+        }
       },
-      dataSourceStatus: {
-        commonInfoSource: true,
-        randomData: Math.random(),
-        poiChangedNum: Math.random(),
-        crowdInfoSource: true,
+      mapData: {
+        showCommon: true,
+        showCrowd: true,
+        showBase: true,
+        showAbroad: false,
+        randomPoiChangedNum: 5 + (parseInt(20 * Math.random()))
       },
       timeout: null,
-      tweenColor: '',
-    }
+      tweenColor: ''
+    };
   },
   computed: {
-    test1() {
-      return this.dataSourceStatus.commonInfoSource ? 'commonInfo' : 'commonInfoNone';
-    },
-    test2() {
-      return this.dataSourceStatus.crowdInfoSource ? 'crowdInfo' : 'crowdInfoNone';
-    }
   },
   filters: {
     splitSymbol(value) { // 将数字三位隔开
@@ -259,10 +260,11 @@ export default {
       }).catch(function(err) {})
     },
     recomData(data) { // 格式化接口数据
-      data.perAddPoi = 12616;
-      data.perUpdatePoi = 35418;
-      data.perAddRoad = 1432;
-      data.perUpdateRoad = 6345;
+      // 临时的假数据
+      // data.perAddPoi = 12616;
+      // data.perUpdatePoi = 35418;
+      // data.perAddRoad = 1432;
+      // data.perUpdateRoad = 6345;
 
       this.initOriginData(data);
       this.titleData(data);
@@ -324,9 +326,7 @@ export default {
       return step;
     },
     titleData(data) {
-      let perAddRoad = data.perAddRoad ;
       let times = 60 * 15 * 2; // 总共更新的次数 （一分钟刷新一次，24小时刷新60*24次，可以根据具体效果设置时长）
-      let intervalTimes = 1000 * 30;
       let that = this;
       if (this.timeout) {
         clearTimeout(this.timeout);
@@ -340,9 +340,9 @@ export default {
 
         that.title.roadLen = that.title.roadLen + improve1;
         that.title.poiNum = that.title.poiNum + improve3;
-        that.dataSourceStatus.randomData = Math.random();
-        // that.dataSourceStatus.poiChangedNum = improve3 + improve4;
-        that.dataSourceStatus.poiChangedNum = 5 + (parseInt(20 * Math.random()))
+        that.mapData.randomTaskNum = Math.random();
+        // that.mapData.randomPoiChangedNum = improve3 + improve4;
+        that.mapData.randomPoiChangedNum = 5 + (parseInt(20 * Math.random()))
         let currentMonth = new Date().getMonth() + 1;
         data.cRoadAverage[currentMonth].add = data.cRoadAverage[currentMonth].add + improve1;
         data.cRoadAverage[currentMonth].update = data.cRoadAverage[currentMonth].update + improve2;
@@ -441,7 +441,7 @@ export default {
       data.cUpdatePoi = data.cUpdatePoi - data.perUpdatePoi + this.title.perUpdatePoi;
     },
     recomPoi(data) { // 重组poi数据,使之符合图表格式
-      let poiAvg = data.cPoiAverage;
+      const poiAvg = data.cPoiAverage;
       // this.charData.poi.cUpdatePoi = data.cUpdatePoi;
       // this.charData.poi.cAddPoi = data.cAddPoi;
       this.charData.poi.newData = [];
@@ -537,9 +537,9 @@ export default {
     },
     toggleDataSource(type) {
       if (type === 'common') {
-        this.dataSourceStatus.commonInfoSource = !this.dataSourceStatus.commonInfoSource;
+        this.mapData.showCommon = !this.mapData.showCommon;
       } else {
-        this.dataSourceStatus.crowdInfoSource = !this.dataSourceStatus.crowdInfoSource;
+        this.mapData.showCrowd = !this.mapData.showCrowd;
       }
     }
   },
@@ -631,22 +631,7 @@ div.legendContainer div.legend span {
   width: 16px;
   height: 16px;
   vertical-align: bottom;
-}
-
-div.legendContainer div.legend span.commonInfo {
-  background-color: #fd8e2a;
-}
-
-div.legendContainer div.legend span.commonInfoNone {
-  background-color: #9da0a4;
-}
-
-div.legendContainer div.legend span.crowdInfo {
-  background-color: #33c3ff;
-}
-
-div.legendContainer div.legend span.crowdInfoNone {
-  background-color: #9da0a4;
+  border-radius: 5px;
 }
 
 .num-text {
@@ -732,7 +717,9 @@ div.inlineChart {
   width: 48%;
 }
 
+
 /*覆盖cesium的默认样式，不显示下方工具条*/
+
 .cesium-viewer-bottom {
   display: none;
 }
