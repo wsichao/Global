@@ -60,10 +60,10 @@
         <div class="legendContainer">
           <div class="legend">
             <div @click="mapData.showCommon=!mapData.showCommon">
-              <span :style="{'background-color': mapData.showCommon ? '#33c3ff' : '#9da0a4'}"></span> 自采分布
+              <span :style="{'background-color': mapData.showCommon ? '#fd8e2a' : '#9da0a4'}"></span> 自采分布
             </div>
             <div @click="mapData.showCrowd=!mapData.showCrowd">
-              <span :style="{'background-color': mapData.showCrowd ? '#fd8e2a' : '#9da0a4'}"></span> 众包分布
+              <span :style="{'background-color': mapData.showCrowd ? '#33c3ff' : '#9da0a4'}"></span> 众包分布
             </div>
             <div @click="mapData.showBase=!mapData.showBase">
               <span :style="{'background-color': mapData.showBase ? '#0b8415' : '#9da0a4'}"></span> 外业基地
