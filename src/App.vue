@@ -634,7 +634,7 @@ div.legendContainer div.legend span {
 }
 
 div.legendContainer div.legend span.commonInfo {
-  background-color: #33c3ff;
+  background-color: #fd8e2a;
 }
 
 div.legendContainer div.legend span.commonInfoNone {
@@ -642,7 +642,7 @@ div.legendContainer div.legend span.commonInfoNone {
 }
 
 div.legendContainer div.legend span.crowdInfo {
-  background-color: #fd8e2a;
+  background-color: #33c3ff;
 }
 
 div.legendContainer div.legend span.crowdInfoNone {

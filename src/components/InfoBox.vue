@@ -1,5 +1,5 @@
 <template>
-  <div class="info-box" :style="{top: top, left: left, 'background-image': imgSrc}">
+  <div class="info-box" :style="{top: top, left: left, 'background-image': imgSrc }">
     <div class="content">
       <div class="desc">
         <p>开发时间：{{ desc.date }}</p>
@@ -28,7 +28,7 @@ export default {
   },
   computed: {
     imgSrc() {
-      return `url(./static/images/abroad/${this.type}_introduction.png)`;
+      return `url(./static/images/abroad/frame.png)`;
     },
     top() {
       return `${this.anchor[1] - 200}px`;
