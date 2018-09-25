@@ -203,7 +203,7 @@ export default {
                 feature.geometry.coordinates[1]),
               point: {
                 pixelSize: 4,
-                color: Cesium.Color.fromCssColorString('#fd8e20')
+                color: Cesium.Color.fromCssColorString('#33c3ff')
               }
             }));
           }
@@ -227,7 +227,7 @@ export default {
                 feature.geometry.coordinates[1]),
               point: {
                 pixelSize: 4,
-                color: Cesium.Color.fromCssColorString('#33c3ff')
+                color: Cesium.Color.fromCssColorString('#fd8e20')
               }
             }));
           }
@@ -352,7 +352,7 @@ export default {
     // 移动开始后清理海外地图的信息框
     viewer.camera.moveStart.addEventListener((moveStartPosition) => {
       if (this.selectedAbroad) {
-        this.selectedAbroad.billboard.image = new Cesium.ConstantProperty(`./static/images/abroad/${this.selectedAbroad.id}.png`);
+        this.selectedAbroad.billboard.image = new Cesium.ConstantProperty(`./static/images/abroad/map_${this.selectedAbroad.id}.png`);
         this.selectedAbroad = null;
       }
     });
