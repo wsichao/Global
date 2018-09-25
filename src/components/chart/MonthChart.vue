@@ -33,7 +33,7 @@ export default {
           max = temp
         }
       }
-      max = Math.ceil(max / 100) * 100;
+      // max = Math.ceil(max / 100) * 100;
       this.monthProduce.barData.forEach(function(item, index, arr) {
         maxArr[index] = max;
       });
@@ -51,20 +51,24 @@ export default {
       this.chart.setOption({
         backgroundColor: 'rgba(128, 128, 128, 0)',
         grid: {
-          left: 160,
-          right: 10,
+          left: 90,
+          // right: 60,
           top: 8,
           bottom: 26,
         },
         legend: {
           itemWidth: 14,
           bottom: 0,
-          data: [{ name: '月均线', icon: 'roundRect', textStyle: { color: '#FFFFFF' } }]
+          data: [{ 
+            name: '月均线', 
+            icon: 'roundRect',
+            textStyle: { color: '#FFFFFF' } }]
         },
         xAxis: {
           show: false
         },
-        yAxis: {
+        yAxis: [
+          {
           data: this.monthProduce.yAxis,
           boundaryGap: true, // 坐标轴两边留空白
           axisLine: {
@@ -74,22 +78,27 @@ export default {
             show: false
           },
           axisLabel: {
-            formatter: function(value) {
-              let arr = value.split(' ');
-              return arr[0] + ' {' + 'a|' + arr[1] + '}' + arr[2];
-            },
             fontSize: 14,
             fontWeight: 'bold',
             color: '#DDDDDD',
-            rich: {
-              a: {
-                color: '#FD8E20',
-                fontWeight: 'bold',
-                fontSize: 14
-              }
-            }
           }
         },
+          {
+          data: this.monthProduce.barData,
+          boundaryGap: true, // 坐标轴两边留空白
+          offset:-30,
+          axisLine: {
+            show: false
+          },
+          axisTick: {
+            show: false
+          },
+          axisLabel: {
+            fontSize: 14,
+            fontWeight: 'bold',
+            color:'#FD8E20',
+          }
+        },],
         series: [{ // For shadow
           type: 'bar',
           itemStyle: {
@@ -108,13 +117,6 @@ export default {
             normal: {
               color: '#39f',
               barBorderRadius: [0, 5, 5, 0],
-              label: {
-                show: false,
-                position: 'right',
-                textStyle: {
-                  color: '#FD8E20'
-                }
-              }
             }
           },
           data: this.monthProduce.barData // [100, 90, 80, 70]

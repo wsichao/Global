@@ -32,7 +32,7 @@ export default {
           max = this.dayProduce.barData[i];
         }
       }
-      max = Math.ceil(max / 100) * 100 + 10;
+      // max = Math.ceil(max / 1) * 1;
       this.dayProduce.barData.forEach(function(item, index, arr) {
         maxArr[index] = max;
       });
@@ -50,8 +50,8 @@ export default {
       this.chart.setOption({
         backgroundColor: 'rgba(128, 128, 128, 0)',
         grid: {
-          left: 160,
-          right: 10,
+          left: 90,
+          // right: 60,
           top: 8,
           bottom: 26,
         },
@@ -66,8 +66,10 @@ export default {
         },
         xAxis: {
           show: false,
+          
         },
-        yAxis: {
+        yAxis: [
+          {
           data: this.dayProduce.yAxis,
           boundaryGap: true, // 坐标轴两边留空白
           axisLine: {
@@ -77,22 +79,28 @@ export default {
             show: false,
           },
           axisLabel: {
-            formatter: function(value) {
-              let arr = value.split(' ');
-              return arr[0] + ' {' + 'a|' + arr[1] + '}' + arr[2];
-            },
             fontSize: 14,
             fontWeight: 'bold',
             color: '#DDD',
-            rich: {
-              a: {
-                color: '#FD8E20',
-                fontWeight: 'bold',
-                fontSize: 14,
-              },
-            },
           },
         },
+
+          {
+          data: this.dayProduce.barData,
+          boundaryGap: true, // 坐标轴两边留空白
+          offset: -30,
+          axisLine: {
+            show: false,
+          },
+          axisTick: {
+            show: false,
+          },
+          axisLabel: {
+            fontSize: 14,
+            fontWeight: 'bold',
+            color: '#FD8E20'
+          },
+        },],
         series: [{ // For shadow
           type: 'bar',
           itemStyle: {
@@ -107,6 +115,7 @@ export default {
           animation: false,
         }, {
           type: 'bar',
+          
           itemStyle: {
             normal: {
               color: '#39f',
@@ -114,7 +123,8 @@ export default {
             },
           },
           data: this.dayProduce.barData // [100, 90, 80, 70]
-        }, {
+        },
+         {
           name: '日均线',
           type: 'line',
           symbol: 'none', // 去掉点

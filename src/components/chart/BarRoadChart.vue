@@ -158,7 +158,7 @@ export default {
     display: inline-block;
 }
 #myBarRoadChart {
-    width: 400px;
+    width: 450px;
     height: 140px;
 }
 .numberText{
