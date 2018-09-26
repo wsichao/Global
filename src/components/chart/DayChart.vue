@@ -5,11 +5,11 @@
   </div>
 </template>
 <script>
-import echarts from 'echarts';
+import echarts from "echarts";
 // require('echarts/theme/dark');
 
 export default {
-  props: ['dayProduce'],
+  props: ["dayProduce"],
   data() {
     return {
       dataShadow: [] // 用于阴影柱状图显示
@@ -32,7 +32,7 @@ export default {
           max = this.dayProduce.barData[i];
         }
       }
-      max = Math.ceil(max / 100) * 100 + 10;
+      max = Math.ceil(max);
       this.dayProduce.barData.forEach(function(item, index, arr) {
         maxArr[index] = max;
       });
@@ -43,92 +43,108 @@ export default {
       this.dataShadow = this.shadowMax();
 
       if (!this.chart) {
-        this.chart = echarts.init(document.getElementById('myDayChart'));
+        this.chart = echarts.init(document.getElementById("myDayChart"));
       }
 
       this.chart.showLoading();
       this.chart.setOption({
-        backgroundColor: 'rgba(128, 128, 128, 0)',
+        backgroundColor: "rgba(128, 128, 128, 0)",
         grid: {
-          left: 160,
-          right: 10,
+          left: 90,
+          // right: 60,
           top: 8,
-          bottom: 26,
+          bottom: 26
         },
         legend: {
           itemWidth: 14,
           bottom: 0,
-          data: [{
-            name: '日均线',
-            icon: 'roundRect',
-            textStyle: { color: '#FFFFFF' },
-          }, ],
+          data: [
+            {
+              name: "日均线",
+              icon: "roundRect",
+              textStyle: { color: "#FFFFFF" }
+            }
+          ]
         },
         xAxis: {
-          show: false,
+          show: false
         },
-        yAxis: {
-          data: this.dayProduce.yAxis,
-          boundaryGap: true, // 坐标轴两边留空白
-          axisLine: {
-            show: true,
-          },
-          axisTick: {
-            show: false,
-          },
-          axisLabel: {
-            formatter: function(value) {
-              let arr = value.split(' ');
-              return arr[0] + ' {' + 'a|' + arr[1] + '}' + arr[2];
+        yAxis: [
+          {
+            data: this.dayProduce.yAxis,
+            boundaryGap: true, // 坐标轴两边留空白
+            axisLine: {
+              show: true
             },
-            fontSize: 14,
-            fontWeight: 'bold',
-            color: '#DDD',
-            rich: {
-              a: {
-                color: '#FD8E20',
-                fontWeight: 'bold',
-                fontSize: 14,
-              },
+            axisTick: {
+              show: false
             },
+            axisLabel: {
+              fontSize: 14,
+              fontWeight: "bold",
+              color: "#DDD"
+            }
           },
-        },
-        series: [{ // For shadow
-          type: 'bar',
-          itemStyle: {
-            normal: {
-              color: 'rgba(255,255,255,0.15)',
-              barBorderRadius: [0, 5, 5, 0],
+
+          {
+            data: this.dayProduce.barData,
+            boundaryGap: true, // 坐标轴两边留空白
+            offset: -30,
+            axisLine: {
+              show: false
             },
-          },
-          barGap: '-100%', // 两个柱子重叠
-          barCategoryGap: '80%', // 柱子之间的间距
-          data: this.dataShadow,
-          animation: false,
-        }, {
-          type: 'bar',
-          itemStyle: {
-            normal: {
-              color: '#39f',
-              barBorderRadius: [0, 5, 5, 0],
+            axisTick: {
+              show: false
             },
-          },
-          data: this.dayProduce.barData // [100, 90, 80, 70]
-        }, {
-          name: '日均线',
-          type: 'line',
-          symbol: 'none', // 去掉点
-          smooth: true,
-          itemStyle: {
-            normal: {
-              color: '#fd8e2a',
+            axisLabel: {
+              fontSize: 14,
+              fontWeight: "bold",
+              color: "#FD8E20"
+            }
+          }
+        ],
+        series: [
+          {
+            // For shadow
+            type: "bar",
+            itemStyle: {
+              normal: {
+                color: "rgba(255,255,255,0.15)",
+                barBorderRadius: [0, 5, 5, 0]
+              }
             },
+            barGap: "-100%", // 两个柱子重叠
+            barCategoryGap: "80%", // 柱子之间的间距
+            data: this.dataShadow,
+            animation: false
           },
-          data: this.dayProduce.lineData,
-        }, ],
+          {
+            type: "bar",
+
+            itemStyle: {
+              normal: {
+                color: "#39f",
+                barBorderRadius: [0, 5, 5, 0]
+              }
+            },
+            data: this.dayProduce.barData // [100, 90, 80, 70]
+          },
+          {
+            name: "日均线",
+            type: "line",
+            symbol: "none", // 去掉点
+            smooth: true,
+            itemStyle: {
+              normal: {
+                color: "#fd8e2a"
+              }
+            },
+            data: this.dayProduce.lineData
+          }
+        ]
       });
       this.chart.hideLoading();
-    },
+    }
   },
   mounted() {},
   watch: {
@@ -138,16 +154,15 @@ export default {
           this.drawGraph();
         });
       },
-      deep: true,
-    },
-  },
+      deep: true
+    }
+  }
 };
-
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
 .chart-content {
-  color: #DDD;
+  color: #ddd;
   width: 400px;
   display: inline-block;
 }
@@ -156,5 +171,4 @@ export default {
   width: 400px;
   height: 200px;
 }
-
 </style>
