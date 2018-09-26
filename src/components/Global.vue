@@ -87,9 +87,7 @@ export default {
               let name = orginEntity.name === 'crowd' ? 'blue' : 'yellow';
               return `./static/billboard2/${name}_${tmp}.png`;
             }, false),
-            // width: 32, // default: undefined
-            // eyeOffset: new Cesium.Cartesian3(0, 0, -500000),
-            // height: 32
+            eyeOffset: new Cesium.Cartesian3(0, 0, -500000)            
           }
         }
 
@@ -264,7 +262,8 @@ export default {
                 item.lonlat[1]),
               billboard: {
                 image: `./static/images/base_type_${item.type}.png`,
-                pixelOffset: new Cesium.Cartesian2(0, offsetY)
+                pixelOffset: new Cesium.Cartesian2(0, offsetY),
+                eyeOffset: new Cesium.Cartesian3(0, 0, -500000) // 用于解决图片显示的高度，不被其他点压盖
               }
             }));
           });
@@ -327,7 +326,8 @@ export default {
               position: Cesium.Cartesian3.fromDegrees(item.lonlat[0],
                 item.lonlat[1]),
               billboard: {
-                image: `./static/images/abroad/${item.id}.png`
+                image: `./static/images/abroad/${item.id}.png`,
+                eyeOffset: new Cesium.Cartesian3(0, 0, -500000) // 用于解决图片显示的高度，不被其他点压盖
               }
             }));
           });
