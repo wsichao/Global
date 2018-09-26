@@ -1,10 +1,6 @@
 <template>
   <div class="fm-stretch">
     <div id="cesiumContainer" class="fm-stretch"></div>
-    <div class="btn-container" :style="{top: btnPosition.top, left: btnPosition.left}">
-      <img src="../../static/images/fuwei.png" @click="flyHome">
-      <img :src="abroadBtnImg">
-    </div>
     <div v-if="selectedAbroadEntity">
       <abroad-info :anchor="center" :info="selectedAbroad"></abroad-info>
     </div>
@@ -29,31 +25,22 @@ export default {
   components: {
     AbroadInfo
   },
-  props: ['showCrowd', 'showCommon', 'showBase', 'showAbroad', 'poiChangedNum'],
+  props: ['showCrowd', 'showCommon', 'showBase', 'showAbroad', 'poiChangedNum', 'reset'],
   data() {
     return {
       viewer: null,
-      randomEntities: [],
       commonEntities: [],
+      commonRandomEntities: [],
       crowdEntities: [],
+      crowdRandomEntities: [],
       baseEntities: [],
       abroadEntities: [], // 所有海外地图的Entiities
       abroadList: [],
       selectedAbroadEntity: null, // 当前选中的海外地图的Entity
-      center: [], // 地图中心点的屏幕坐标
-      btnPosition: {} // 控制按钮的显示位置
+      center: [] // 地图中心点的屏幕坐标
     };
   },
   computed: {
-    allEntities: function() {
-      let arr = [];
-      Array.prototype.push.apply(arr, this.commonEntities);
-      Array.prototype.push.apply(arr, this.crowdEntities);
-      return arr;
-    },
-    abroadBtnImg() {
-      return this.showAbroad ? '../../static/images/abroad.png' : '../../static/images/abroad_normal.png'
-    },
     selectedAbroad() {
       return this.abroadList.find(it => it.id === this.selectedAbroadEntity.id);
     }
@@ -64,6 +51,7 @@ export default {
         this.loadCrowdData();
       } else {
         this.clearSpecEntities(this.crowdEntities);
+        this.clearSpecEntities(this.crowdRandomEntities);
       }
     },
     showCommon: function(newVal) {
@@ -71,39 +59,46 @@ export default {
         this.loadCommonData();
       } else {
         this.clearSpecEntities(this.commonEntities);
+        this.clearSpecEntities(this.commonRandomEntities);
       }
     },
     poiChangedNum: function(newVal) {
-      this.clearSpecEntities(this.randomEntities);
+      this.clearSpecEntities(this.commonRandomEntities);
+      this.clearSpecEntities(this.crowdRandomEntities);
 
       let c = newVal;
-      const t = this.allEntities.length - 1;
+      const allEntities = [...this.commonEntities, ...this.crowdEntities];
+      const t = allEntities.length - 1;
       while (t >= 0 && c > 0) {
         const i = parseInt(t * Math.random());
-        const pointPosition = this.allEntities[i].position;
+        const orginEntity = allEntities[i];
         let count = 0;
         const entity = {
-          position: pointPosition,
+          position: orginEntity.position,
           billboard: {
             image: new Cesium.CallbackProperty(function() {
               // 闪烁次数
-              count++
-
-              var tmp = parseInt(count / 2)
-              if (tmp >= 34) {
-                count = 0
+              count++;
+              let tmp = parseInt(count / 2);
+              if (tmp >= 49) {
+                count = 0;
               }
-              var image = `./static/billboard/${tmp}.png`
-              return image
+              tmp = String(tmp).padStart(5, '0');
+              let name = orginEntity.name === 'crowd' ? 'blue' : 'yellow';
+              return `./static/billboard2/${name}_${tmp}.png`;
             }, false),
-            width: 32, // default: undefined
-            eyeOffset: new Cesium.Cartesian3(0, 0, -500000),
-            height: 32
+            // width: 32, // default: undefined
+            // eyeOffset: new Cesium.Cartesian3(0, 0, -500000),
+            // height: 32
           }
         }
 
         const entityAdded = this.viewer.entities.add(entity)
-        this.randomEntities.push(entityAdded)
+        if (orginEntity.name === 'crowd') {
+          this.crowdRandomEntities.push(entityAdded);
+        } else {
+          this.commonRandomEntities.push(entityAdded);
+        }
         c--;
       }
 
@@ -125,16 +120,18 @@ export default {
       } else {
         this.clearSpecEntities(this.abroadEntities);
 
-        this.abroadList.length = 0;
+        this.abroadList = [];
         this.selectedAbroadEntity = null;
         this.viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
       }
+    },
+    reset() {
+      this.flyHome();
     }
   },
   methods: {
-    reloadData() {
+    loadData() {
       this.viewer.entities.removeAll();
-      this.allEntities.length = 0;
       if (this.showCrowd) {
         this.loadCrowdData();
       }
@@ -206,11 +203,12 @@ export default {
           for (let i = 0; i < tempSourceData.features.length; i++) {
             const feature = tempSourceData.features[i];
             that.crowdEntities.push(that.viewer.entities.add({
+              name: 'crowd',
               position: Cesium.Cartesian3.fromDegrees(feature.geometry.coordinates[0],
                 feature.geometry.coordinates[1]),
               point: {
                 pixelSize: 4,
-                color: Cesium.Color.fromCssColorString('#33c3ff')
+                color: Cesium.Color.fromCssColorString('#3493ff')
               }
             }));
           }
@@ -229,11 +227,12 @@ export default {
           for (let i = 0; i < tempSourceData.features.length; i++) {
             const feature = tempSourceData.features[i];
             that.commonEntities.push(that.viewer.entities.add({
+              name: 'common',
               position: Cesium.Cartesian3.fromDegrees(feature.geometry.coordinates[0],
                 feature.geometry.coordinates[1]),
               point: {
                 pixelSize: 4,
-                color: Cesium.Color.fromCssColorString('#fd8e20')
+                color: Cesium.Color.fromCssColorString('#fd8e2a')
               }
             }));
           }
@@ -241,7 +240,7 @@ export default {
       });
     },
     flyHome() {
-      this.viewer.camera.flyHome();
+      this.viewer.camera.flyHome(1.5);
     },
     loadBase() {
       axios({
@@ -251,14 +250,21 @@ export default {
       }).then(res => {
         if (res.data) {
           res.data.forEach(item => {
+            let offsetY = 0;
+            if (item.type === 1) {
+              offsetY = -17;
+            } else if (item.type === 2) {
+              offsetY = -14;
+            } else if (item.type === 3) {
+              offsetY = -11;
+            }
             this.baseEntities.push(this.viewer.entities.add({
               id: item.id,
               position: Cesium.Cartesian3.fromDegrees(item.lonlat[0],
                 item.lonlat[1]),
               billboard: {
-                image: new Cesium.CallbackProperty(function() {
-                  return `./static/images/base_type_${item.type}.png`
-                }, true)
+                image: `./static/images/base_type_${item.type}.png`,
+                pixelOffset: new Cesium.Cartesian2(0, offsetY)
               }
             }));
           });
@@ -381,7 +387,7 @@ export default {
 
     // 禁用默认的双击一个entity后，自动缩放、定位操作
     viewer.screenSpaceEventHandler.setInputAction(() => {
-      viewer.camera.flyHome(1.5);
+      this.flyHome();
     }, Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
     // 移动开始后清理海外地图的信息框
     viewer.camera.moveStart.addEventListener((moveStartPosition) => {
@@ -391,34 +397,13 @@ export default {
     });
 
     this.viewer = viewer;
-    this.reloadData();
-    this.btnPosition = {
-      top: '180px',
-      left: `${this.$el.clientWidth *0.75 - 90}px`
-    };
+    this.loadData();
   }
 };
 
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-#cesiumContainer .cesium-viewer-bottom {
-  display: none;
-}
 
-.btn-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-  justify-content: space-evenly;
-  padding: 0px 10px 0px 4px;
-  position: absolute;
-  width: 128px;
-  height: 51px;
-  background-image: url(../../static/images/button_frame.png);
-  /* 处理被右侧div压盖的问题 */
-  z-index: 999;
-  display: none;
-}
 
 </style>
