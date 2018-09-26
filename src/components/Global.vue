@@ -180,7 +180,7 @@ export default {
     },
     data2GeoJson(data) {
       let featureCollection = {
-        type: "FeatureCollection",
+        type: 'FeatureCollection',
         features: [],
       };
       for (let i = 0; i < data.length; i++) {
