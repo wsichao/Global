@@ -171,7 +171,7 @@ export default {
             }, false),
             color: Cesium.Color.TRANSPARENT,
             outlineColor: Cesium.Color.DEEPSKYBLUE,
-            outlineWidth: 2
+            outlineWidth: 4
           }
         };
         points.push(tmpEntity);
@@ -394,7 +394,7 @@ export default {
     this.reloadData();
     this.btnPosition = {
       top: '180px',
-      left: `${this.$el.clientWidth * 0.75 - 90}px`
+      left: `${this.$el.clientWidth *0.75 - 90}px`
     };
   }
 };

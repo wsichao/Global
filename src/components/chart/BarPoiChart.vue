@@ -1,6 +1,6 @@
 <template>
   <div class="chart-content">
-    <div style='display:flex;'>
+    <div style='display:flex'>
       <div style='flex:1;padding-left:18px;'>
         <div>POI 更新累积值</div>
         <div>POI 新增累积值</div>
@@ -10,25 +10,27 @@
         <div><span class='numberText'>{{poiData.cAddPoi | splitSymbol}}</span> 个</div>
       </div>
     </div>
-    <div id='myBarPoiChart' style="margin-left: 10px">
+    <div id='myBarPoiChart'>
     </div>
   </div>
 </template>
 
 <script>
-import echarts from 'echarts'
+import echarts from "echarts";
 // require('echarts/theme/dark');
 
 export default {
-  props: ['poiData'],
-  data () {
+  name: "test",
+  props: ["poiData"],
+  data() {
     return {
-      msg: 'this is a bar Chart',
+      msg: "this is a bar Chart",
       chart: null
-    }
+    };
   },
   filters: {
-    splitSymbol: function (value){ // 将数字三位隔开
+    splitSymbol: function(value) {
+      // 将数字三位隔开
       return parseInt(value).toLocaleString();
     }
   },
@@ -39,132 +41,136 @@ export default {
       var maxArr = [];
       for (let i = 0; i < this.poiData.updateData.length; i++) {
         if (max < this.poiData.newData[i] + this.poiData.updateData[i]) {
-          max = this.poiData.newData[i] + this.poiData.updateData[i]
+          max = this.poiData.newData[i] + this.poiData.updateData[i];
         }
       }
       max = Math.ceil(max) + 20;
-      this.poiData.newData.forEach(function (item, index, arr) {
+      this.poiData.newData.forEach(function(item, index, arr) {
         maxArr[index] = max;
       });
       return maxArr;
     },
     // 绘制表格
     drawGraph() {
-        // let seriesDataTemp = this.poiData.seriesNewData
-        let dataShadow = this.shadowMax()
-        let xAxis = this.poiData.xAxis
-        if (!this.chart) {
-            this.chart = echarts.init(document.getElementById('myBarPoiChart'))
-        }
+      // let seriesDataTemp = this.poiData.seriesNewData
+      let dataShadow = this.shadowMax();
+      let xAxis = this.poiData.xAxis;
+      if (!this.chart) {
+        this.chart = echarts.init(document.getElementById("myBarPoiChart"));
+      }
 
-        this.chart.showLoading()
-        this.chart.setOption({
-            backgroundColor: 'rgba(128, 128, 128, 0)',
-            grid: {
-              left: 50,
-              right: 20,
-              top: 10,
-              bottom:30
+      this.chart.showLoading();
+      this.chart.setOption({
+        backgroundColor: "rgba(128, 128, 128, 0)",
+        grid: {
+          left: 50,
+          right: 20,
+          top: 10,
+          bottom: 30
+        },
+        xAxis: {
+          data: xAxis,
+          boundaryGap: true, // 坐标轴两边留空白
+          axisLine: {
+            show: false
+          },
+          axisTick: {
+            show: false
+          },
+          axisLabel: {
+            fontSize: 12,
+            color: "#DDDDDD",
+            interval: 0
+          }
+        },
+        yAxis: {
+          show: true,
+          axisLabel: {
+            fontSize: 12,
+            color: "#DDDDDD",
+            formatter: function(value, index) {
+              let val = value / 10000;
+              if (val == 0) {
+                return val;
+              }
+              return val + "W";
+            }
+          },
+          splitLine: {
+            show: false
+          },
+          splitNumber: 4
+        },
+        calculable: true,
+        series: [
+          {
+            // For shadow
+            type: "bar",
+            itemStyle: {
+              normal: {
+                color: "rgba(255,255,255,0.15)",
+                barBorderRadius: [5, 5, 0, 0]
+              }
             },
-            xAxis: {
-                data: xAxis,
-                boundaryGap: true, // 坐标轴两边留空白
-                axisLine: {
-                  show:false
-                },
-                axisTick: {
-                  show: false
-                },
-                axisLabel: {
-                  fontSize: 12,
-                  color: '#DDDDDD',
-                  interval: 0
-                }
+            barGap: "-100%", // 两个柱子重叠
+            barCategoryGap: "80%", // 柱子之间的间距
+            data: dataShadow, //this.poiData.updateData,
+            animation: false
+          },
+          {
+            type: "bar",
+            stack: "总和",
+            itemStyle: {
+              normal: {
+                color: "#FFF",
+                barBorderRadius: [5, 5, 0, 0]
+              }
             },
-            yAxis: {
-                show: true,
-                axisLabel: {
-                  fontSize: 12,
-                  color: '#DDDDDD',
-                  formatter: function (value, index) {
-                    let val = value / 10000;
-                    if (val == 0) {
-                      return val;
-                    }
-                    return val + 'W';
-                  }
-                },
-                splitLine: {
-                  show:false
-                },
-                splitNumber: 4
+            data: this.poiData.newData
+          },
+          {
+            type: "bar",
+            stack: "总和",
+            itemStyle: {
+              normal: {
+                color: "#3399FF",
+                barBorderRadius: [5, 5, 0, 0]
+              }
             },
-            calculable: true,
-            series: [{    // For shadow
-                 type: 'bar',
-                 itemStyle: {
-                     normal: {
-                        color: 'rgba(255,255,255,0.15)',
-                        barBorderRadius:[5, 5, 0, 0]
-                     }
-                 },
-                 barGap:'-100%', // 两个柱子重叠
-                 barCategoryGap:'80%', // 柱子之间的间距
-                 data: dataShadow, //this.poiData.updateData,
-                 animation: false
-             },{
-               type: 'bar',
-               stack: '总和',
-               itemStyle: {
-                 normal: {
-                   color: '#FFF',
-                   barBorderRadius:[5, 5, 0, 0]
-                 }
-               },
-               data: this.poiData.newData
-            },{
-               type: 'bar',
-               stack: '总和',
-               itemStyle: {
-                 normal: {
-                    color: '#3399FF',
-                    barBorderRadius:[5, 5, 0, 0]
-                  }
-               },
-               data: this.poiData.updateData
-           }]
-        })
-        this.chart.hideLoading()
+            data: this.poiData.updateData
+          }
+        ]
+      });
+      this.chart.hideLoading();
     }
   },
-  updated() {
-  },
+  updated() {},
   watch: {
     poiData: {
-      handler(curVal,oldVal){
+      handler(curVal, oldVal) {
         this.$nextTick(function() {
-          this.drawGraph()
-        })
-　　　　},
-　　　　deep:true //当单观察数据poiData为对象时,需要添加deep:true参数，否则监听不到方法
+          this.drawGraph();
+        });
+      },
+      deep: true //当单观察数据poiData为对象时,需要添加deep:true参数，否则监听不到方法
     }
-  },
-}
+  }
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.chart-content{
-    color: #DDD;
-    width: 400px;
-    display: inline-block;
+.chart-content {
+  color: #ddd;
+  width: 400px;
+  display: inline-block;
 }
 #myBarPoiChart {
-    width: 400px;
-    height: 140px;
+  width: 400px;
+  height: 140px;
 }
-.numberText{
-  color: #FD8E20;
-  margin-left: -15px;
+.numberText {
+  color: #fd8e20;
+  margin-left: -10px;
 }
 </style>
