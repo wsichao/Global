@@ -1,6 +1,6 @@
 <template>
   <div class="fm-stretch">
-    <Global :poi-changed-num="mapData.randomPoiChangedNum" :show-crowd="mapData.showCrowd" :show-common="mapData.showCommon" :show-base="mapData.showBase" :show-abroad="mapData.showAbroad"></Global>
+    <Global :poi-changed-num="mapData.randomPoiChangedNum" :show-crowd="mapData.showCrowd" :show-common="mapData.showCommon" :show-base="mapData.showBase" :show-abroad="mapData.showAbroad" :reset="mapData.reset"></Global>
     <div class="fm-stretch flex-layout float">
       <div class="col flex-layout-v" style="width: 25%;align-items: flex-start;">
         <div class="top-title left">
@@ -58,20 +58,19 @@
           </div>
         </div>
         <div class="legendContainer">
+          <img src="../static/images/fuwei.png" class="img-btn" @click="mapData.reset=Math.random()">
           <div class="legend">
             <div @click="mapData.showCommon=!mapData.showCommon">
               <span :style="{'background-color': mapData.showCommon ? '#fd8e2a' : '#9da0a4'}"></span> 自采分布
             </div>
             <div @click="mapData.showCrowd=!mapData.showCrowd">
-              <span :style="{'background-color': mapData.showCrowd ? '#33c3ff' : '#9da0a4'}"></span> 众包分布
+              <span :style="{'background-color': mapData.showCrowd ? '#3493ff' : '#9da0a4'}"></span> 众包分布
             </div>
             <div @click="mapData.showBase=!mapData.showBase">
               <span :style="{'background-color': mapData.showBase ? '#0b8415' : '#9da0a4'}"></span> 外业基地
             </div>
-            <div @click="mapData.showAbroad=!mapData.showAbroad">
-              <span :style="{'background-color': mapData.showAbroad ? '#e10c13' : '#9da0a4'}"></span> 海外地图
-            </div>
           </div>
+          <img :src="abroadBtnImg" class="img-btn" @click="mapData.showAbroad=!mapData.showAbroad">
         </div>
       </div>
       <div class="col flex-layout-v" style="width:25%;align-items: flex-end">
@@ -172,7 +171,11 @@ export default {
           yAxis: []
         },
         thrid: {
-          lineData: [[], [], []], //  用户轨迹点,用户问题反馈,互联网信息
+          lineData: [
+            [],
+            [],
+            []
+          ], //  用户轨迹点,用户问题反馈,互联网信息
           xAxis: []
         }
       },
@@ -181,13 +184,18 @@ export default {
         showCrowd: true,
         showBase: true,
         showAbroad: false,
-        randomPoiChangedNum: 5 + parseInt(20 * Math.random())
+        randomPoiChangedNum: 5 + parseInt(20 * Math.random()),
+        reset: 0
       },
       timeout: null,
       tweenColor: ""
     };
   },
-  computed: {},
+  computed: {
+    abroadBtnImg() {
+      return this.mapData.showAbroad ? '../static/images/abroad.png' : '../static/images/abroad_normal.png'
+    },
+  },
   filters: {
     splitSymbol(value) {
       // 将数字三位隔开
@@ -228,11 +236,10 @@ export default {
         }
       }
       let t = new TWEEN.Tween({
-        tweeningNumber: oldValue
-      })
+          tweeningNumber: oldValue
+        })
         .easing(TWEEN.Easing.Quadratic.Out)
-        .to(
-          {
+        .to({
             tweeningNumber: newValue
           },
           1000 * 2
@@ -250,11 +257,11 @@ export default {
     getChartData() {
       const that = this;
       axios({
-        method: "get",
-        url: conf.serviceUrl + "statics/productMonitor"
-        // url: 'http://fastmap.navinfo.com/18spr/service/statics/productMonitor',
-        // url: 'http://fastmap.navinfo.com/service/statics/productMonitor',
-      })
+          method: "get",
+          url: conf.serviceUrl + "statics/productMonitor"
+          // url: 'http://fastmap.navinfo.com/18spr/service/statics/productMonitor',
+          // url: 'http://fastmap.navinfo.com/service/statics/productMonitor',
+        })
         .then(function(res) {
           if (res && res.data.errcode == 0) {
             that.recomData(res.data.data);
@@ -309,7 +316,10 @@ export default {
       let months = Object.keys(data.crowdEachMonth).sort((a, b) => {
         return a - b;
       });
-      let lineData = [[], []],
+      let lineData = [
+          [],
+          []
+        ],
         xAxis = [];
       months.forEach(e => {
         lineData[0].push(data.crowdEachMonth[Number(e)].road);
@@ -516,7 +526,11 @@ export default {
       this.charData.thrid.inforTotal = inforTotal;
       this.charData.thrid.userTotal = userTotal;
       this.charData.thrid.webTotal = webTotal;
-      this.charData.thrid.lineData = [[], [], []];
+      this.charData.thrid.lineData = [
+        [],
+        [],
+        []
+      ];
       this.charData.thrid.xAxis = [];
       for (let i in inforDetail) {
         if (inforDetail.hasOwnProperty(i)) {
@@ -619,6 +633,7 @@ export default {
     Panel
   }
 };
+
 </script>
 <style>
 div.fm-stretch {
@@ -647,25 +662,31 @@ div.float {
   pointer-events: none;
 }
 
-div.flex-layout > div.col {
+div.flex-layout>div.col {
   width: 100%;
   height: 100%;
 }
 
-div.flex-layout-v > div.row {
+div.flex-layout-v>div.row {
   width: 100%;
   height: 100%;
 }
 
 div.legendContainer {
-  padding: 10px;
+  display: flex;
+  align-items: center;
+}
+
+div.legendContainer .img-btn {
+  cursor: pointer;
+  pointer-events: auto;
 }
 
 div.legendContainer div.legend {
-  display: inline-block;
+  padding: 5px;
 }
 
-div.legendContainer div.legend > div {
+div.legendContainer div.legend>div {
   color: #fff;
   font-weight: 500;
   display: inline-block;
@@ -717,7 +738,7 @@ div.legendContainer div.legend span {
   background: url(./assets/right_up.png) no-repeat center;
 }
 
-.top-title > .text {
+.top-title>.text {
   width: 250px;
   height: 70px;
   color: #fd8e2a;
@@ -728,11 +749,11 @@ div.legendContainer div.legend span {
   font-weight: bold;
 }
 
-.top-title.left > .text {
+.top-title.left>.text {
   padding-left: 70px;
 }
 
-.top-title.right > .text {
+.top-title.right>.text {
   padding-right: 70px;
 }
 
@@ -752,7 +773,7 @@ div.legendContainer div.legend span {
   background: url(./assets/right_down.png) no-repeat center;
 }
 
-.bottom-title > .text {
+.bottom-title>.text {
   color: #fd8e20;
   font-size: 24px;
   font-weight: bold;
@@ -766,9 +787,11 @@ div.inlineChart {
   width: 48%;
 }
 
+
 /*覆盖cesium的默认样式，不显示下方工具条*/
 
 .cesium-viewer-bottom {
   display: none;
 }
+
 </style>
