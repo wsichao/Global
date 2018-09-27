@@ -51,8 +51,8 @@ export default {
       this.chart.setOption({
         backgroundColor: "rgba(128, 128, 128, 0)",
         grid: {
-          left: 90,
-          // right: 60,
+          left: 80,
+          right: 100,
           top: 8,
           bottom: 26
         },
@@ -86,6 +86,7 @@ export default {
               color: "#DDDDDD"
             }
           },
+
           {
             data: this.monthProduce.barData,
             boundaryGap: true, // 坐标轴两边留空白
@@ -101,7 +102,24 @@ export default {
               fontWeight: "bold",
               color: "#FD8E20"
             }
-          }
+          },
+
+          {
+            data: this.monthProduce.unit,
+            boundaryGap: false, // 坐标轴两边留空白
+            offset: 35,
+            axisLine: {
+              show: false
+            },
+            axisTick: {
+              show: false
+            },
+            axisLabel: {
+              fontSize: 14,
+              fontWeight: "bold",
+              color: "#FD8E20"
+            }
+          },
         ],
         series: [
           {

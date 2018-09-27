@@ -1,10 +1,13 @@
 <template>
   <div class="info-box" :style="{top: top, left: left}">
     <div class="desc">
+      <div class="desc-p">
+      <p class="desc-title">{{ info.summary.devName }}</p>
       <p>开发时间：{{ info.summary.devDate }}</p>
       <p>范围：{{ info.summary.scope }}</p>
       <p>道路总里程：{{ info.summary.roadSum }}</p>
       <p>POI数量：{{ info.summary.poiSum }}</p>
+      </div>
     </div>
     <div class="img">
       <img :src="imgSrc">
@@ -56,8 +59,22 @@ export default {
 }
 
 .info-box > .desc {
-  padding: 30px 60px 10px 60px;
+  padding: 0px 60px 10px 60px;
   color: #2fa9fc;
+}
+
+.desc-p {
+  padding: 10% 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.desc-p>p {
+  margin: 10px 0px;
+}
+
+.desc-title {
+  font-size: 24px;
 }
 
 .info-box > .img {

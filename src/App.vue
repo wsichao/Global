@@ -76,7 +76,7 @@
       <div class="col flex-layout-v" style="width:25%;align-items: flex-end">
         <div class="top-title right" style="padding-top: 0%;align-items: flex-start;">
           <div class="text">
-            <div style="padding:0 10px">数据出品</div>
+            <div style="padding:0 10px">数据发布</div>
             <img src="./assets/icon_1.png">
           </div>
         </div>
@@ -568,6 +568,12 @@ export default {
         "新增道路",
         "更新道路"
       ];
+      this.charData.dayProduce.unit = [
+        "个",
+        "个",
+        "公里",
+        "公里"
+      ];
       //${data.dpAddPoi}\\${data.dpUpdateRoad}\\${data.dpAddRoad}\\${data.dpUpdateRoad}
     },
     recomMonthProduce(data) {
@@ -595,6 +601,12 @@ export default {
         "更新POI",
         "新增道路",
         "更新道路"
+      ];
+      this.charData.monthProduce.unit = [
+        "个",
+        "个",
+        "公里",
+        "公里"
       ];
       //${data.mpAddPoi} 个${data.mpUpdatePoi} 个${data.mpAddRoad} 公里${data.mpUpdateRoad} 公里
     },

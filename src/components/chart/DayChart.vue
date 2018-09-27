@@ -50,8 +50,8 @@ export default {
       this.chart.setOption({
         backgroundColor: "rgba(128, 128, 128, 0)",
         grid: {
-          left: 90,
-          // right: 60,
+          left: 80,
+          right: 100,
           top: 8,
           bottom: 26
         },
@@ -90,6 +90,23 @@ export default {
             data: this.dayProduce.barData,
             boundaryGap: true, // 坐标轴两边留空白
             offset: -30,
+            axisLine: {
+              show: false
+            },
+            axisTick: {
+              show: false
+            },
+            axisLabel: {
+              fontSize: 14,
+              fontWeight: "bold",
+              color: "#FD8E20"
+            }
+          },
+
+          {
+            data: this.dayProduce.unit,
+            boundaryGap: true, // 坐标轴两边留空白
+            offset: 15,
             axisLine: {
               show: false
             },
