@@ -556,10 +556,10 @@ export default {
         data.dpUpdateRoad
       ]
       this.charData.dayProduce.unit = [
-        data.dpAddPoi + '(千个)',
-        data.dpUpdatePoi + '(千个)',
-        data.dpAddRoad + '(千公里)',
-        data.dpUpdateRoad + '(千公里)'
+        data.dpAddPoi + '千个',
+        data.dpUpdatePoi + '千个',
+        data.dpAddRoad + '公里',
+        data.dpUpdateRoad + '公里'
       ]
       this.charData.dayProduce.lineData = [
         data.dpAverage.addPoi,
@@ -591,10 +591,10 @@ export default {
         data.mpUpdateRoad
       ]
       this.charData.monthProduce.unit = [
-        data.mpAddPoi + '(个)',
-        data.mpUpdatePoi + '(个)',
-        data.mpAddRoad + '(公里)',
-        data.mpUpdateRoad + '(公里)'
+        data.mpAddPoi + '个',
+        data.mpUpdatePoi + '个',
+        data.mpAddRoad + '公里',
+        data.mpUpdateRoad + '公里'
       ]
       this.charData.monthProduce.lineData = [
         data.mpAverage.addPoi,

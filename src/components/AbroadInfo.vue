@@ -3,7 +3,10 @@
     <div class="desc">
       <div class="desc-p">
         <p class="desc-title">{{ info.summary.devName }}</p>
-        <p>开发时间：{{ info.summary.devDate }}</p>
+        <p v-if="info.summary.devName=='香港(Hongkong)'||info.summary.devName=='澳门(Macao)'">
+          更新时间：{{ info.summary.devDate }}
+        </p>
+        <p v-else>开发时间：{{ info.summary.devDate }}</p>
         <p>范围：{{ info.summary.scope }}</p>
         <p>道路总里程：{{ info.summary.roadSum }}</p>
         <p>POI数量：{{ info.summary.poiSum }}</p>
@@ -56,14 +59,12 @@ export default {
   background-image: url(../../static/images/abroad/frame.png);
   box-shadow: 0 0 50px -5px #2fa9fc;
 }
-
 .info-box > .desc {
   padding: 0px 60px;
   flex: 0 0 50%;
   display: flex;
   align-items: center;
 }
-
 .desc-p > p {
   color: #2fa9fc;
   margin: 10px 0px;
