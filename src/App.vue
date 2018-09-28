@@ -168,13 +168,13 @@ export default {
         },
         dayProduce: {
           barData: [],
-          barData1: [],
+          unit: [],
           lineData: [],
           yAxis: []
         },
         monthProduce: {
           barData: [],
-          barData1: [],
+          unit: [],
           lineData: [],
           yAxis: []
         },
@@ -555,7 +555,7 @@ export default {
         data.dpAddRoad,
         data.dpUpdateRoad
       ]
-      this.charData.dayProduce.barData1 = [
+      this.charData.dayProduce.unit = [
         data.dpAddPoi + '(千个)',
         data.dpUpdatePoi + '(千个)',
         data.dpAddRoad + '(千公里)',
@@ -590,7 +590,7 @@ export default {
         data.mpAddRoad,
         data.mpUpdateRoad
       ]
-      this.charData.monthProduce.barData1 = [
+      this.charData.monthProduce.unit = [
         data.mpAddPoi + '(个)',
         data.mpUpdatePoi + '(个)',
         data.mpAddRoad + '(公里)',

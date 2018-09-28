@@ -86,7 +86,7 @@ export default {
             }
           },
           {
-            data: this.dayProduce.barData1,
+            data: this.dayProduce.unit,
             boundaryGap: true, // 坐标轴两边留空白
             offset: -30,
             axisLine: {

@@ -88,7 +88,7 @@ export default {
           },
 
           {
-            data: this.monthProduce.barData1,
+            data: this.monthProduce.unit,
             boundaryGap: true, // 坐标轴两边留空白
             offset: -30,
             axisLine: {
