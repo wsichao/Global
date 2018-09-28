@@ -64,25 +64,25 @@
         {
         "id":"xianggang",
         "name":"香港",
-        "lonlat":[121.50,25.03],
+        "lonlat":[114.18,22.25],
         "summary":{
                 "devName":"香港(Hongkong)",
                 "devDate":"2018年",
-                "scope":"全境",
-                "roadSum":"约13万公里",
-                "poiSum":"规划重点POI全面覆盖"
+                "scope":"香港岛、九龙、新界和周围262个岛屿",
+                "roadSum":"5691公里",
+                "poiSum":"20万，重点POI全面覆盖"
                 }
         },
         {
         "id":"aomen",
         "name":"澳门",
-        "lonlat":[121.50,25.03],
+        "lonlat":[113.56,22.16],
         "summary":{
-                "devName":"澳门()",
+                "devName":"澳门(Macao)",
                 "devDate":"2018年",
-                "scope":"全境",
-                "roadSum":"约13万公里",
-                "poiSum":"规划重点POI全面覆盖"
+                "scope":"澳门半岛、氹仔和路环贰岛",
+                "roadSum":"424公里",
+                "poiSum":"1.9万，重点POI全面覆盖"
                 }
         }
         

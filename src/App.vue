@@ -45,14 +45,20 @@
             </div>
             <div class="flex-layout summary">
               <div>
-                <div>道路总量:<span class="num-text">{{title.roadLen | splitSymbol}}</span>公里</div>
-                <div>道路更新:<span class="num-text">{{title.perUpdateRoadLable | splitSymbol}}</span> 公里</div>
-                <div>道路新增:<span class="num-text">{{title.perAddRoadLable | splitSymbol}}</span> 公里</div>
+                <div>道路总量:
+                  <span class="num-text">{{title.roadLen | splitSymbol}}</span>公里</div>
+                <div>道路更新:
+                  <span class="num-text">{{title.perUpdateRoadLable | splitSymbol}}</span> 公里</div>
+                <div>道路新增:
+                  <span class="num-text">{{title.perAddRoadLable | splitSymbol}}</span> 公里</div>
               </div>
               <div>
-                <div>POI总量:<span class="num-text">{{title.poiNum | splitSymbol}}</span>个</div>
-                <div>POI更新:<span class="num-text">{{title.perUpdatePoiLable | splitSymbol}}</span>个</div>
-                <div>POI新增:<span class="num-text">{{title.perAddPoiLable | splitSymbol}}</span>个</div>
+                <div>POI总量:
+                  <span class="num-text">{{title.poiNum | splitSymbol}}</span>个</div>
+                <div>POI更新:
+                  <span class="num-text">{{title.perUpdatePoiLable | splitSymbol}}</span>个</div>
+                <div>POI新增:
+                  <span class="num-text">{{title.perAddPoiLable | splitSymbol}}</span>个</div>
               </div>
             </div>
           </div>
@@ -108,24 +114,24 @@
   </div>
 </template>
 <script>
-import BarPoiChart from "@/components/chart/BarPoiChart";
-import BarRoadChart from "@/components/chart/BarRoadChart";
-import LineChart from "@/components/chart/LineChart";
-import LineChartCrowd from "@/components/chart/LineChartCrowd";
-import DashboardChart from "@/components/chart/DashboardChart";
-import DayChart from "@/components/chart/DayChart";
-import MonthChart from "@/components/chart/MonthChart";
-import Banner from "@/components/Banner";
-import Global from "@/components/Global";
-import SplitNumber from "@/components/SplitNumber";
-import axios from "axios";
-import Panel from "@/components/Panel";
-import conf from "./config";
+import BarPoiChart from '@/components/chart/BarPoiChart'
+import BarRoadChart from '@/components/chart/BarRoadChart'
+import LineChart from '@/components/chart/LineChart'
+import LineChartCrowd from '@/components/chart/LineChartCrowd'
+import DashboardChart from '@/components/chart/DashboardChart'
+import DayChart from '@/components/chart/DayChart'
+import MonthChart from '@/components/chart/MonthChart'
+import Banner from '@/components/Banner'
+import Global from '@/components/Global'
+import SplitNumber from '@/components/SplitNumber'
+import axios from 'axios'
+import Panel from '@/components/Panel'
+import conf from './config'
 
-const TWEEN = require("@tweenjs/tween.js");
+const TWEEN = require('@tweenjs/tween.js')
 
 export default {
-  name: "app",
+  name: 'app',
   data() {
     return {
       title: {
@@ -162,20 +168,18 @@ export default {
         },
         dayProduce: {
           barData: [],
+          barData1: [],
           lineData: [],
           yAxis: []
         },
         monthProduce: {
           barData: [],
+          barData1: [],
           lineData: [],
           yAxis: []
         },
         thrid: {
-          lineData: [
-            [],
-            [],
-            []
-          ], //  用户轨迹点,用户问题反馈,互联网信息
+          lineData: [[], [], []], //  用户轨迹点,用户问题反馈,互联网信息
           xAxis: []
         }
       },
@@ -188,86 +192,89 @@ export default {
         reset: 0
       },
       timeout: null,
-      tweenColor: ""
-    };
+      tweenColor: ''
+    }
   },
   computed: {
     abroadBtnImg() {
-      return this.mapData.showAbroad ? '../static/images/abroad.png' : '../static/images/abroad_normal.png'
-    },
+      return this.mapData.showAbroad
+        ? '../static/images/abroad.png'
+        : '../static/images/abroad_normal.png'
+    }
   },
   filters: {
     splitSymbol(value) {
       // 将数字三位隔开
-      return parseInt(value).toLocaleString();
+      return parseInt(value).toLocaleString()
     }
   },
   watch: {
     // 用于统计信息的过度效果显示
-    "title.perAddRoad": {
+    'title.perAddRoad': {
       handler(newValue, oldValue) {
-        this.tweenChange("perAddRoadLable", newValue, oldValue);
+        this.tweenChange('perAddRoadLable', newValue, oldValue)
       }
     },
-    "title.perUpdateRoad": {
+    'title.perUpdateRoad': {
       handler(newValue, oldValue) {
-        this.tweenChange("perUpdateRoadLable", newValue, oldValue);
+        this.tweenChange('perUpdateRoadLable', newValue, oldValue)
       }
     },
-    "title.perAddPoi": {
+    'title.perAddPoi': {
       handler(newValue, oldValue) {
-        this.tweenChange("perAddPoiLable", newValue, oldValue);
+        this.tweenChange('perAddPoiLable', newValue, oldValue)
       }
     },
-    "title.perUpdatePoi": {
+    'title.perUpdatePoi': {
       handler(newValue, oldValue) {
-        this.tweenChange("perUpdatePoiLable", newValue, oldValue);
+        this.tweenChange('perUpdatePoiLable', newValue, oldValue)
       }
     }
   },
   methods: {
     tweenChange(lable, newValue, oldValue) {
       // 用于统计信息的过度效果显示
-      let vm = this;
+      let vm = this
 
       function animate() {
         if (TWEEN.update()) {
-          requestAnimationFrame(animate);
+          requestAnimationFrame(animate)
         }
       }
       let t = new TWEEN.Tween({
-          tweeningNumber: oldValue
-        })
+        tweeningNumber: oldValue
+      })
         .easing(TWEEN.Easing.Quadratic.Out)
-        .to({
+        .to(
+          {
             tweeningNumber: newValue
           },
           1000 * 2
         ) // 数据变化持续2秒
         .onUpdate(function() {
-          vm.title[lable] = this.tweeningNumber.toFixed(0);
-          vm.tweenColor = "#fff";
+          vm.title[lable] = this.tweeningNumber.toFixed(0)
+          vm.tweenColor = '#fff'
         })
         .onComplete(function() {
-          vm.tweenColor = "";
+          vm.tweenColor = ''
         })
-        .start();
-      animate();
+        .start()
+      animate()
     },
     getChartData() {
-      const that = this;
+      const that = this
       axios({
-          method: "get",
-          url: conf.serviceUrl + "statics/productMonitor"
-          // url: 'http://fastmap.navinfo.com/18spr/service/statics/productMonitor',
-          // url: 'http://fastmap.navinfo.com/service/statics/productMonitor',
-        })
+        method: 'get',
+        url: conf.serviceUrl + 'statics/productMonitor'
+        // url: 'http://fastmap.navinfo.com/18spr/service/statics/productMonitor',
+        // url: 'http://fastmap.navinfo.com/service/statics/productMonitor',
+      })
         .then(function(res) {
           if (res && res.data.errcode == 0) {
-            that.recomData(res.data.data);
+            that.recomData(res.data.data)
           }
         })
-        .catch(function(err) {});
+        .catch(function(err) {})
     },
     recomData(data) {
       // 格式化接口数据
@@ -277,267 +284,260 @@ export default {
       // data.perAddRoad = 1432;
       // data.perUpdateRoad = 6345;
 
-      this.initOriginData(data);
-      this.titleData(data);
-      this.recomPoi(data);
-      this.recomRoad(data);
-      this.recomDayProduce(data);
-      this.recomMonthProduce(data);
-      this.recomThird(data);
-      this.crowdData(data);
-      this.seasonData(data);
+      this.initOriginData(data)
+      this.titleData(data)
+      this.recomPoi(data)
+      this.recomRoad(data)
+      this.recomDayProduce(data)
+      this.recomMonthProduce(data)
+      this.recomThird(data)
+      this.crowdData(data)
+      this.seasonData(data)
     },
     seasonData(data) {
       this.season.road = {
-        cahrtId: "roadDash",
-        titleName: "道路",
-        styleColor: "rgba(51,153,255,0.5)",
-        dataUnit: "公里",
+        cahrtId: 'roadDash',
+        titleName: '道路',
+        styleColor: 'rgba(51,153,255,0.5)',
+        dataUnit: '公里',
         dataUpdate: data.spUpdateRoad,
         dataAdd: data.spAddRoad
-      };
+      }
 
       this.season.poi = {
-        cahrtId: "poiDash",
-        titleName: "POI",
-        styleColor: "rgba(253,142,32,0.5)",
-        dataUnit: "个",
+        cahrtId: 'poiDash',
+        titleName: 'POI',
+        styleColor: 'rgba(253,142,32,0.5)',
+        dataUnit: '个',
         dataUpdate: data.spUpdatePoi,
         dataAdd: data.spAddPoi
-      };
-      this.season.spVerson = data.spVerson;
+      }
+      this.season.spVerson = data.spVerson
     },
     crowdData(data) {
       // 众包
-      this.crowd.crowdUserNum = data.crowdUserNum;
-      this.crowd.crowdRoadLen = data.crowdRoadLen;
-      this.crowd.crowdPoiNum = data.crowdPoiNum;
+      this.crowd.crowdUserNum = data.crowdUserNum
+      this.crowd.crowdRoadLen = data.crowdRoadLen
+      this.crowd.crowdPoiNum = data.crowdPoiNum
 
       let months = Object.keys(data.crowdEachMonth).sort((a, b) => {
-        return a - b;
-      });
-      let lineData = [
-          [],
-          []
-        ],
-        xAxis = [];
+        return a - b
+      })
+      let lineData = [[], []],
+        xAxis = []
       months.forEach(e => {
-        lineData[0].push(data.crowdEachMonth[Number(e)].road);
-        lineData[1].push(data.crowdEachMonth[Number(e)].poi);
-        xAxis.push(e + "月");
-      });
+        lineData[0].push(data.crowdEachMonth[Number(e)].road)
+        lineData[1].push(data.crowdEachMonth[Number(e)].poi)
+        xAxis.push(e + '月')
+      })
 
-      this.crowd.lineData = lineData;
-      this.crowd.xAxis = xAxis;
+      this.crowd.lineData = lineData
+      this.crowd.xAxis = xAxis
     },
     getCurrentProcess(filed, data) {
-      let currentHour = new Date().getHours() - 8; // 当前小时
-      let step = Math.ceil(data[filed] / 15 * currentHour);
+      let currentHour = new Date().getHours() - 8 // 当前小时
+      let step = Math.ceil(data[filed] / 15 * currentHour)
       if (step > data[filed]) {
-        step = data[filed];
+        step = data[filed]
       }
-      return step;
+      return step
     },
     titleData(data) {
-      let times = 60 * 15 * 2; // 总共更新的次数 （一分钟刷新一次，24小时刷新60*24次，可以根据具体效果设置时长）
-      let that = this;
+      let times = 60 * 15 * 2 // 总共更新的次数 （一分钟刷新一次，24小时刷新60*24次，可以根据具体效果设置时长）
+      let that = this
       if (this.timeout) {
-        clearTimeout(this.timeout);
+        clearTimeout(this.timeout)
       }
 
       let _refreshData = function() {
-        let improve1 = that.updatePerAddRoad(times, data);
-        let improve2 = that.updatePerUpdateRoad(times, data);
-        let improve3 = that.updatePerAddPoi(times, data); // poi新增每次递增值
-        let improve4 = that.updatePerUpdatePoi(times, data); // poi修改每次递增值
+        let improve1 = that.updatePerAddRoad(times, data)
+        let improve2 = that.updatePerUpdateRoad(times, data)
+        let improve3 = that.updatePerAddPoi(times, data) // poi新增每次递增值
+        let improve4 = that.updatePerUpdatePoi(times, data) // poi修改每次递增值
 
-        that.title.roadLen = that.title.roadLen + improve1;
-        that.title.poiNum = that.title.poiNum + improve3;
-        that.mapData.randomTaskNum = Math.random();
+        that.title.roadLen = that.title.roadLen + improve1
+        that.title.poiNum = that.title.poiNum + improve3
+        that.mapData.randomTaskNum = Math.random()
         // that.mapData.randomPoiChangedNum = improve3 + improve4;
-        that.mapData.randomPoiChangedNum = 5 + parseInt(20 * Math.random());
-        let currentMonth = new Date().getMonth() + 1;
+        that.mapData.randomPoiChangedNum = 5 + parseInt(20 * Math.random())
+        let currentMonth = new Date().getMonth() + 1
         data.cRoadAverage[currentMonth].add =
-          data.cRoadAverage[currentMonth].add + improve1;
+          data.cRoadAverage[currentMonth].add + improve1
         data.cRoadAverage[currentMonth].update =
-          data.cRoadAverage[currentMonth].update + improve2;
-        data.cAddRoad = data.cAddRoad + improve1;
-        data.cUpdateRoad = data.cUpdateRoad + improve2;
+          data.cRoadAverage[currentMonth].update + improve2
+        data.cAddRoad = data.cAddRoad + improve1
+        data.cUpdateRoad = data.cUpdateRoad + improve2
         data.cPoiAverage[currentMonth].add =
-          data.cPoiAverage[currentMonth].add + improve3;
+          data.cPoiAverage[currentMonth].add + improve3
         data.cPoiAverage[currentMonth].update =
-          data.cPoiAverage[currentMonth].update + improve4;
-        data.cAddPoi = data.cAddPoi + improve3;
-        data.cUpdatePoi = data.cUpdatePoi + improve4;
-        that.recomPoi(data);
-        that.recomRoad(data);
-      };
+          data.cPoiAverage[currentMonth].update + improve4
+        data.cAddPoi = data.cAddPoi + improve3
+        data.cUpdatePoi = data.cUpdatePoi + improve4
+        that.recomPoi(data)
+        that.recomRoad(data)
+      }
 
       let _startTimer = function() {
-        const timer = (10 + parseInt(20 * Math.random())) * 1000;
+        const timer = (10 + parseInt(20 * Math.random())) * 1000
         that.timeout = setTimeout(function() {
-          _refreshData();
-          _startTimer();
-        }, timer);
-      };
+          _refreshData()
+          _startTimer()
+        }, timer)
+      }
 
-      _startTimer();
+      _startTimer()
     },
     updatePerAddRoad(times, data) {
-      let addStep = 0;
+      let addStep = 0
       // let step = Math.ceil(data.perAddRoad / times);
-      let step = parseInt(3 * Math.random());
+      let step = parseInt(3 * Math.random())
       if (this.title.perAddRoad + step < data.perAddRoad) {
-        this.title.perAddRoad = this.title.perAddRoad + step;
-        addStep = step;
+        this.title.perAddRoad = this.title.perAddRoad + step
+        addStep = step
       } else {
-        addStep = data.perAddRoad - this.title.perAddRoad;
-        this.title.perAddRoad = data.perAddRoad;
+        addStep = data.perAddRoad - this.title.perAddRoad
+        this.title.perAddRoad = data.perAddRoad
       }
-      return addStep;
+      return addStep
     },
     updatePerUpdateRoad(times, data) {
-      let addStep = 0;
+      let addStep = 0
       // let step = Math.ceil(data.perUpdateRoad / times);
-      let step = parseInt(5 * Math.random());
+      let step = parseInt(5 * Math.random())
       if (this.title.perUpdateRoad + step < data.perUpdateRoad) {
-        this.title.perUpdateRoad = this.title.perUpdateRoad + step;
-        addStep = step;
+        this.title.perUpdateRoad = this.title.perUpdateRoad + step
+        addStep = step
       } else {
-        addStep = data.perUpdateRoad - this.title.perUpdateRoad;
-        this.title.perUpdateRoad = data.perUpdateRoad;
+        addStep = data.perUpdateRoad - this.title.perUpdateRoad
+        this.title.perUpdateRoad = data.perUpdateRoad
       }
-      return addStep;
+      return addStep
     },
     updatePerAddPoi(times, data) {
-      let addStep = 0;
+      let addStep = 0
       // let step = Math.ceil(data.perAddPoi / times);
-      let step = 10 + parseInt(10 * Math.random());
+      let step = 10 + parseInt(10 * Math.random())
       if (this.title.perAddPoi + step < data.perAddPoi) {
-        this.title.perAddPoi = this.title.perAddPoi + step;
-        addStep = step;
+        this.title.perAddPoi = this.title.perAddPoi + step
+        addStep = step
       } else {
-        addStep = data.perAddPoi - this.title.perAddPoi;
-        this.title.perAddPoi = data.perAddPoi;
+        addStep = data.perAddPoi - this.title.perAddPoi
+        this.title.perAddPoi = data.perAddPoi
       }
-      return addStep;
+      return addStep
     },
     updatePerUpdatePoi(times, data) {
-      let addStep = 0;
+      let addStep = 0
       // let step = Math.ceil(data.perUpdatePoi / times);
-      let step = 20 + parseInt(10 * Math.random());
+      let step = 20 + parseInt(10 * Math.random())
       if (this.title.perUpdatePoi + step < data.perUpdatePoi) {
-        this.title.perUpdatePoi = this.title.perUpdatePoi + step;
-        addStep = step;
+        this.title.perUpdatePoi = this.title.perUpdatePoi + step
+        addStep = step
       } else {
-        addStep = data.perUpdatePoi - this.title.perUpdatePoi;
-        this.title.perUpdatePoi = data.perUpdatePoi;
+        addStep = data.perUpdatePoi - this.title.perUpdatePoi
+        this.title.perUpdatePoi = data.perUpdatePoi
       }
-      return addStep;
+      return addStep
     },
     initOriginData(data) {
       // 根据当前的时间设置初始值
-      this.title.perUpdateRoad = this.getCurrentProcess("perUpdateRoad", data);
-      this.title.perAddRoad = this.getCurrentProcess("perAddRoad", data);
-      this.title.perUpdatePoi = this.getCurrentProcess("perUpdatePoi", data);
-      this.title.perAddPoi = this.getCurrentProcess("perAddPoi", data);
+      this.title.perUpdateRoad = this.getCurrentProcess('perUpdateRoad', data)
+      this.title.perAddRoad = this.getCurrentProcess('perAddRoad', data)
+      this.title.perUpdatePoi = this.getCurrentProcess('perUpdatePoi', data)
+      this.title.perAddPoi = this.getCurrentProcess('perAddPoi', data)
       // 重置总量 poi和道路的界面显示值 等于 总数量-今日新增-今日更新+新增初始值+更新初始值
-      data.roadLen = data.roadLen - data.perAddRoad + this.title.perAddRoad;
-      data.poiNum = data.poiNum - data.perAddPoi + this.title.perAddPoi;
-      this.title.roadLen = data.roadLen;
-      this.title.poiNum = data.poiNum;
+      data.roadLen = data.roadLen - data.perAddRoad + this.title.perAddRoad
+      data.poiNum = data.poiNum - data.perAddPoi + this.title.perAddPoi
+      this.title.roadLen = data.roadLen
+      this.title.poiNum = data.poiNum
       // 初始化自采道路图表
-      let currentMonth = new Date().getMonth() + 1;
+      let currentMonth = new Date().getMonth() + 1
       data.cRoadAverage[currentMonth].add =
         data.cRoadAverage[currentMonth].add -
         data.perAddRoad +
-        this.title.perAddRoad;
+        this.title.perAddRoad
       data.cRoadAverage[currentMonth].update =
         data.cRoadAverage[currentMonth].update -
         data.perUpdateRoad +
-        this.title.perUpdateRoad;
-      data.cAddRoad = data.cAddRoad - data.perAddRoad + this.title.perAddRoad;
+        this.title.perUpdateRoad
+      data.cAddRoad = data.cAddRoad - data.perAddRoad + this.title.perAddRoad
       data.cUpdateRoad =
-        data.cUpdateRoad - data.perUpdateRoad + this.title.perUpdateRoad;
+        data.cUpdateRoad - data.perUpdateRoad + this.title.perUpdateRoad
       data.cPoiAverage[currentMonth].add =
         data.cPoiAverage[currentMonth].add -
         data.perAddPoi +
-        this.title.perAddPoi;
+        this.title.perAddPoi
       data.cPoiAverage[currentMonth].update =
         data.cPoiAverage[currentMonth].update -
         data.perUpdatePoi +
-        this.title.perUpdatePoi;
-      data.cAddPoi = data.cAddPoi - data.perAddPoi + this.title.perAddPoi;
+        this.title.perUpdatePoi
+      data.cAddPoi = data.cAddPoi - data.perAddPoi + this.title.perAddPoi
       data.cUpdatePoi =
-        data.cUpdatePoi - data.perUpdatePoi + this.title.perUpdatePoi;
+        data.cUpdatePoi - data.perUpdatePoi + this.title.perUpdatePoi
     },
     recomPoi(data) {
       // 重组poi数据,使之符合图表格式
-      const poiAvg = data.cPoiAverage;
+      const poiAvg = data.cPoiAverage
       // this.charData.poi.cUpdatePoi = data.cUpdatePoi;
       // this.charData.poi.cAddPoi = data.cAddPoi;
-      this.charData.poi.newData = [];
-      this.charData.poi.updateData = [];
-      this.charData.poi.xAxis = [];
-      let cAdd = 0;
-      let cUpdate = 0;
+      this.charData.poi.newData = []
+      this.charData.poi.updateData = []
+      this.charData.poi.xAxis = []
+      let cAdd = 0
+      let cUpdate = 0
       for (let i in poiAvg) {
         if (poiAvg.hasOwnProperty(i)) {
-          this.charData.poi.xAxis.push(i + "月");
-          this.charData.poi.newData.push(poiAvg[i].add);
-          this.charData.poi.updateData.push(poiAvg[i].update);
-          cAdd += poiAvg[i].add;
-          cUpdate += poiAvg[i].update;
+          this.charData.poi.xAxis.push(i + '月')
+          this.charData.poi.newData.push(poiAvg[i].add)
+          this.charData.poi.updateData.push(poiAvg[i].update)
+          cAdd += poiAvg[i].add
+          cUpdate += poiAvg[i].update
         }
       }
-      this.charData.poi.cUpdatePoi = cUpdate;
-      this.charData.poi.cAddPoi = cAdd;
+      this.charData.poi.cUpdatePoi = cUpdate
+      this.charData.poi.cAddPoi = cAdd
     },
     recomRoad(data) {
       // 重组road数据,使之符合图表格式
-      let roadAvg = data.cRoadAverage;
+      let roadAvg = data.cRoadAverage
       // this.charData.road.cUpdateRoad = data.cUpdateRoad;
       // this.charData.road.cAddRoad = data.cAddRoad;
-      this.charData.road.newData = [];
-      this.charData.road.updateData = [];
-      this.charData.road.xAxis = [];
-      let cAdd = 0;
-      let cUpdate = 0;
+      this.charData.road.newData = []
+      this.charData.road.updateData = []
+      this.charData.road.xAxis = []
+      let cAdd = 0
+      let cUpdate = 0
       for (let i in roadAvg) {
         if (roadAvg.hasOwnProperty(i)) {
-          this.charData.road.xAxis.push(i + "月");
-          this.charData.road.newData.push(roadAvg[i].add);
-          this.charData.road.updateData.push(roadAvg[i].update);
-          cAdd += roadAvg[i].add;
-          cUpdate += roadAvg[i].update;
+          this.charData.road.xAxis.push(i + '月')
+          this.charData.road.newData.push(roadAvg[i].add)
+          this.charData.road.updateData.push(roadAvg[i].update)
+          cAdd += roadAvg[i].add
+          cUpdate += roadAvg[i].update
         }
       }
-      this.charData.road.cUpdateRoad = cUpdate;
-      this.charData.road.cAddRoad = cAdd;
+      this.charData.road.cUpdateRoad = cUpdate
+      this.charData.road.cAddRoad = cAdd
     },
     recomThird(data) {
       // 重组road数据,使之符合图表格式
-      let inforDetail = data.thirdInforDetail; // 用户轨迹点 -- 数据情报收集详情
-      let userDetail = data.thirdUserDetail; // 用户问题反馈  -- 用户反馈详情
-      let webDetail = data.thirdWebDetail; // 互联网信息  -- 互联网信息详情
-      let inforTotal = data.thirdInforTotal; // 用户轨迹点 -- 数据情报收集
-      let userTotal = data.thirdUserTotal; // 用户问题反馈  -- 用户反馈
-      let webTotal = data.thirdWebTotal; // 互联网信息  -- 互联网信息
-      this.charData.thrid.inforTotal = inforTotal;
-      this.charData.thrid.userTotal = userTotal;
-      this.charData.thrid.webTotal = webTotal;
-      this.charData.thrid.lineData = [
-        [],
-        [],
-        []
-      ];
-      this.charData.thrid.xAxis = [];
+      let inforDetail = data.thirdInforDetail // 用户轨迹点 -- 数据情报收集详情
+      let userDetail = data.thirdUserDetail // 用户问题反馈  -- 用户反馈详情
+      let webDetail = data.thirdWebDetail // 互联网信息  -- 互联网信息详情
+      let inforTotal = data.thirdInforTotal // 用户轨迹点 -- 数据情报收集
+      let userTotal = data.thirdUserTotal // 用户问题反馈  -- 用户反馈
+      let webTotal = data.thirdWebTotal // 互联网信息  -- 互联网信息
+      this.charData.thrid.inforTotal = inforTotal
+      this.charData.thrid.userTotal = userTotal
+      this.charData.thrid.webTotal = webTotal
+      this.charData.thrid.lineData = [[], [], []]
+      this.charData.thrid.xAxis = []
       for (let i in inforDetail) {
         if (inforDetail.hasOwnProperty(i)) {
-          this.charData.thrid.xAxis.push(i + "月");
-          this.charData.thrid.lineData[0].push(inforDetail[i]);
-          this.charData.thrid.lineData[1].push(userDetail[i]);
-          this.charData.thrid.lineData[2].push(webDetail[i]);
+          this.charData.thrid.xAxis.push(i + '月')
+          this.charData.thrid.lineData[0].push(inforDetail[i])
+          this.charData.thrid.lineData[1].push(userDetail[i])
+          this.charData.thrid.lineData[2].push(webDetail[i])
         }
       }
     },
@@ -545,91 +545,92 @@ export default {
     recomDayProduce(data) {
       // 重组road数据,使之符合图表格式
       // add by chenx on 2018-9-10 for story#6678
-      data.dpAddPoi = Math.ceil(data.dpAddPoi / 1000);
-      data.dpUpdatePoi = Math.ceil(data.dpUpdatePoi / 1000);
-      data.dpAverage.addPoi = Math.ceil(data.dpAverage.addPoi / 1000);
-      data.dpAverage.updatePoi = Math.ceil(data.dpAverage.updatePoi / 1000);
+      data.dpAddPoi = Math.ceil(data.dpAddPoi / 1000)
+      data.dpUpdatePoi = Math.ceil(data.dpUpdatePoi / 1000)
+      data.dpAverage.addPoi = Math.ceil(data.dpAverage.addPoi / 1000)
+      data.dpAverage.updatePoi = Math.ceil(data.dpAverage.updatePoi / 1000)
       this.charData.dayProduce.barData = [
         data.dpAddPoi,
         data.dpUpdatePoi,
         data.dpAddRoad,
         data.dpUpdateRoad
-      ];
+      ]
+      this.charData.dayProduce.barData1 = [
+        data.dpAddPoi + '(千个)',
+        data.dpUpdatePoi + '(千个)',
+        data.dpAddRoad + '(千公里)',
+        data.dpUpdateRoad + '(千公里)'
+      ]
       this.charData.dayProduce.lineData = [
         data.dpAverage.addPoi,
         data.dpAverage.updatePoi,
         data.dpAverage.addRoad,
         data.dpAverage.updateRoad
-      ];
+      ]
       // this.charData.dayProduce.yAxis = [`新增POI  （个）`, `更新POI  （个）`, `新增道路  （公里）`, `更新道路  （公里）`];
       this.charData.dayProduce.yAxis = [
-        "新增POI",
-        "更新POI",
-        "新增道路",
-        "更新道路"
-      ];
-      this.charData.dayProduce.unit = [
-        "个",
-        "个",
-        "公里",
-        "公里"
-      ];
+        '新增POI',
+        '更新POI',
+        '新增道路',
+        '更新道路'
+      ]
       //${data.dpAddPoi}\\${data.dpUpdateRoad}\\${data.dpAddRoad}\\${data.dpUpdateRoad}
     },
+
     recomMonthProduce(data) {
       // 重组road数据,使之符合图表格式
       // add by chenx on 2018-9-10 for story#6678
-      data.mpAddPoi = Math.ceil(data.mpAddPoi);
-      data.mpUpdatePoi = Math.ceil(data.mpUpdatePoi);
-      data.mpAverage.addPoi = Math.ceil(data.mpAverage.addPoi);
-      data.mpAverage.updatePoi = Math.ceil(data.mpAverage.updatePoi);
+      data.mpAddPoi = Math.ceil(data.mpAddPoi)
+      data.mpUpdatePoi = Math.ceil(data.mpUpdatePoi)
+      data.mpAverage.addPoi = Math.ceil(data.mpAverage.addPoi)
+      data.mpAverage.updatePoi = Math.ceil(data.mpAverage.updatePoi)
       this.charData.monthProduce.barData = [
         data.mpAddPoi,
         data.mpUpdatePoi,
         data.mpAddRoad,
         data.mpUpdateRoad
-      ];
+      ]
+      this.charData.monthProduce.barData1 = [
+        data.mpAddPoi + '(个)',
+        data.mpUpdatePoi + '(个)',
+        data.mpAddRoad + '(公里)',
+        data.mpUpdateRoad + '(公里)'
+      ]
       this.charData.monthProduce.lineData = [
         data.mpAverage.addPoi,
         data.mpAverage.updatePoi,
         data.mpAverage.addRoad,
         data.mpAverage.updateRoad
-      ];
+      ]
       // this.charData.monthProduce.yAxis = [`新增POI`, `更新POI  （个）`, `新增道路  （公里）`, `更新道路  （公里）`];
       this.charData.monthProduce.yAxis = [
-        "新增POI",
-        "更新POI",
-        "新增道路",
-        "更新道路"
-      ];
-      this.charData.monthProduce.unit = [
-        "个",
-        "个",
-        "公里",
-        "公里"
-      ];
+        '新增POI',
+        '更新POI',
+        '新增道路',
+        '更新道路'
+      ]
       //${data.mpAddPoi} 个${data.mpUpdatePoi} 个${data.mpAddRoad} 公里${data.mpUpdateRoad} 公里
     },
     toggleDataSource(type) {
-      if (type === "common") {
-        this.mapData.showCommon = !this.mapData.showCommon;
+      if (type === 'common') {
+        this.mapData.showCommon = !this.mapData.showCommon
       } else {
-        this.mapData.showCrowd = !this.mapData.showCrowd;
+        this.mapData.showCrowd = !this.mapData.showCrowd
       }
     }
   },
   created() {
-    this.getChartData();
+    this.getChartData()
     setInterval(function() {
-      var date = new Date();
+      var date = new Date()
       if (date.getHours() == 23) {
         // 每天23点执行一次
-        this.getChartData();
+        this.getChartData()
       }
-    }, 1000 * 60 * 60);
+    }, 1000 * 60 * 60)
   },
   beforeDestroy() {
-    clearTimeout(this.timeout);
+    clearTimeout(this.timeout)
   },
   components: {
     BarPoiChart,
@@ -644,8 +645,7 @@ export default {
     Global,
     Panel
   }
-};
-
+}
 </script>
 <style>
 div.fm-stretch {
@@ -674,12 +674,12 @@ div.float {
   pointer-events: none;
 }
 
-div.flex-layout>div.col {
+div.flex-layout > div.col {
   width: 100%;
   height: 100%;
 }
 
-div.flex-layout-v>div.row {
+div.flex-layout-v > div.row {
   width: 100%;
   height: 100%;
 }
@@ -698,7 +698,7 @@ div.legendContainer div.legend {
   padding: 5px;
 }
 
-div.legendContainer div.legend>div {
+div.legendContainer div.legend > div {
   color: #fff;
   font-weight: 500;
   display: inline-block;
@@ -750,7 +750,7 @@ div.legendContainer div.legend span {
   background: url(./assets/right_up.png) no-repeat center;
 }
 
-.top-title>.text {
+.top-title > .text {
   width: 250px;
   height: 70px;
   color: #fd8e2a;
@@ -761,11 +761,11 @@ div.legendContainer div.legend span {
   font-weight: bold;
 }
 
-.top-title.left>.text {
+.top-title.left > .text {
   padding-left: 70px;
 }
 
-.top-title.right>.text {
+.top-title.right > .text {
   padding-right: 70px;
 }
 
@@ -785,7 +785,7 @@ div.legendContainer div.legend span {
   background: url(./assets/right_down.png) no-repeat center;
 }
 
-.bottom-title>.text {
+.bottom-title > .text {
   color: #fd8e20;
   font-size: 24px;
   font-weight: bold;
@@ -799,11 +799,9 @@ div.inlineChart {
   width: 48%;
 }
 
-
 /*覆盖cesium的默认样式，不显示下方工具条*/
 
 .cesium-viewer-bottom {
   display: none;
 }
-
 </style>

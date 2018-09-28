@@ -2,11 +2,11 @@
   <div class="info-box" :style="{top: top, left: left}">
     <div class="desc">
       <div class="desc-p">
-      <p class="desc-title">{{ info.summary.devName }}</p>
-      <p>开发时间：{{ info.summary.devDate }}</p>
-      <p>范围：{{ info.summary.scope }}</p>
-      <p>道路总里程：{{ info.summary.roadSum }}</p>
-      <p>POI数量：{{ info.summary.poiSum }}</p>
+        <p class="desc-title">{{ info.summary.devName }}</p>
+        <p>开发时间：{{ info.summary.devDate }}</p>
+        <p>范围：{{ info.summary.scope }}</p>
+        <p>道路总里程：{{ info.summary.roadSum }}</p>
+        <p>POI数量：{{ info.summary.poiSum }}</p>
       </div>
     </div>
     <div class="img">
@@ -29,20 +29,19 @@ export default {
   },
   computed: {
     imgSrc() {
-      return `./static/images/abroad/map_${this.info.id}.png`;
+      return `./static/images/abroad/map_${this.info.id}.png`
     },
     top() {
-      return `${this.anchor[1] - 200}px`;
+      return `${this.anchor[1] - 200}px`
     },
     left() {
-      return `${this.anchor[0] + 40}px`;
+      return `${this.anchor[0] + 40}px`
     }
   },
   mounted() {
-    console.log(this.info);
+    console.log(this.info)
   }
-};
-
+}
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
@@ -59,17 +58,14 @@ export default {
 }
 
 .info-box > .desc {
-  padding: 0px 60px 10px 60px;
-  color: #2fa9fc;
-}
-
-.desc-p {
-  padding: 10% 0;
+  padding: 0px 60px;
+  flex: 0 0 50%;
+  display: flex;
   align-items: center;
-  justify-content: center;
 }
 
-.desc-p>p {
+.desc-p > p {
+  color: #2fa9fc;
   margin: 10px 0px;
 }
 
@@ -89,5 +85,4 @@ export default {
   max-width: 100%;
   max-height: 100%;
 }
-
 </style>
